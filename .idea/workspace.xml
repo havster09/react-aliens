@@ -2,11 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="620993e2-89bb-4d89-a315-77d8912e8cb8" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/demo/assets/corporal.png" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/README.md" afterPath="" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/demo/game/character.js" afterPath="$PROJECT_DIR$/demo/game/character.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/demo/game/index.js" afterPath="$PROJECT_DIR$/demo/game/index.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/components/sprite.js" afterPath="$PROJECT_DIR$/src/components/sprite.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/temp/" />
@@ -285,12 +281,12 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1490700429220</updated>
-      <workItem from="1490700430369" duration="12887000" />
+      <workItem from="1490700430369" duration="13089000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="12887000" />
+    <option name="totallyTimeSpent" value="13089000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="2576" height="1056" extended-state="6" />
