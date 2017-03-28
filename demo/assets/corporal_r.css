@@ -1,0 +1,22 @@
+/* ----------------------------------------------------
+   created with http://www.codeandweb.com/texturepacker 
+   ----------------------------------------------------
+   $TexturePacker:SmartUpdate:44244ae660b6c3b3e1d171ad296acf1f:fc8c842955d7d482aaf4e8688be44b2d:71cbb926e46357dff8cef852896d9c8b$
+   ----------------------------------------------------
+
+   usage: <span class="{-spritename-} sprite"></span>
+
+   replace {-spritename-} with the sprite you like to use
+
+*/
+
+.sprite {display:inline-block; overflow:hidden; background-repeat: no-repeat;background-image:url(corporal_r.png);}
+
+.corporal_walk_0 {width:160px; height:120px; background-position: -0px -0px}
+.corporal_walk_1 {width:160px; height:120px; background-position: -160px -0px}
+.corporal_walk_2 {width:160px; height:120px; background-position: -320px -0px}
+.corporal_walk_3 {width:160px; height:120px; background-position: -480px -0px}
+.corporal_walk_4 {width:160px; height:120px; background-position: -640px -0px}
+.corporal_walk_5 {width:160px; height:120px; background-position: -800px -0px}
+.corporal_walk_6 {width:160px; height:120px; background-position: -960px -0px}
+.corporal_walk_7 {width:160px; height:120px; background-position: -1120px -0px}

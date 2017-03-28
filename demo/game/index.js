@@ -23,7 +23,7 @@ export default class Game extends Component {
 
   physicsInit = (engine) => {
     const ground = Matter.Bodies.rectangle(
-      512 * 3, 448,
+      512 * 3, 400,
       1024 * 3, 64,
       {
         isStatic: true,
@@ -73,8 +73,9 @@ export default class Game extends Component {
 
   componentDidMount() {
     this.player = new AudioPlayer('/assets/music.wav', () => {
-      this.stopMusic = this.player.play({ loop: true, offset: 1, volume: 0.35 });
+      //this.stopMusic = this.player.play({ loop: true, offset: 1, volume: 0.35 });
     });
+
 
     this.setState({
       fade: false,
@@ -90,14 +91,14 @@ export default class Game extends Component {
   }
 
   componentWillUnmount() {
-    this.stopMusic();
+    //this.stopMusic();
     this.keyListener.unsubscribe();
   }
 
   render() {
     return (
       <Loop>
-        <Stage style={{ background: '#3a9bdc' }}>
+        <Stage style={{ background: '#000' }}>
           <World
             onInit={this.physicsInit}
           >

@@ -1,216 +1,225 @@
-import React, { Component, PropTypes } from 'react';
-import { observer } from 'mobx-react';
+import React, {Component, PropTypes} from 'react';
+import {observer} from 'mobx-react';
 import Matter from 'matter-js';
 
 import {
-  AudioPlayer,
-  Body,
-  Sprite,
+    AudioPlayer,
+    Body,
+    Sprite,
 } from '../../src';
 
 @observer
 export default class Character extends Component {
 
-  static propTypes = {
-    keys: PropTypes.object,
-    onEnterBuilding: PropTypes.func,
-    store: PropTypes.object,
-  };
+    static propTypes = {
+        keys: PropTypes.object,
+        onEnterBuilding: PropTypes.func,
+        store: PropTypes.object,
+    };
 
-  static contextTypes = {
-    engine: PropTypes.object,
-    scale: PropTypes.number,
-  };
+    static contextTypes = {
+        engine: PropTypes.object,
+        scale: PropTypes.number,
+    };
 
-  handlePlayStateChanged = (state) => {
-    this.setState({
-      spritePlaying: state ? true : false,
-    });
-  };
+    handlePlayStateChanged = (state) => {
+        this.setState({
+            spritePlaying: state ? true : false,
+        });
+    };
 
-  move = (body, x) => {
-    Matter.Body.setVelocity(body, { x, y: 0 });
-  };
+    move = (body, x) => {
+        this.lastDirection = (x < 0 && Math.abs(x) > 2) ? 1 : 0;
+        Matter.Body.setVelocity(body, {x, y: 0});
+    };
 
-  jump = (body) => {
-    this.jumpNoise.play();
-    this.isJumping = true;
-    Matter.Body.applyForce(
-      body,
-      { x: 0, y: 0 },
-      { x: 0, y: -0.15 },
-    );
-    Matter.Body.set(body, 'friction', 0.0001);
-  };
+    jump = (body) => {
+        this.jumpNoise.play();
+        this.isJumping = true;
+        Matter.Body.applyForce(
+            body,
+            {x: 0, y: 0},
+            {x: 0, y: -0.15},
+        );
+        Matter.Body.set(body, 'friction', 0.0001);
+    };
 
-  punch = () => {
-    this.isPunching = true;
-    this.setState({
-      characterState: 4,
-      repeat: false,
-    });
-  }
-
-  getDoorIndex = (body) => {
-    let doorIndex = null;
-
-    const doorPositions = [...Array(6).keys()].map((a) => {
-      return [(512 * a) + 208, (512 * a) + 272];
-    });
-
-    doorPositions.forEach((dp, di) => {
-      if (body.position.x + 64 > dp[0] && body.position.x + 64 < dp[1]) {
-        doorIndex = di;
-      }
-    });
-
-    return doorIndex;
-  }
-
-  enterBuilding = (body) => {
-    const doorIndex = this.getDoorIndex(body);
-
-    if (doorIndex !== null) {
-      this.setState({
-        characterState: 3,
-      });
-      this.isLeaving = true;
-      this.props.onEnterBuilding(doorIndex);
-    }
-  };
-
-  checkKeys = (shouldMoveStageLeft, shouldMoveStageRight) => {
-    const { keys, store } = this.props;
-    const { body } = this.body;
-
-    let characterState = 2;
-
-    if (keys.isDown(65)) {
-      return this.punch();
+    punch = () => {
+        this.isPunching = true;
+        this.setState({
+            characterState: 4,
+            repeat: false,
+        });
     }
 
-    if (keys.isDown(keys.SPACE)) {
-      this.jump(body);
+    getDoorIndex = (body) => {
+        let doorIndex = null;
+
+        const doorPositions = [...Array(6).keys()].map((a) => {
+            return [(512 * a) + 208, (512 * a) + 272];
+        });
+
+        doorPositions.forEach((dp, di) => {
+            if (body.position.x + 64 > dp[0] && body.position.x + 64 < dp[1]) {
+                doorIndex = di;
+            }
+        });
+
+        return doorIndex;
     }
 
-    if (keys.isDown(keys.UP)) {
-      return this.enterBuilding(body);
-    }
+    enterBuilding = (body) => {
+        const doorIndex = this.getDoorIndex(body);
 
-    if (keys.isDown(keys.LEFT)) {
-      if (shouldMoveStageLeft) {
-        store.setStageX(store.stageX + 5);
-      }
+        if (doorIndex !== null) {
+            this.setState({
+                characterState: 3,
+            });
+            this.isLeaving = true;
+            this.props.onEnterBuilding(doorIndex);
+        }
+    };
 
-      this.move(body, -5);
-      characterState = 1;
-    } else if (keys.isDown(keys.RIGHT)) {
-      if (shouldMoveStageRight) {
-        store.setStageX(store.stageX - 5);
-      }
+    checkKeys = (shouldMoveStageLeft, shouldMoveStageRight) => {
+        const {keys, store} = this.props;
+        const {body} = this.body;
 
-      this.move(body, 5);
-      characterState = 0;
-    }
+        let characterState = 1;
+        let direction = this.lastDirection > 0?-1:1;
 
-    this.setState({
-      characterState,
-      repeat: characterState < 2,
-    });
-  }
+        if (keys.isDown(65)) {
+            return this.punch();
+        }
 
-  update = () => {
-    const { store } = this.props;
-    const { body } = this.body;
+        if (keys.isDown(keys.SPACE)) {
+            this.jump(body);
+        }
 
-    const midPoint = Math.abs(store.stageX) + 448;
+        if (keys.isDown(keys.UP)) {
+            return this.enterBuilding(body);
+        }
 
-    const shouldMoveStageLeft = body.position.x < midPoint && store.stageX < 0;
-    const shouldMoveStageRight = body.position.x > midPoint && store.stageX > -2048;
+        if (keys.isDown(keys.LEFT)) {
+            if (shouldMoveStageLeft) {
+                store.setStageX(store.stageX + 3);
+            }
+            direction = -1;
+            this.move(body, -3);
+            characterState = 0;
+        } else if (keys.isDown(keys.RIGHT)) {
+            if (shouldMoveStageRight) {
+                store.setStageX(store.stageX - 3);
+            }
+            characterState = 0;
+            direction = 1;
+            this.move(body, 3);
+        }
 
-    const velY = parseFloat(body.velocity.y.toFixed(10));
+        // console.log(characterState);
 
-    if (velY === 0) {
-      this.isJumping = false;
-      Matter.Body.set(body, 'friction', 0.9999);
-    }
+        this.setState({
+            characterState,
+            direction,
+            repeat: characterState < 2,
+        });
+    };
 
-    if (!this.isJumping && !this.isPunching && !this.isLeaving) {
-      this.checkKeys(shouldMoveStageLeft, shouldMoveStageRight);
+    update = () => {
+        const {store} = this.props;
+        const {body} = this.body;
 
-      store.setCharacterPosition(body.position);
-    } else {
-      if (this.isPunching && this.state.spritePlaying === false) {
+        const midPoint = Math.abs(store.stageX) + 360;
+
+        const shouldMoveStageLeft = body.position.x < midPoint && store.stageX < 0;
+        const shouldMoveStageRight = body.position.x > midPoint && store.stageX > -2048;
+
+        const velY = parseFloat(body.velocity.y.toFixed(10));
+
+        if (velY === 0) {
+            this.isJumping = false;
+            Matter.Body.set(body, 'friction', 0.9999);
+        }
+
+        if (!this.isJumping && !this.isPunching && !this.isLeaving) {
+            this.checkKeys(shouldMoveStageLeft, shouldMoveStageRight);
+
+            store.setCharacterPosition(body.position);
+        } else {
+            if (this.isPunching && this.state.spritePlaying === false) {
+                this.isPunching = false;
+            }
+
+            const targetX = store.stageX + (this.lastX - body.position.x);
+            if (shouldMoveStageLeft || shouldMoveStageRight) {
+                store.setStageX(targetX);
+            }
+        }
+
+        this.lastX = body.position.x;
+    };
+
+    constructor(props) {
+        super(props);
+
+        this.loopID = null;
+        this.isJumping = false;
         this.isPunching = false;
-      }
+        this.isLeaving = false;
+        this.lastX = 0;
 
-      const targetX = store.stageX + (this.lastX - body.position.x);
-      if (shouldMoveStageLeft || shouldMoveStageRight) {
-        store.setStageX(targetX);
-      }
+        this.state = {
+            characterState: 2,
+            loop: false,
+            spritePlaying: true,
+        };
     }
 
-    this.lastX = body.position.x;
-  };
+    componentDidMount() {
+        this.jumpNoise = new AudioPlayer('/assets/jump.wav');
+        Matter.Events.on(this.context.engine, 'afterUpdate', this.update);
+    }
 
-  constructor(props) {
-    super(props);
+    componentWillUnmount() {
+        Matter.Events.off(this.context.engine, 'afterUpdate', this.update);
+    }
 
-    this.loopID = null;
-    this.isJumping = false;
-    this.isPunching = false;
-    this.isLeaving = false;
-    this.lastX = 0;
+    getWrapperStyles() {
+        const {characterPosition, stageX} = this.props.store;
+        const {scale} = this.context;
+        const {x, y} = characterPosition;
+        const targetX = x + stageX;
 
-    this.state = {
-      characterState: 2,
-      loop: false,
-      spritePlaying: true,
-    };
-  }
+        return {
+            position: 'absolute',
+            transform: `translate(${targetX * scale}px, ${y * scale}px)`,
+            transformOrigin: 'left top',
+        };
+    }
 
-  componentDidMount() {
-    this.jumpNoise = new AudioPlayer('/assets/jump.wav');
-    Matter.Events.on(this.context.engine, 'afterUpdate', this.update);
-  }
+    render() {
+        const x = this.props.store.characterPosition.x;
 
-  componentWillUnmount() {
-    Matter.Events.off(this.context.engine, 'afterUpdate', this.update);
-  }
-
-  getWrapperStyles() {
-    const { characterPosition, stageX } = this.props.store;
-    const { scale } = this.context;
-    const { x, y } = characterPosition;
-    const targetX = x + stageX;
-
-    return {
-      position: 'absolute',
-      transform: `translate(${targetX * scale}px, ${y * scale}px)`,
-      transformOrigin: 'left top',
-    };
-  }
-
-  render() {
-    const x = this.props.store.characterPosition.x;
-
-    return (
-      <div style={this.getWrapperStyles()}>
-        <Body
-          args={[x, 384, 64, 64]}
-          inertia={Infinity}
-          ref={(b) => { this.body = b; }}
-        >
-          <Sprite
-            repeat={this.state.repeat}
-            onPlayStateChanged={this.handlePlayStateChanged}
-            src="assets/character-sprite.png"
-            scale={this.context.scale * 2}
-            state={this.state.characterState}
-            steps={[9, 9, 0, 4, 5]}
-          />
-        </Body>
-      </div>
-    );
-  }
+        return (
+            <div style={this.getWrapperStyles()}>
+                <Body
+                    args={[x, 320, 160, 120]}
+                    inertia={Infinity}
+                    ref={(b) => { this.body = b; }}
+                >
+                <Sprite
+                    repeat={this.state.repeat}
+                    onPlayStateChanged={this.handlePlayStateChanged}
+                    src="assets/corporal.png"
+                    scale={this.context.scale * 2}
+                    direction={this.state.direction}
+                    state={this.state.characterState}
+                    steps={[7,0]}
+                    offset={[0,0]}
+                    tileWidth={160}
+                    tileHeight={120}
+                />
+                </Body>
+            </div>
+        );
+    }
 }
