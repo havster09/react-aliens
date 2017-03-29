@@ -96,6 +96,7 @@ export default class Sprite extends Component {
             this.tickCount = 0;
         } else {
             this.tickCount++;
+            // todo expose tick count
         }
 
     }

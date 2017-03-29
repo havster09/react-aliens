@@ -14,6 +14,8 @@ export default class Character extends Component {
     static propTypes = {
         keys: PropTypes.object,
         onEnterBuilding: PropTypes.func,
+        onShoot: PropTypes.func,
+        onReload: PropTypes.func,
         store: PropTypes.object,
     };
 
@@ -47,20 +49,36 @@ export default class Character extends Component {
     shoot = () => {
         this.isShooting = true;
         let direction = this.lastDirection > 0?-1:1;
+        if(this.props.ammo > 0) {
+            this.props.onShoot();
+            this.setState({
+                characterState: 3,
+                direction,
+                repeat: true
+            });
+        }
+        else {
+            this.reload();
+        }
+    };
+
+    reload = () => {
+        let direction = this.lastDirection > 0?-1:1;
         this.setState({
-            characterState: 3,
+            characterState: 4,
             direction,
-            repeat: true,
+            repeat: false
         });
-    }
+        this.props.onReload();
+    };
 
     punch = () => {
         this.isPunching = true;
         this.setState({
-            characterState: 4,
+            characterState: 99,
             repeat: false,
         });
-    }
+    };
 
     getDoorIndex = (body) => {
         let doorIndex = null;
@@ -163,6 +181,10 @@ export default class Character extends Component {
                 this.isPunching = false;
             }
 
+            if (this.isShooting && this.state.spritePlaying === false) {
+                this.isShooting = false;
+            }
+
             const targetX = store.stageX + (this.lastX - body.position.x);
             if (shouldMoveStageLeft || shouldMoveStageRight) {
                 store.setStageX(targetX);
@@ -186,6 +208,7 @@ export default class Character extends Component {
             characterState: 2,
             loop: false,
             spritePlaying: true,
+            ticksPerFrame:5
         };
     }
 
@@ -228,10 +251,11 @@ export default class Character extends Component {
                     scale={this.context.scale * 2}
                     direction={this.state.direction}
                     state={this.state.characterState}
-                    steps={[7,7,0,1]}
+                    steps={[7,7,0,1,0]}
                     offset={[0,0]}
                     tileWidth={160}
                     tileHeight={120}
+                    ticksPerFrame={this.state.ticksPerFrame}
                 />
                 </Body>
             </div>

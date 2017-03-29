@@ -13,10 +13,12 @@ import {
 import Character from './character';
 import Level from './level';
 import Fade from './fade';
+import Ammo from './ammo';
 
 import GameStore from './stores/game-store';
 
 export default class Game extends Component {
+
 
     static propTypes = {
         onLeave: PropTypes.func,
@@ -50,7 +52,7 @@ export default class Game extends Component {
         Matter.World.addBody(engine.world, ground);
         Matter.World.addBody(engine.world, leftWall);
         Matter.World.addBody(engine.world, rightWall);
-    }
+    };
 
     handleEnterBuilding = (index) => {
         this.setState({
@@ -59,13 +61,26 @@ export default class Game extends Component {
         setTimeout(() => {
             this.props.onLeave(index);
         }, 500);
-    }
+    };
+
+    handleShoot = () => {
+        this.setState({
+            ammo: this.state.ammo -1
+        });
+    };
+
+    handleReload = () => {
+        this.setState({
+            ammo: 99
+        });
+    };
 
     constructor(props) {
         super(props);
 
         this.state = {
             fade: true,
+            ammo:99
         };
         this.keyListener = new KeyListener();
         window.AudioContext = window.AudioContext || window.webkitAudioContext;
@@ -104,12 +119,12 @@ export default class Game extends Component {
                         <Level store={GameStore}/>
                         <Character
                             onEnterBuilding={this.handleEnterBuilding}
+                            onShoot={this.handleShoot}
+                            onReload={this.handleReload}
                             store={GameStore}
+                            ammo={this.state.ammo}
                             keys={this.keyListener}/>
-                        {/*UI*/}
-                        <div className="ui" style={{width: 696,height: 138,overflow: 'hidden',position: 'absolute'}}>
-                            <p>AMMO</p>
-                        </div>
+                        <Ammo count={this.state.ammo}/>
                     </World>
                 </Stage>
                 <Fade visible={this.state.fade}/>
