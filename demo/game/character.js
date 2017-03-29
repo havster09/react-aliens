@@ -39,10 +39,20 @@ export default class Character extends Component {
         Matter.Body.applyForce(
             body,
             {x: 0, y: 0},
-            {x: 0, y: -0.15},
+            {x: 0, y: -0.3},
         );
         Matter.Body.set(body, 'friction', 0.0001);
     };
+
+    shoot = () => {
+        this.isShooting = true;
+        let direction = this.lastDirection > 0?-1:1;
+        this.setState({
+            characterState: 3,
+            direction,
+            repeat: true,
+        });
+    }
 
     punch = () => {
         this.isPunching = true;
@@ -84,8 +94,12 @@ export default class Character extends Component {
         const {keys, store} = this.props;
         const {body} = this.body;
 
-        let characterState = 1;
+        let characterState = 2;
         let direction = this.lastDirection > 0?-1:1;
+
+        if (keys.isDown(83)) {
+            return this.shoot();
+        }
 
         if (keys.isDown(65)) {
             return this.punch();
@@ -101,14 +115,14 @@ export default class Character extends Component {
 
         if (keys.isDown(keys.LEFT)) {
             if (shouldMoveStageLeft) {
-                store.setStageX(store.stageX + 3);
+                store.setStageX(store.stageX + 4);
             }
             direction = -1;
-            this.move(body, -3);
-            characterState = 0;
+            this.move(body, -4);
+            characterState = 1;
         } else if (keys.isDown(keys.RIGHT)) {
             if (shouldMoveStageRight) {
-                store.setStageX(store.stageX - 3);
+                store.setStageX(store.stageX - 4);
             }
             characterState = 0;
             direction = 1;
@@ -164,6 +178,7 @@ export default class Character extends Component {
         this.loopID = null;
         this.isJumping = false;
         this.isPunching = false;
+        this.isShooting = false;
         this.isLeaving = false;
         this.lastX = 0;
 
@@ -213,7 +228,7 @@ export default class Character extends Component {
                     scale={this.context.scale * 2}
                     direction={this.state.direction}
                     state={this.state.characterState}
-                    steps={[7,0]}
+                    steps={[7,7,0,1]}
                     offset={[0,0]}
                     tileWidth={160}
                     tileHeight={120}

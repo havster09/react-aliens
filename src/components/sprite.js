@@ -107,8 +107,7 @@ export default class Sprite extends Component {
         const left = this.props.offset[0] + (currentStep * tileWidth);
         const top = this.props.offset[1] + (state * tileHeight);
 
-        if(direction < 0) {
-            debugger;
+        if(direction < 0 && state===3) {
         }
 
         return {

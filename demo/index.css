@@ -15,7 +15,7 @@ html, body, #root {
   margin: 0;
   padding: 0;
   color: white;
-  font-family: 'Helvetica Neue';
+  font-family: '8BIT WONDER';
   font-size: 3vw;
 }
 
@@ -78,4 +78,9 @@ pre {
 
 * {
   box-sizing: border-box;
+}
+
+.ui *{
+  font-family: '8BIT WONDER';
+  font-size:.5em
 }
