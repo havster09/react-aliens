@@ -5,6 +5,7 @@ export default class Sprite extends Component {
     static propTypes = {
         offset: PropTypes.array,
         onPlayStateChanged: PropTypes.func,
+        onGetContextLoop: PropTypes.func,
         repeat: PropTypes.bool,
         scale: PropTypes.number,
         direction: PropTypes.number,
@@ -20,6 +21,8 @@ export default class Sprite extends Component {
     static defaultProps = {
         offset: [0, 0],
         onPlayStateChanged: () => {
+        },
+        onGetContextLoop: () => {
         },
         repeat: true,
         src: '',
@@ -77,6 +80,9 @@ export default class Sprite extends Component {
     animate(props) {
         const {repeat, ticksPerFrame, state, steps} = props;
 
+        this.props.onGetContextLoop(this.context.loop.loopID);
+        // todo expose tick count
+
         if (this.tickCount === ticksPerFrame && !this.finished) {
             if (steps[state] !== 0) {
                 const {currentStep} = this.state;
@@ -96,7 +102,6 @@ export default class Sprite extends Component {
             this.tickCount = 0;
         } else {
             this.tickCount++;
-            // todo expose tick count
         }
 
     }

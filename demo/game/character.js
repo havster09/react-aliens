@@ -26,7 +26,13 @@ export default class Character extends Component {
 
     handlePlayStateChanged = (state) => {
         this.setState({
-            spritePlaying: state ? true : false,
+            spritePlaying: state ? true : false
+        });
+    };
+
+    getContextLoop = (contextLoop) => {
+        this.setState({
+            contextLoop: contextLoop
         });
     };
 
@@ -63,13 +69,28 @@ export default class Character extends Component {
     };
 
     reload = () => {
+        if(!this.state.reloadTimeStamp) {
+            this.setState({
+                ticksPerFrame:15,
+                reloadTimeStamp:this.state.contextLoop
+            });
+        }
         let direction = this.lastDirection > 0?-1:1;
         this.setState({
             characterState: 4,
             direction,
             repeat: false
         });
-        this.props.onReload();
+
+        if(this.state.reloadTimeStamp) {
+            if(this.state.contextLoop>this.state.reloadTimeStamp+30) {
+                this.props.onReload();
+                this.setState({
+                    ticksPerFrame:5,
+                    reloadTimeStamp:0
+                });
+            }
+        }
     };
 
     punch = () => {
@@ -160,6 +181,8 @@ export default class Character extends Component {
         const {store} = this.props;
         const {body} = this.body;
 
+        // console.log(this.state.contextLoop);
+
         const midPoint = Math.abs(store.stageX) + 360;
 
         const shouldMoveStageLeft = body.position.x < midPoint && store.stageX < 0;
@@ -208,7 +231,8 @@ export default class Character extends Component {
             characterState: 2,
             loop: false,
             spritePlaying: true,
-            ticksPerFrame:5
+            ticksPerFrame:5,
+            contextLoop:null
         };
     }
 
@@ -240,18 +264,19 @@ export default class Character extends Component {
         return (
             <div style={this.getWrapperStyles()}>
                 <Body
-                    args={[x, 320, 160, 120]}
+                    args={[x, 415, 160, 120]}
                     inertia={Infinity}
                     ref={(b) => { this.body = b; }}
                 >
                 <Sprite
                     repeat={this.state.repeat}
                     onPlayStateChanged={this.handlePlayStateChanged}
+                    onGetContextLoop={this.getContextLoop}
                     src="assets/corporal.png"
-                    scale={this.context.scale * 2}
+                    scale={this.context.scale * 1}
                     direction={this.state.direction}
                     state={this.state.characterState}
-                    steps={[7,7,0,1,0]}
+                    steps={[7,7,0,1,1]}
                     offset={[0,0]}
                     tileWidth={160}
                     tileHeight={120}
