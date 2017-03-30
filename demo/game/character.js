@@ -71,7 +71,6 @@ export default class Character extends Component {
     reload = () => {
         if(!this.state.reloadTimeStamp) {
             this.setState({
-                ticksPerFrame:15,
                 reloadTimeStamp:this.state.contextLoop
             });
         }
@@ -79,6 +78,7 @@ export default class Character extends Component {
         this.setState({
             characterState: 4,
             direction,
+            ticksPerFrame:15,
             repeat: false
         });
 
@@ -87,18 +87,14 @@ export default class Character extends Component {
                 this.props.onReload();
                 this.setState({
                     ticksPerFrame:5,
-                    reloadTimeStamp:0
+                    reloadTimeStamp:null
                 });
             }
         }
     };
 
     punch = () => {
-        this.isPunching = true;
-        this.setState({
-            characterState: 99,
-            repeat: false,
-        });
+        // this.reload();
     };
 
     getDoorIndex = (body) => {
