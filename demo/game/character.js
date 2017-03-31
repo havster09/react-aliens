@@ -31,6 +31,8 @@ export default class Character extends Component {
     };
 
     getContextLoop = (contextLoop) => {
+        const {store} = this.props;
+        store.setHeroLoopCount(contextLoop);
         this.setState({
             contextLoop: contextLoop
         });
@@ -78,23 +80,26 @@ export default class Character extends Component {
         this.setState({
             characterState: 4,
             direction,
-            ticksPerFrame:15,
             repeat: false
         });
 
         if(this.state.reloadTimeStamp) {
-            if(this.state.contextLoop>this.state.reloadTimeStamp+30) {
+            if(this.state.contextLoop>this.state.reloadTimeStamp+50) {
                 this.props.onReload();
                 this.setState({
-                    ticksPerFrame:5,
                     reloadTimeStamp:null
                 });
             }
         }
     };
 
-    punch = () => {
-        // this.reload();
+    stop = () => {
+        let direction = this.lastDirection > 0?-1:1;
+        this.setState({
+            characterState: 2,
+            direction,
+            repeat: false
+        });
     };
 
     getDoorIndex = (body) => {
@@ -137,7 +142,7 @@ export default class Character extends Component {
         }
 
         if (keys.isDown(65)) {
-            return this.punch();
+            return this.stop();
         }
 
         if (keys.isDown(keys.SPACE)) {
@@ -177,7 +182,7 @@ export default class Character extends Component {
         const {store} = this.props;
         const {body} = this.body;
 
-        // console.log(this.state.contextLoop);
+        // console.log(store.heroLoopCount);
 
         const midPoint = Math.abs(store.stageX) + 360;
 
@@ -272,7 +277,7 @@ export default class Character extends Component {
                     scale={this.context.scale * 1}
                     direction={this.state.direction}
                     state={this.state.characterState}
-                    steps={[7,7,0,1,1]}
+                    steps={[7,7,0,1,0]}
                     offset={[0,0]}
                     tileWidth={160}
                     tileHeight={120}

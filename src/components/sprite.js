@@ -81,7 +81,6 @@ export default class Sprite extends Component {
         const {repeat, ticksPerFrame, state, steps} = props;
 
         this.props.onGetContextLoop(this.context.loop.loopID);
-        // todo expose tick count
 
         if (this.tickCount === ticksPerFrame && !this.finished) {
             if (steps[state] !== 0) {

@@ -65,13 +65,13 @@ export default class Game extends Component {
 
     handleShoot = () => {
         this.setState({
-            ammo: this.state.ammo -1
+            ammo: this.state.ammo -2
         });
     };
 
     handleReload = () => {
         this.setState({
-            ammo: 99
+            ammo: 990
         });
     };
 
@@ -80,7 +80,7 @@ export default class Game extends Component {
 
         this.state = {
             fade: true,
-            ammo:99
+            ammo:990
         };
         this.keyListener = new KeyListener();
         window.AudioContext = window.AudioContext || window.webkitAudioContext;
@@ -118,12 +118,12 @@ export default class Game extends Component {
                     <World onInit={this.physicsInit}>
                         <Level store={GameStore}/>
                         <Character
-                            onEnterBuilding={this.handleEnterBuilding}
-                            onShoot={this.handleShoot}
-                            onReload={this.handleReload}
-                            store={GameStore}
-                            ammo={this.state.ammo}
-                            keys={this.keyListener}/>
+                        onEnterBuilding={this.handleEnterBuilding}
+                        onShoot={this.handleShoot}
+                        onReload={this.handleReload}
+                        store={GameStore}
+                        ammo={this.state.ammo}
+                        keys={this.keyListener}/>
                         <Ammo count={this.state.ammo}/>
                     </World>
                 </Stage>
