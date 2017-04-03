@@ -284,6 +284,19 @@ export default class Character extends Component {
                     ticksPerFrame={this.state.ticksPerFrame}
                 />
                 </Body>
+                <Sprite
+                    repeat={this.state.repeat}
+                    src="assets/pulse_rifle_shoot.png"
+                    scale={this.context.scale * 1}
+                    direction={this.state.direction}
+                    steps={[3]}
+                    offset={[0,0]}
+                    tileWidth={160}
+                    tileHeight={120}
+                    ticksPerFrame={3}
+                    top={-120}
+                    display={this.state.characterState!==3?"none":"block"}
+                />
             </div>
         );
     }

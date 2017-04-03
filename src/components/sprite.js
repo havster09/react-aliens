@@ -16,6 +16,8 @@ export default class Sprite extends Component {
         ticksPerFrame: PropTypes.number,
         tileHeight: PropTypes.number,
         tileWidth: PropTypes.number,
+        top: PropTypes.number,
+        hidden: PropTypes.bool,
     };
 
     static defaultProps = {
@@ -122,15 +124,29 @@ export default class Sprite extends Component {
     }
 
     getWrapperStyles() {
-        return {
+        let wrapperStyles = {
             height: this.props.tileHeight,
             width: this.props.tileWidth,
             overflow: 'hidden',
             position: 'relative',
             transform: `scale(${this.props.scale || this.context.scale})`,
             transformOrigin: 'top left',
-            imageRendering: 'pixelated',
+            imageRendering: 'pixelated'
         };
+
+        if(this.props.top) {
+            wrapperStyles = {
+                ...wrapperStyles,top:`${this.props.top}px`
+            }
+        }
+
+        if(this.props.display) {
+            wrapperStyles = {
+                ...wrapperStyles,display:`${this.props.display}`
+            }
+        }
+
+        return wrapperStyles;
     }
 
     render() {
