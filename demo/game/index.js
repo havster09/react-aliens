@@ -10,7 +10,8 @@ import {
     Sprite
 } from '../../src';
 
-import Character from './character';
+import Corporal from './corporal';
+import Npc from './npc';
 import Level from './level';
 import Fade from './fade';
 import Ammo from './ammo';
@@ -117,13 +118,16 @@ export default class Game extends Component {
                 <Stage style={{ background: '#000' }}>
                     <World onInit={this.physicsInit}>
                         <Level store={GameStore}/>
-                        <Character
+                        <Corporal
                         onEnterBuilding={this.handleEnterBuilding}
                         onShoot={this.handleShoot}
                         onReload={this.handleReload}
                         store={GameStore}
                         ammo={this.state.ammo}
                         keys={this.keyListener}/>
+
+                        <Npc store={GameStore} npcIndex={0}/>
+
                         <Ammo count={this.state.ammo}/>
                     </World>
                 </Stage>

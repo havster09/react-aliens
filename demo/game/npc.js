@@ -9,11 +9,11 @@ import {
 } from '../../src';
 
 @observer
-export default class Character extends Component {
+export default class Npc extends Component {
 
     static propTypes = {
+        npcIndex: PropTypes.number,
         keys: PropTypes.object,
-        onEnterBuilding: PropTypes.func,
         onShoot: PropTypes.func,
         onReload: PropTypes.func,
         store: PropTypes.object,
@@ -32,7 +32,6 @@ export default class Character extends Component {
 
     getContextLoop = (contextLoop) => {
         const {store} = this.props;
-        store.setHeroLoopCount(contextLoop);
         this.setState({
             contextLoop: contextLoop
         });
@@ -60,7 +59,7 @@ export default class Character extends Component {
         if(this.props.ammo > 0) {
             this.props.onShoot();
             this.setState({
-                characterState: 3,
+                npcState: 3,
                 direction,
                 repeat: true
             });
@@ -70,74 +69,23 @@ export default class Character extends Component {
         }
     };
 
-    reload = () => {
-        if(!this.state.reloadTimeStamp) {
-            this.setState({
-                reloadTimeStamp:this.state.contextLoop
-            });
-        }
-        let direction = this.lastDirection > 0?-1:1;
-        this.setState({
-            characterState: 4,
-            direction,
-            repeat: false
-        });
-
-        if(this.state.reloadTimeStamp) {
-            if(this.state.contextLoop>this.state.reloadTimeStamp+50) {
-                this.props.onReload();
-                this.setState({
-                    reloadTimeStamp:null
-                });
-            }
-        }
-    };
-
     stop = () => {
         let direction = this.lastDirection > 0?-1:1;
         this.setState({
-            characterState: 2,
+            npcState: 2,
             direction,
             repeat: false
         });
-    };
-
-    getDoorIndex = (body) => {
-        let doorIndex = null;
-
-        const doorPositions = [...Array(6).keys()].map((a) => {
-            return [(512 * a) + 208, (512 * a) + 272];
-        });
-
-        doorPositions.forEach((dp, di) => {
-            if (body.position.x + 64 > dp[0] && body.position.x + 64 < dp[1]) {
-                doorIndex = di;
-            }
-        });
-
-        return doorIndex;
-    }
-
-    enterBuilding = (body) => {
-        const doorIndex = this.getDoorIndex(body);
-
-        if (doorIndex !== null) {
-            this.setState({
-                characterState: 3,
-            });
-            this.isLeaving = true;
-            this.props.onEnterBuilding(doorIndex);
-        }
     };
 
     checkKeys = (shouldMoveStageLeft, shouldMoveStageRight) => {
         const {keys, store} = this.props;
         const {body} = this.body;
 
-        let characterState = 2;
+        let npcState = 2;
         let direction = this.lastDirection > 0?-1:1;
 
-        if (keys.isDown(83)) {
+        /*if (keys.isDown(83)) {
             return this.shoot();
         }
 
@@ -149,40 +97,35 @@ export default class Character extends Component {
             this.jump(body);
         }
 
-        if (keys.isDown(keys.UP)) {
-            return this.enterBuilding(body);
-        }
-
         if (keys.isDown(keys.LEFT)) {
             if (shouldMoveStageLeft) {
-                store.setStageX(store.stageX + 4);
+
             }
             direction = -1;
             this.move(body, -4);
-            characterState = 1;
+            npcState = 1;
         } else if (keys.isDown(keys.RIGHT)) {
             if (shouldMoveStageRight) {
-                store.setStageX(store.stageX - 4);
+
             }
-            characterState = 0;
+            npcState = 0;
             direction = 1;
             this.move(body, 3);
-        }
+        }*/
 
-        // console.log(characterState);
+        // console.log(npcState);
 
         this.setState({
-            characterState,
+            npcState,
             direction,
-            repeat: characterState < 2,
+            repeat: npcState < 2,
         });
     };
 
     update = () => {
-        const {store} = this.props;
+        const {store,npcIndex} = this.props;
         const {body} = this.body;
 
-        // console.log(store.heroLoopCount);
 
         const midPoint = Math.abs(store.stageX) + 360;
 
@@ -198,8 +141,7 @@ export default class Character extends Component {
 
         if (!this.isJumping && !this.isPunching && !this.isLeaving) {
             this.checkKeys(shouldMoveStageLeft, shouldMoveStageRight);
-
-            store.setCharacterPosition(body.position);
+            store.setNpcPosition(body.position,0);
         } else {
             if (this.isPunching && this.state.spritePlaying === false) {
                 this.isPunching = false;
@@ -211,7 +153,7 @@ export default class Character extends Component {
 
             const targetX = store.stageX + (this.lastX - body.position.x);
             if (shouldMoveStageLeft || shouldMoveStageRight) {
-                store.setStageX(targetX);
+
             }
         }
 
@@ -229,11 +171,10 @@ export default class Character extends Component {
         this.lastX = 0;
 
         this.state = {
-            characterState: 2,
+            npcState: 2,
             loop: false,
             spritePlaying: true,
             ticksPerFrame:5,
-            contextLoop:null
         };
     }
 
@@ -247,9 +188,11 @@ export default class Character extends Component {
     }
 
     getWrapperStyles() {
-        const {characterPosition, stageX} = this.props.store;
+        const {store,npcIndex} = this.props;
+        const npcPosition = store.npcPositions.slice()[npcIndex];
+        const {stageX} = this.props.store;
         const {scale} = this.context;
-        const {x, y} = characterPosition;
+        const {x, y} = npcPosition;
         const targetX = x + stageX;
 
         return {
@@ -260,12 +203,13 @@ export default class Character extends Component {
     }
 
     render() {
-        const x = this.props.store.characterPosition.x;
+        const {npcIndex} = this.props;
+        const x = this.props.store.npcPositions[npcIndex].x;
 
         return (
             <div style={this.getWrapperStyles()}>
                 <Body
-                    args={[x, 415, 160, 120]}
+                    args={[x, 415, 20, 60]}
                     inertia={Infinity}
                     ref={(b) => { this.body = b; }}
                 >
@@ -276,7 +220,7 @@ export default class Character extends Component {
                     src="assets/corporal.png"
                     scale={this.context.scale * 1}
                     direction={this.state.direction}
-                    state={this.state.characterState}
+                    state={this.state.npcState}
                     steps={[7,7,0,1,0]}
                     offset={[0,0]}
                     tileWidth={160}
@@ -295,7 +239,7 @@ export default class Character extends Component {
                     tileHeight={120}
                     ticksPerFrame={3}
                     top={-120}
-                    display={this.state.characterState!==3?"none":"block"}
+                    display={this.state.npcState!==3?"none":"block"}
                 />
             </div>
         );
