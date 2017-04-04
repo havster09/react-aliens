@@ -74,7 +74,7 @@ export default class Level extends Component {
           columns={6}
           tileSize={512}
           layers={[
-            [1, 2, 3, 4, 5, 6],
+            [1,2,3,4,5,6],
           ]}
         />
       </div>

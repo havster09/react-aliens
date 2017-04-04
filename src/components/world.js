@@ -1,6 +1,6 @@
-import React, { Component, PropTypes } from 'react';
+import React, {Component, PropTypes} from 'react';
 
-import Matter, { Engine, Events } from 'matter-js';
+import Matter, {Engine, Events} from 'matter-js';
 
 export default class World extends Component {
 
@@ -22,9 +22,12 @@ export default class World extends Component {
       y: 1,
       scale: 0.001,
     },
-    onCollision: () => {},
-    onInit: () => {},
-    onUpdate: () => {},
+    onCollision: () => {
+    },
+    onInit: () => {
+    },
+    onUpdate: () => {
+    },
   };
 
   static contextTypes = {
@@ -48,15 +51,15 @@ export default class World extends Component {
     this.loopID = null;
     this.lastTime = null;
 
-    const world = Matter.World.create({ gravity: props.gravity });
+    const world = Matter.World.create({gravity: props.gravity});
 
     this.engine = Engine.create({
-      world,
+      world
     });
   }
 
   componentWillReceiveProps(nextProps) {
-    const { gravity } = nextProps;
+    const {gravity} = nextProps;
 
     if (gravity !== this.props.gravity) {
       this.engine.world.gravity = gravity;
