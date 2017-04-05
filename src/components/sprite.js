@@ -114,7 +114,8 @@ export default class Sprite extends Component {
         const left = this.props.offset[0] + (currentStep * tileWidth);
         const top = this.props.offset[1] + (state * tileHeight);
 
-        if(direction < 0 && state===3) {
+        if(this.props.src !== 'assets/corporal.png'&&this.props.src !== 'assets/pulse_rifle_shoot.png') {
+
         }
 
         return {

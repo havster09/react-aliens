@@ -2,11 +2,18 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="620993e2-89bb-4d89-a315-77d8912e8cb8" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/demo/game/npc.js" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/demo/game/character.js" afterPath="$PROJECT_DIR$/demo/game/corporal.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/demo/assets/Aliens_Soundtrack_Futile_Escape.mp3" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/demo/assets/alien_0.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/demo/assets/level0.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/demo/assets/pulse_rifle_shoot.png" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/demo/assets/tile_bg_outdoor.png" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/demo/game/corporal.js" afterPath="$PROJECT_DIR$/demo/game/corporal.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/demo/game/index.js" afterPath="$PROJECT_DIR$/demo/game/index.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/demo/game/npc.js" afterPath="$PROJECT_DIR$/demo/game/npc.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/demo/game/stores/game-store.js" afterPath="$PROJECT_DIR$/demo/game/stores/game-store.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/components/body.js" afterPath="$PROJECT_DIR$/src/components/body.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/components/sprite.js" afterPath="$PROJECT_DIR$/src/components/sprite.js" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/temp/" />
@@ -26,24 +33,14 @@
     <favorites_list name="react-game-kit" />
   </component>
   <component name="FileEditorManager">
-    <splitter split-orientation="horizontal" split-proportion="0.34252337">
+    <splitter split-orientation="horizontal" split-proportion="0.46913004">
       <split-first>
         <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-          <file leaf-file-name="game-store.js" pinned="false" current-in-tab="true">
-            <entry file="file://$PROJECT_DIR$/demo/game/stores/game-store.js">
+          <file leaf-file-name="corporal.js" pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/demo/game/corporal.js">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="136">
-                  <caret line="8" column="14" lean-forward="false" selection-start-line="8" selection-start-column="14" selection-end-line="8" selection-end-column="14" />
-                  <folding />
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file leaf-file-name="index.js" pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/demo/game/index.js">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="705">
-                  <caret line="128" column="59" lean-forward="true" selection-start-line="128" selection-start-column="47" selection-end-line="128" selection-end-column="59" />
+                <state relative-caret-position="285">
+                  <caret line="269" column="43" lean-forward="false" selection-start-line="269" selection-start-column="34" selection-end-line="269" selection-end-column="43" />
                   <folding>
                     <element signature="e#0#50#0" expanded="true" />
                   </folding>
@@ -54,13 +51,83 @@
           <file leaf-file-name="sprite.js" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/src/components/sprite.js">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="572">
-                  <caret line="144" column="63" lean-forward="false" selection-start-line="144" selection-start-column="63" selection-end-line="144" selection-end-column="63" />
+                <state relative-caret-position="121">
+                  <caret line="125" column="0" lean-forward="true" selection-start-line="125" selection-start-column="0" selection-end-line="125" selection-end-column="0" />
                   <folding>
-                    <marker date="1491259063300" expanded="true" signature="4201:4351" ph="..." />
-                    <marker date="1491259063300" expanded="true" signature="4223:4332" ph="..." />
-                    <marker date="1491259063300" expanded="false" signature="4250:4273" ph="..." />
+                    <marker date="1491425151495" expanded="true" signature="4267:4417" ph="..." />
+                    <marker date="1491425151495" expanded="true" signature="4289:4398" ph="..." />
+                    <marker date="1491425151495" expanded="false" signature="4316:4339" ph="..." />
                   </folding>
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file leaf-file-name="package.json" pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/package.json">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="514">
+                  <caret line="42" column="39" lean-forward="false" selection-start-line="42" selection-start-column="39" selection-end-line="42" selection-end-column="39" />
+                  <folding />
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file leaf-file-name="index.js" pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/demo/game/index.js">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="393">
+                  <caret line="121" column="53" lean-forward="true" selection-start-line="121" selection-start-column="53" selection-end-line="121" selection-end-column="53" />
+                  <folding />
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file leaf-file-name="game-store.js" pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/demo/game/stores/game-store.js">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="153">
+                  <caret line="9" column="12" lean-forward="false" selection-start-line="9" selection-start-column="12" selection-end-line="9" selection-end-column="12" />
+                  <folding />
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file leaf-file-name="world.js" pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/src/components/world.js">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="50">
+                  <caret line="56" column="11" lean-forward="false" selection-start-line="56" selection-start-column="11" selection-end-line="56" selection-end-column="11" />
+                  <folding />
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file leaf-file-name="body.js" pinned="false" current-in-tab="true">
+            <entry file="file://$PROJECT_DIR$/src/components/body.js">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="285">
+                  <caret line="84" column="9" lean-forward="false" selection-start-line="84" selection-start-column="4" selection-end-line="84" selection-end-column="9" />
+                  <folding />
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file leaf-file-name="index.js" pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/demo/index.js">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="170">
+                  <caret line="13" column="41" lean-forward="false" selection-start-line="13" selection-start-column="41" selection-end-line="13" selection-end-column="41" />
+                  <folding />
+                </state>
+              </provider>
+            </entry>
+          </file>
+          <file leaf-file-name="fade.js" pinned="false" current-in-tab="false">
+            <entry file="file://$PROJECT_DIR$/demo/game/fade.js">
+              <provider selected="true" editor-type-id="text-editor">
+                <state relative-caret-position="0">
+                  <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+                  <folding />
                 </state>
               </provider>
             </entry>
@@ -69,23 +136,11 @@
       </split-first>
       <split-second>
         <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-          <file leaf-file-name="corporal.js" pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/demo/game/corporal.js">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="416">
-                  <caret line="51" column="27" lean-forward="false" selection-start-line="51" selection-start-column="27" selection-end-line="51" selection-end-column="27" />
-                  <folding>
-                    <element signature="e#0#50#0" expanded="true" />
-                  </folding>
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file leaf-file-name="level.js" pinned="false" current-in-tab="true">
+          <file leaf-file-name="level.js" pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/demo/game/level.js">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="901">
-                  <caret line="71" column="31" lean-forward="false" selection-start-line="71" selection-start-column="22" selection-end-line="71" selection-end-column="31" />
+                <state relative-caret-position="1190">
+                  <caret line="70" column="63" lean-forward="true" selection-start-line="70" selection-start-column="63" selection-end-line="70" selection-end-column="63" />
                   <folding>
                     <element signature="e#0#52#0" expanded="true" />
                   </folding>
@@ -93,29 +148,15 @@
               </provider>
             </entry>
           </file>
-          <file leaf-file-name="npc.js" pinned="false" current-in-tab="false">
+          <file leaf-file-name="npc.js" pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/demo/game/npc.js">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="398">
-                  <caret line="211" column="43" lean-forward="true" selection-start-line="211" selection-start-column="43" selection-end-line="211" selection-end-column="43" />
+                <state relative-caret-position="3740">
+                  <caret line="220" column="19" lean-forward="true" selection-start-line="220" selection-start-column="19" selection-end-line="220" selection-end-column="19" />
                   <folding>
                     <element signature="e#0#50#0" expanded="true" />
                   </folding>
                 </state>
-              </provider>
-            </entry>
-          </file>
-          <file leaf-file-name="buildings.png" pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/demo/assets/buildings.png">
-              <provider selected="true" editor-type-id="images">
-                <state />
-              </provider>
-            </entry>
-          </file>
-          <file leaf-file-name="tile_bg_outdoor.png" pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/demo/assets/tile_bg_outdoor.png">
-              <provider selected="true" editor-type-id="images">
-                <state />
               </provider>
             </entry>
           </file>
@@ -133,14 +174,7 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>ammo</find>
-      <find>this.props</find>
-      <find>handleShoot</find>
-      <find>onPlayStateChanged</find>
-      <find>consol</find>
-      <find>99</find>
       <find>ticksPerFrame</find>
-      <find>getChildContext</find>
       <find>.subscribe</find>
       <find>contextLoop</find>
       <find>onGetContextLoop</find>
@@ -152,7 +186,6 @@
       <find>punch</find>
       <find>console.log</find>
       <find>this.isPunching</find>
-      <find>GameStore</find>
       <find>shoot</find>
       <find>character</find>
       <find>store</find>
@@ -160,9 +193,17 @@
       <find>lastX</find>
       <find>npcPosition</find>
       <find>debugg</find>
-      <find>npcPositions</find>
       <find>setNpcPosition</find>
       <find>jump</find>
+      <find>lastDirection</find>
+      <find>direction</find>
+      <find>GameStore</find>
+      <find>npcPositions</find>
+      <find>Body</find>
+      <find>this.body</find>
+      <find>body</find>
+      <find>getChildContext</find>
+      <find>World</find>
     </findStrings>
     <replaceStrings>
       <replace>stop</replace>
@@ -186,13 +227,16 @@
         <option value="$PROJECT_DIR$/.gitignore" />
         <option value="$PROJECT_DIR$/demo/game/ammo.js" />
         <option value="$PROJECT_DIR$/src/components/loop.js" />
-        <option value="$PROJECT_DIR$/src/components/sprite.js" />
-        <option value="$PROJECT_DIR$/demo/game/level.js" />
         <option value="$PROJECT_DIR$/demo/game/character.js" />
-        <option value="$PROJECT_DIR$/demo/game/index.js" />
-        <option value="$PROJECT_DIR$/demo/game/stores/game-store.js" />
-        <option value="$PROJECT_DIR$/demo/game/npc.js" />
+        <option value="$PROJECT_DIR$/demo/index.html" />
+        <option value="$PROJECT_DIR$/demo/game/level.js" />
+        <option value="$PROJECT_DIR$/src/components/world.js" />
+        <option value="$PROJECT_DIR$/src/components/sprite.js" />
         <option value="$PROJECT_DIR$/demo/game/corporal.js" />
+        <option value="$PROJECT_DIR$/demo/game/stores/game-store.js" />
+        <option value="$PROJECT_DIR$/demo/game/index.js" />
+        <option value="$PROJECT_DIR$/demo/game/npc.js" />
+        <option value="$PROJECT_DIR$/src/components/body.js" />
       </list>
     </option>
   </component>
@@ -233,6 +277,8 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scope" />
+      <pane id="Scratches" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -351,17 +397,16 @@
           </PATH>
         </subPane>
       </pane>
-      <pane id="Scope" />
-      <pane id="Scratches" />
     </panes>
   </component>
   <component name="PropertiesComponent">
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../campaign-monitor" />
     <property name="HbShouldOpenHtmlAsHb" value="" />
     <property name="nodejs_interpreter_path" value="C:/Program Files/nodejs/node" />
     <property name="js.eslint.eslintPackage" value="C:\Users\haven\react_projects\react-game-kit\node_modules\eslint" />
     <property name="js-jscs-nodeInterpreter" value="C:\Program Files\nodejs\node.exe" />
+    <property name="settings.editor.selected.configurable" value="preferences.sourceCode.JavaScript" />
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
@@ -445,7 +490,8 @@
       <workItem from="1491006269088" duration="77000" />
       <workItem from="1491048052853" duration="568000" />
       <workItem from="1491120683474" duration="622000" />
-      <workItem from="1491254469468" duration="11563000" />
+      <workItem from="1491254469468" duration="19674000" />
+      <workItem from="1491427875525" duration="5050000" />
     </task>
     <task id="LOCAL-00001" summary="ui">
       <created>1490788379420</created>
@@ -496,11 +542,25 @@
       <option name="project" value="LOCAL" />
       <updated>1491259219655</updated>
     </task>
-    <option name="localTasksCounter" value="8" />
+    <task id="LOCAL-00008" summary="npc">
+      <created>1491311359868</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1491311359868</updated>
+    </task>
+    <task id="LOCAL-00009" summary="alien">
+      <created>1491343738242</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1491343738242</updated>
+    </task>
+    <option name="localTasksCounter" value="10" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="58101000" />
+    <option name="totallyTimeSpent" value="71262000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-7" y="0" width="2574" height="1047" extended-state="0" />
@@ -541,18 +601,15 @@
     <MESSAGE value="disable punch" />
     <MESSAGE value="heroLoopCount observable decorator" />
     <MESSAGE value="pulse_rifle_shoot" />
-    <option name="LAST_COMMIT_MESSAGE" value="pulse_rifle_shoot" />
+    <MESSAGE value="npc" />
+    <MESSAGE value="alien" />
+    <option name="LAST_COMMIT_MESSAGE" value="alien" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager />
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/demo/assets/intro.png">
-      <provider selected="true" editor-type-id="images">
-        <state />
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/demo/assets/character-sprite-grid.png">
       <provider selected="true" editor-type-id="images">
         <state />
@@ -585,14 +642,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/package.json">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="597">
-          <caret line="42" column="39" lean-forward="false" selection-start-line="42" selection-start-column="39" selection-end-line="42" selection-end-column="39" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -695,13 +744,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/demo/game/fade.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/.gitignore">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="85">
@@ -712,13 +754,6 @@
     <entry file="file://$PROJECT_DIR$/src/components/stage.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-1540">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/components/world.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
         </state>
       </provider>
@@ -762,7 +797,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="153">
           <caret line="10" column="3" lean-forward="true" selection-start-line="10" selection-start-column="3" selection-end-line="10" selection-end-column="3" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -784,21 +818,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/demo/index.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="221">
-          <caret line="13" column="41" lean-forward="false" selection-start-line="13" selection-start-column="41" selection-end-line="13" selection-end-column="41" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/components/body.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="68">
-          <caret line="6" column="22" lean-forward="false" selection-start-line="6" selection-start-column="22" selection-end-line="6" selection-end-column="22" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/utils/key-listener.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
@@ -812,28 +831,6 @@
         <state relative-caret-position="34">
           <caret line="2" column="11" lean-forward="false" selection-start-line="2" selection-start-column="11" selection-end-line="2" selection-end-column="11" />
           <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/demo/game/ammo.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="136">
-          <caret line="8" column="6" lean-forward="true" selection-start-line="8" selection-start-column="6" selection-end-line="8" selection-end-column="6" />
-          <folding>
-            <element signature="e#0#26#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/components/sprite.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="572">
-          <caret line="144" column="63" lean-forward="false" selection-start-line="144" selection-start-column="63" selection-end-line="144" selection-end-column="63" />
-          <folding>
-            <marker date="1491259063300" expanded="true" signature="4201:4351" ph="..." />
-            <marker date="1491259063300" expanded="true" signature="4223:4332" ph="..." />
-            <marker date="1491259063300" expanded="false" signature="4250:4273" ph="..." />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -857,10 +854,60 @@
         <state />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/demo/game/index.js">
+    <entry file="file://$PROJECT_DIR$/demo/index.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="705">
-          <caret line="128" column="59" lean-forward="true" selection-start-line="128" selection-start-column="47" selection-end-line="128" selection-end-column="59" />
+        <state relative-caret-position="102">
+          <caret line="6" column="4" lean-forward="false" selection-start-line="6" selection-start-column="4" selection-end-line="6" selection-end-column="4" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/demo/game/ammo.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="119">
+          <caret line="8" column="6" lean-forward="true" selection-start-line="8" selection-start-column="6" selection-end-line="8" selection-end-column="6" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/demo/game/fade.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/demo/index.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="170">
+          <caret line="13" column="41" lean-forward="false" selection-start-line="13" selection-start-column="41" selection-end-line="13" selection-end-column="41" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/demo/game/level.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1190">
+          <caret line="70" column="63" lean-forward="true" selection-start-line="70" selection-start-column="63" selection-end-line="70" selection-end-column="63" />
+          <folding>
+            <element signature="e#0#52#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/components/world.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="50">
+          <caret line="56" column="11" lean-forward="false" selection-start-line="56" selection-start-column="11" selection-end-line="56" selection-end-column="11" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/demo/game/corporal.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="285">
+          <caret line="269" column="43" lean-forward="false" selection-start-line="269" selection-start-column="34" selection-end-line="269" selection-end-column="43" />
           <folding>
             <element signature="e#0#50#0" expanded="true" />
           </folding>
@@ -869,39 +916,55 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/demo/game/stores/game-store.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="136">
-          <caret line="8" column="14" lean-forward="false" selection-start-line="8" selection-start-column="14" selection-end-line="8" selection-end-column="14" />
+        <state relative-caret-position="153">
+          <caret line="9" column="12" lean-forward="false" selection-start-line="9" selection-start-column="12" selection-end-line="9" selection-end-column="12" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/components/sprite.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="121">
+          <caret line="125" column="0" lean-forward="true" selection-start-line="125" selection-start-column="0" selection-end-line="125" selection-end-column="0" />
+          <folding>
+            <marker date="1491425151495" expanded="true" signature="4267:4417" ph="..." />
+            <marker date="1491425151495" expanded="true" signature="4289:4398" ph="..." />
+            <marker date="1491425151495" expanded="false" signature="4316:4339" ph="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/package.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="514">
+          <caret line="42" column="39" lean-forward="false" selection-start-line="42" selection-start-column="39" selection-end-line="42" selection-end-column="39" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/demo/game/index.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="393">
+          <caret line="121" column="53" lean-forward="true" selection-start-line="121" selection-start-column="53" selection-end-line="121" selection-end-column="53" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/demo/game/npc.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="398">
-          <caret line="211" column="43" lean-forward="true" selection-start-line="211" selection-start-column="43" selection-end-line="211" selection-end-column="43" />
+        <state relative-caret-position="3740">
+          <caret line="220" column="19" lean-forward="true" selection-start-line="220" selection-start-column="19" selection-end-line="220" selection-end-column="19" />
           <folding>
             <element signature="e#0#50#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/demo/game/corporal.js">
+    <entry file="file://$PROJECT_DIR$/src/components/body.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="416">
-          <caret line="51" column="27" lean-forward="false" selection-start-line="51" selection-start-column="27" selection-end-line="51" selection-end-column="27" />
-          <folding>
-            <element signature="e#0#50#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/demo/game/level.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="901">
-          <caret line="71" column="31" lean-forward="false" selection-start-line="71" selection-start-column="22" selection-end-line="71" selection-end-column="31" />
-          <folding>
-            <element signature="e#0#52#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="285">
+          <caret line="84" column="9" lean-forward="false" selection-start-line="84" selection-start-column="4" selection-end-line="84" selection-end-column="9" />
+          <folding />
         </state>
       </provider>
     </entry>

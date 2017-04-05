@@ -113,6 +113,11 @@ export default class Npc extends Component {
      this.move(body, 3);
      }*/
 
+    direction = -1;
+    //this.move(body, -4);
+    //npcState = 1;
+
+
     // console.log(npcState);
 
     this.setState({
@@ -161,20 +166,20 @@ export default class Npc extends Component {
 
   constructor(props) {
     super(props);
-
     this.loopID = null;
     this.isJumping = false;
     this.isPunching = false;
     this.isShooting = false;
     this.isLeaving = false;
     this.lastX = 0;
+    this.lastDirection = -1;
 
     this.state = {
       npcState: 2,
       loop: false,
       spritePlaying: true,
       ticksPerFrame: 5,
-      lastDirection:1
+      direction: -1
     };
   }
 
@@ -206,13 +211,18 @@ export default class Npc extends Component {
   render() {
     const {npcIndex} = this.props;
     const x = this.props.store.npcPositions[npcIndex].x;
-
     return (
-      <div style={this.getWrapperStyles()}>
+      <div style={this.getWrapperStyles()} ref={(npcIndex)=>npcIndex}>
         <Body
           args={[x, 415, 20, 20]}
           inertia={Infinity}
-          ref={(b) => { this.body = b; }}
+          ref={(b) => {
+            this.body = b;
+            if(!b){
+                return this.body;
+              }
+            }
+          }
         >
         <Sprite
           repeat={this.state.repeat}
@@ -220,7 +230,7 @@ export default class Npc extends Component {
           onGetContextLoop={this.getContextLoop}
           src="assets/alien_0.png"
           scale={this.context.scale * 1}
-          direction={this.state.direction}
+          direction={-1}
           state={this.state.npcState}
           steps={[7,7,0]}
           offset={[0,0]}

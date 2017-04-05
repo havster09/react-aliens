@@ -6,7 +6,9 @@ class GameStore {
   @observable heroLoopCount = 0;
 
   @observable npcPositions = [
-      { x: 100, y: 0 }
+      { x: 500 , y: 0 },
+      { x: 800, y: 0 },
+      { x: 300, y: 0 },
   ];
 
   setCharacterPosition(position) {

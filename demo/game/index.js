@@ -89,8 +89,8 @@ export default class Game extends Component {
     }
 
     componentDidMount() {
-        this.player = new AudioPlayer('/assets/music.wav', () => {
-            //this.stopMusic = this.player.play({ loop: true, offset: 1, volume: 0.35 });
+        this.player = new AudioPlayer('/assets/Aliens_Soundtrack_Futile_Escape.mp3', () => {
+            this.stopMusic = this.player.play({ loop: true, offset: 1, volume: 0.35 });
         });
 
 
@@ -108,11 +108,14 @@ export default class Game extends Component {
     }
 
     componentWillUnmount() {
-        //this.stopMusic();
+        this.stopMusic();
         this.keyListener.unsubscribe();
     }
 
     render() {
+
+      const aliens = GameStore.npcPositions.map((alien, i)=> {return <Npc ref={`alien_${i}`} key={i} store={GameStore} npcIndex={parseInt(i)}/>});
+
         return (
             <Loop>
                 <Stage style={{ background: '#000' }}>
@@ -126,7 +129,9 @@ export default class Game extends Component {
                         ammo={this.state.ammo}
                         keys={this.keyListener}/>
 
-                        <Npc store={GameStore} npcIndex={0}/>
+                      <Npc key={0} store={GameStore} npcIndex={0}/>
+                      <Npc key={1} store={GameStore} npcIndex={1}/>
+                      <Npc key={2} store={GameStore} npcIndex={2}/>
 
                         <Ammo count={this.state.ammo}/>
                     </World>

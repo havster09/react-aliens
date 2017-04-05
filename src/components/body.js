@@ -81,6 +81,7 @@ export default class Body extends Component {
     const { args, children, shape, ...options } = props;
 
     this.body = Bodies[shape](...args, options);
+    if(!this.body)debugger;
     World.addBody(context.engine.world, this.body);
   }
 
@@ -105,6 +106,7 @@ export default class Body extends Component {
   }
 
   render() {
+
     return this.props.children;
   }
 
