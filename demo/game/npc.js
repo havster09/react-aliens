@@ -81,7 +81,7 @@ export default class Npc extends Component {
     let direction = this.lastDirection > 0 ? -1 : 1;
 
     direction = -1;
-    // this.move(body, -3);
+    this.move(body, -3);
     npcState = 1;
 
     this.setState({

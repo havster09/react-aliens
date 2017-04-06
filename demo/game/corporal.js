@@ -151,14 +151,14 @@ export default class Corporal extends Component {
 
     if (keys.isDown(keys.LEFT)) {
       if (shouldMoveStageLeft) {
-        store.setStageX(store.stageX + 4);
+        store.setStageX(store.stageX + 3);
       }
       direction = -1;
       this.move(this.body, -3);
       characterState = 1;
     } else if (keys.isDown(keys.RIGHT)) {
       if (shouldMoveStageRight) {
-        store.setStageX(store.stageX - 4);
+        store.setStageX(store.stageX - 3);
       }
       characterState = 0;
       direction = 1;
