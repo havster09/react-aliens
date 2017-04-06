@@ -10,7 +10,6 @@ import {
 
 @observer
 export default class Npc extends Component {
-
   static propTypes = {
     npcIndex: PropTypes.number,
     keys: PropTypes.object,
@@ -36,78 +35,6 @@ export default class Npc extends Component {
     this.setState({
       contextLoop: contextLoop
     });
-  };
-
-  move = (body, x) => {
-    const {store,npcIndex} = this.props;
-    this.lastDirection = (x < 0 && Math.abs(x) > 2) ? 1 : 0;
-    store.setNpcPosition({x:store.npcPositions[npcIndex].x + x,y:store.npcPositions[npcIndex].y},npcIndex);
-  };
-
-  jump = (body) => {
-    this.jumpNoise.play();
-    this.isJumping = true;
-  };
-
-  shoot = () => {
-    this.isShooting = true;
-    let direction = this.lastDirection > 0 ? -1 : 1;
-    if (this.props.ammo > 0) {
-      this.props.onShoot();
-      this.setState({
-        npcState: 3,
-        direction,
-        repeat: true
-      });
-    }
-    else {
-      this.reload();
-    }
-  };
-
-  stop = () => {
-    let direction = this.lastDirection > 0 ? -1 : 1;
-    this.setState({
-      npcState: 2,
-      direction,
-      repeat: false
-    });
-  };
-
-  npcAction = (body) => {
-    const {keys, store} = this.props;
-
-    let npcState = 2;
-    let direction = this.lastDirection > 0 ? -1 : 1;
-
-    direction = -1;
-    this.move(body, -3);
-    npcState = 1;
-
-    this.setState({
-      npcState,
-      direction,
-      repeat: npcState < 2,
-    });
-  };
-
-  loop = () => {
-    const {store, npcIndex} = this.props;
-
-    const midPoint = Math.abs(store.stageX) + 360;
-
-    if (!this.isJumping && !this.isPunching && !this.isLeaving) {
-      this.npcAction(this.body);
-    } else {
-      if (this.isPunching && this.state.spritePlaying === false) {
-        this.isPunching = false;
-      }
-
-      if (this.isShooting && this.state.spritePlaying === false) {
-        this.isShooting = false;
-      }
-    }
-    this.lastX = store.npcPositions[npcIndex].x;
   };
 
   constructor(props) {
@@ -154,6 +81,112 @@ export default class Npc extends Component {
     };
   }
 
+  loop = () => {
+    const {store, npcIndex} = this.props;
+
+    const midPoint = Math.abs(store.stageX) + 360;
+
+    if (!this.isJumping && !this.isPunching && !this.isLeaving) {
+      this.npcAction(this.body);
+    } else {
+      if (this.isPunching && this.state.spritePlaying === false) {
+        this.isPunching = false;
+      }
+
+      if (this.isShooting && this.state.spritePlaying === false) {
+        this.isShooting = false;
+      }
+    }
+    this.lastX = store.npcPositions[npcIndex].x;
+  };
+
+  npcAction = (body) => {
+    const {store, npcIndex} = this.props;
+    let npcState = this.state.npcState;
+
+
+    if (this.isContact() && npcState !== 2) {
+      this.stop();
+    }
+    else if (this.isFar()) {
+      /*if (this.isBehind()) {
+        this.turn();
+      }*/
+      npcState = store.npcPositions[npcIndex].x < store.characterPosition.x ? 1 : 0;
+      const distance = store.npcPositions[npcIndex].x < store.characterPosition.x ? 3 : -3;
+      this.move(body, distance, npcState);
+    }
+  };
+
+  isBehind() {
+    const {store, npcIndex} = this.props;
+    const turnOffset = store.npcPositions[npcIndex].x < store.characterPosition.x ? -1000 : 1000;
+    return store.npcPositions[npcIndex].x < store.characterPosition.x - turnOffset;
+  }
+
+  turn() {
+    const {store, npcIndex} = this.props;
+    this.lastDirection = store.npcPositions[npcIndex].x < store.characterPosition.x ? 1 : -1;
+    this.setState(Object.assign({}, ...this.state, {
+      npcState: 2,
+      direction: this.lastDirection,
+      repeat: false
+    }));
+
+  }
+
+  isFar = () => {
+    const {store, npcIndex} = this.props;
+    const distance = Math.abs(store.npcPositions[npcIndex].x - store.characterPosition.x);
+    return distance > 100;
+  };
+
+  move = (body, distance, npcState) => {
+    const {store, npcIndex} = this.props;
+    store.setNpcPosition({x: store.npcPositions[npcIndex].x + distance, y: store.npcPositions[npcIndex].y}, npcIndex);
+    this.setState({
+      npcState,
+      direction:store.npcPositions[npcIndex].x < store.characterPosition.x ? 1 : -1,
+      repeat: true,
+    });
+  };
+
+  jump = (body) => {
+    this.jumpNoise.play();
+    this.isJumping = true;
+  };
+
+  shoot = () => {
+    this.isShooting = true;
+    let direction = this.lastDirection > 0 ? -1 : 1;
+    if (this.props.ammo > 0) {
+      this.props.onShoot();
+      this.setState({
+        npcState: 3,
+        direction,
+        repeat: true
+      });
+    }
+    else {
+      this.reload();
+    }
+  };
+
+  stop = () => {
+    let direction = this.lastDirection > 0 ? -1 : 1;
+    this.setState({
+      npcState: 2,
+      direction,
+      repeat: false
+    });
+  };
+
+  isContact() {
+    const {store, npcIndex} = this.props;
+    const contactRightOffset = 80;
+    return store.npcPositions[npcIndex].x < store.characterPosition.x + contactRightOffset;
+  }
+
   render() {
     return (
       <div style={this.getWrapperStyles()} className={`npc`} id={`npc_${this.props.npcIndex}`}>
@@ -167,7 +200,7 @@ export default class Npc extends Component {
           onGetContextLoop={this.getContextLoop}
           src="assets/alien_0.png"
           scale={this.context.scale * 1}
-          direction={-1}
+          direction={this.state.direction}
           state={this.state.npcState}
           steps={[7,7,0]}
           offset={[0,0]}
@@ -191,4 +224,5 @@ export default class Npc extends Component {
       </div>
     );
   }
+
 }
