@@ -20,6 +20,7 @@ export default class Npc extends Component {
   };
 
   static contextTypes = {
+    loop: PropTypes.object,
     engine: PropTypes.object,
     scale: PropTypes.number,
   };
@@ -38,19 +39,14 @@ export default class Npc extends Component {
   };
 
   move = (body, x) => {
+    const {store,npcIndex} = this.props;
     this.lastDirection = (x < 0 && Math.abs(x) > 2) ? 1 : 0;
-    Matter.Body.setVelocity(body, {x, y: 0});
+    store.setNpcPosition({x:store.npcPositions[npcIndex].x + x,y:store.npcPositions[npcIndex].y},npcIndex);
   };
 
   jump = (body) => {
     this.jumpNoise.play();
     this.isJumping = true;
-    Matter.Body.applyForce(
-      body,
-      {x: 0, y: 0},
-      {x: 0, y: -0.3},
-    );
-    Matter.Body.set(body, 'friction', 0.0001);
   };
 
   shoot = () => {
@@ -78,47 +74,15 @@ export default class Npc extends Component {
     });
   };
 
-  checkKeys = (shouldMoveStageLeft, shouldMoveStageRight) => {
+  npcAction = (body) => {
     const {keys, store} = this.props;
-    const {body} = this.body;
 
     let npcState = 2;
     let direction = this.lastDirection > 0 ? -1 : 1;
 
-    /*if (keys.isDown(83)) {
-     return this.shoot();
-     }
-
-     if (keys.isDown(65)) {
-     return this.stop();
-     }
-
-     if (keys.isDown(keys.SPACE)) {
-     this.jump(body);
-     }
-
-     if (keys.isDown(keys.LEFT)) {
-     if (shouldMoveStageLeft) {
-
-     }
-     direction = -1;
-     this.move(body, -4);
-     npcState = 1;
-     } else if (keys.isDown(keys.RIGHT)) {
-     if (shouldMoveStageRight) {
-
-     }
-     npcState = 0;
-     direction = 1;
-     this.move(body, 3);
-     }*/
-
     direction = -1;
-    //this.move(body, -4);
-    //npcState = 1;
-
-
-    // console.log(npcState);
+    // this.move(body, -3);
+    npcState = 1;
 
     this.setState({
       npcState,
@@ -127,26 +91,13 @@ export default class Npc extends Component {
     });
   };
 
-  update = () => {
+  loop = () => {
     const {store, npcIndex} = this.props;
-    const {body} = this.body;
-
 
     const midPoint = Math.abs(store.stageX) + 360;
 
-    const shouldMoveStageLeft = body.position.x < midPoint && store.stageX < 0;
-    const shouldMoveStageRight = body.position.x > midPoint && store.stageX > -2048;
-
-    const velY = parseFloat(body.velocity.y.toFixed(10));
-
-    if (velY === 0) {
-      this.isJumping = false;
-      Matter.Body.set(body, 'friction', 0.9999);
-    }
-
     if (!this.isJumping && !this.isPunching && !this.isLeaving) {
-      this.checkKeys(shouldMoveStageLeft, shouldMoveStageRight);
-      store.setNpcPosition(body.position, 0);
+      this.npcAction(this.body);
     } else {
       if (this.isPunching && this.state.spritePlaying === false) {
         this.isPunching = false;
@@ -155,13 +106,8 @@ export default class Npc extends Component {
       if (this.isShooting && this.state.spritePlaying === false) {
         this.isShooting = false;
       }
-
-      const targetX = store.stageX + (this.lastX - body.position.x);
-      if (shouldMoveStageLeft || shouldMoveStageRight) {
-
-      }
     }
-    this.lastX = body.position.x;
+    this.lastX = store.npcPositions[npcIndex].x;
   };
 
   constructor(props) {
@@ -186,11 +132,11 @@ export default class Npc extends Component {
 
   componentDidMount() {
     this.jumpNoise = new AudioPlayer('/assets/jump.wav');
-    Matter.Events.on(this.context.engine, 'afterUpdate', this.update);
+    this.loopID = this.context.loop.subscribe(this.loop);
   }
 
   componentWillUnmount() {
-    Matter.Events.off(this.context.engine, 'afterUpdate', this.update);
+    this.context.loop.unsubscribe(this.loopID);
   }
 
   getWrapperStyles() {
@@ -209,22 +155,13 @@ export default class Npc extends Component {
   }
 
   render() {
-    const {npcIndex} = this.props;
-    const x = this.props.store.npcPositions[npcIndex].x;
     return (
-      <div style={this.getWrapperStyles()} ref={(npcIndex)=>npcIndex}>
-        <Body
-          args={[x, 415, 20, 20]}
-          inertia={Infinity}
-          ref={(b) => {
-            this.body = b;
-            if(!b){
-                return this.body;
-              }
+      <div style={this.getWrapperStyles()} className={`npc`} id={`npc_${this.props.npcIndex}`}>
+        <Sprite
+          ref={(sprite)=>{
+              this.body=sprite
             }
           }
-        >
-        <Sprite
           repeat={this.state.repeat}
           onPlayStateChanged={this.handlePlayStateChanged}
           onGetContextLoop={this.getContextLoop}
@@ -238,7 +175,6 @@ export default class Npc extends Component {
           tileHeight={100}
           ticksPerFrame={this.state.ticksPerFrame}
         />
-        </Body>
         <Sprite
           repeat={this.state.repeat}
           src="assets/pulse_rifle_shoot.png"

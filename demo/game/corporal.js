@@ -142,7 +142,7 @@ export default class Corporal extends Component {
     }
 
     if (keys.isDown(keys.SPACE)) {
-      // this.jump(this.body);
+      //  this.jump(this.body);
     }
 
     if (keys.isDown(keys.UP)) {
@@ -245,12 +245,13 @@ export default class Corporal extends Component {
   }
 
   render() {
-    const x = this.props.store.characterPosition.x;
-
     return (
       <div style={this.getWrapperStyles()}>
         <Sprite
-          ref={(sprite)=>{this.body=sprite}}
+          ref={(sprite)=>{
+              this.body=sprite
+            }
+          }
           repeat={this.state.repeat}
           onPlayStateChanged={this.handlePlayStateChanged}
           onGetContextLoop={this.getContextLoop}
