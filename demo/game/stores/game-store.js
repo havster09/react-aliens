@@ -1,14 +1,14 @@
 import { observable } from 'mobx';
 
 class GameStore {
-  @observable characterPosition = { x: 100, y: 0 };
+  @observable characterPosition = { x: 100, y: 350 };
   @observable stageX = 0;
   @observable heroLoopCount = 0;
 
   @observable npcPositions = [
-      { x: 500 , y: 0 },
-      { x: 800, y: 0 },
-      { x: 300, y: 0 },
+      { x: 500 , y: 400 },
+      { x: 800, y: 400 },
+      { x: 300, y: 400 },
   ];
 
   setCharacterPosition(position) {

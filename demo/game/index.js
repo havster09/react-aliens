@@ -113,8 +113,10 @@ export default class Game extends Component {
     }
 
     render() {
-
-      const aliens = GameStore.npcPositions.map((alien, i)=> {return <Npc ref={`alien_${i}`} key={i} store={GameStore} npcIndex={parseInt(i)}/>});
+      const aliens = GameStore.npcPositions.map((alien, i)=> {return (
+        <Npc ref={`alien_${i}`} key={i} store={GameStore} npcIndex={parseInt(i)}/>
+      )
+      });
 
         return (
             <Loop>
@@ -128,10 +130,6 @@ export default class Game extends Component {
                         store={GameStore}
                         ammo={this.state.ammo}
                         keys={this.keyListener}/>
-
-                      <Npc key={0} store={GameStore} npcIndex={0}/>
-                      <Npc key={1} store={GameStore} npcIndex={1}/>
-                      <Npc key={2} store={GameStore} npcIndex={2}/>
 
                         <Ammo count={this.state.ammo}/>
                     </World>
