@@ -48,11 +48,12 @@ export default class Npc extends Component {
     this.lastDirection = -1;
 
     this.state = {
-      npcState: 2,
+      npcState: 4,
       loop: true,
       spritePlaying: true,
       ticksPerFrame: 5,
-      direction: -1
+      direction: -1,
+      hasStopped:Math.random()<.5?0:1
     };
   }
 
@@ -111,14 +112,19 @@ export default class Npc extends Component {
     }
 
     if (this.isFar()) {
-      npcState = store.npcPositions[npcIndex].x < store.characterPosition.x ? 1 : 0;
+      if(this.state.hasStopped%2>0) {
+        npcState = store.npcPositions[npcIndex].x < store.characterPosition.x ? 0 : 1;
+      }
+      else {
+        npcState = store.npcPositions[npcIndex].x < store.characterPosition.x ? 2 : 3;
+      }
       const distance = store.npcPositions[npcIndex].x < store.characterPosition.x ? 3 : -3;
       this.move(body, distance, npcState);
     }
-    else if(this.state.npcState !== 2){
+    else if(this.state.npcState !== 4){
       this.stop();
     }
-    else if(this.state.npcState === 2) {
+    else if(this.state.npcState === 4) {
       // console.log(`attack`);
     }
   };
@@ -139,9 +145,9 @@ export default class Npc extends Component {
 
   isFar = () => {
     const {store, npcIndex} = this.props;
-    const directionOffset = this.state.direction < 0?-50:0;
+    const directionOffset = this.state.direction < 0?-40:0;
     const distance = Math.abs(store.npcPositions[npcIndex].x - store.characterPosition.x);
-    return distance > 100+directionOffset;
+    return distance > 110+directionOffset;
   };
 
   move = (body, distance, npcState) => {
@@ -178,8 +184,9 @@ export default class Npc extends Component {
 
   stop = () => {
     this.setState({
-      npcState: 2,
-      repeat: false
+      npcState: 4,
+      repeat: false,
+      hasStopped:this.state.hasStopped + 1
     });
   };
 
@@ -198,7 +205,7 @@ export default class Npc extends Component {
         scale={this.context.scale * 1}
         direction={this.state.direction}
         state={this.state.npcState}
-        steps={[7, 7, 0]}
+        steps={[7, 7, 7, 7,0]}
         offset={[0, 0]}
         tileWidth={200}
         tileHeight={100}
@@ -215,7 +222,7 @@ export default class Npc extends Component {
         tileHeight={100}
         ticksPerFrame={3}
         top={-120}
-        display={this.state.npcState !== 3 ? "none" : "block"}
+        display={this.state.npcState !== 99 ? "none" : "block"}
        />
      </div>
     );

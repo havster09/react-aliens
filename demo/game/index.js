@@ -89,7 +89,7 @@ export default class Game extends Component {
   }
 
   componentDidMount() {
-    this.player = new AudioPlayer('/assets/Aliens_Soundtrack_Futile_Escape.mp3', () => {
+    this.player = new AudioPlayer('/assets/Rescue.mp3', () => {
       this.stopMusic = this.player.play({loop: true, offset: 1, volume: 0.35});
     });
 
