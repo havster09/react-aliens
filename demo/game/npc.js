@@ -3,9 +3,9 @@ import {observer} from 'mobx-react';
 import Matter from 'matter-js';
 
 import {
-  AudioPlayer,
-  Body,
-  Sprite,
+ AudioPlayer,
+ Body,
+ Sprite,
 } from '../../src';
 
 @observer
@@ -49,7 +49,7 @@ export default class Npc extends Component {
 
     this.state = {
       npcState: 2,
-      loop: false,
+      loop: true,
       spritePlaying: true,
       ticksPerFrame: 5,
       direction: -1
@@ -103,18 +103,23 @@ export default class Npc extends Component {
   npcAction = (body) => {
     const {store, npcIndex} = this.props;
     let npcState = this.state.npcState;
-
-
-    if (this.isContact() && npcState !== 2) {
-      this.stop();
+    if (this.isBehind()) {
+      this.turn(1);
     }
-    else if (this.isFar()) {
-      /*if (this.isBehind()) {
-        this.turn();
-      }*/
+    else {
+      this.turn(-1);
+    }
+
+    if (this.isFar()) {
       npcState = store.npcPositions[npcIndex].x < store.characterPosition.x ? 1 : 0;
       const distance = store.npcPositions[npcIndex].x < store.characterPosition.x ? 3 : -3;
       this.move(body, distance, npcState);
+    }
+    else if(this.state.npcState !== 2){
+      this.stop();
+    }
+    else if(this.state.npcState === 2) {
+      // console.log(`attack`);
     }
   };
 
@@ -124,31 +129,30 @@ export default class Npc extends Component {
     return store.npcPositions[npcIndex].x < store.characterPosition.x - turnOffset;
   }
 
-  turn() {
+  turn(direction) {
     const {store, npcIndex} = this.props;
-    this.lastDirection = store.npcPositions[npcIndex].x < store.characterPosition.x ? 1 : -1;
+    this.lastDirection = direction;
     this.setState(Object.assign({}, ...this.state, {
-      npcState: 2,
-      direction: this.lastDirection,
-      repeat: false
+      direction: direction
     }));
-
   }
 
   isFar = () => {
     const {store, npcIndex} = this.props;
+    const directionOffset = this.state.direction < 0?-50:0;
     const distance = Math.abs(store.npcPositions[npcIndex].x - store.characterPosition.x);
-    return distance > 100;
+    return distance > 100+directionOffset;
   };
 
   move = (body, distance, npcState) => {
     const {store, npcIndex} = this.props;
     store.setNpcPosition({x: store.npcPositions[npcIndex].x + distance, y: store.npcPositions[npcIndex].y}, npcIndex);
-    this.setState({
+    this.setState(Object.assign({},...this.state,{
       npcState,
-      direction:store.npcPositions[npcIndex].x < store.characterPosition.x ? 1 : -1,
+      direction: store.npcPositions[npcIndex].x < store.characterPosition.x ? 1 : -1,
       repeat: true,
-    });
+      loop: true,
+    }));
   };
 
   jump = (body) => {
@@ -173,55 +177,47 @@ export default class Npc extends Component {
   };
 
   stop = () => {
-    let direction = this.lastDirection > 0 ? -1 : 1;
     this.setState({
       npcState: 2,
-      direction,
       repeat: false
     });
   };
 
-  isContact() {
-    const {store, npcIndex} = this.props;
-    const contactRightOffset = 80;
-    return store.npcPositions[npcIndex].x < store.characterPosition.x + contactRightOffset;
-  }
-
   render() {
     return (
-      <div style={this.getWrapperStyles()} className={`npc`} id={`npc_${this.props.npcIndex}`}>
-        <Sprite
-          ref={(sprite)=>{
-              this.body=sprite
-            }
-          }
-          repeat={this.state.repeat}
-          onPlayStateChanged={this.handlePlayStateChanged}
-          onGetContextLoop={this.getContextLoop}
-          src="assets/alien_0.png"
-          scale={this.context.scale * 1}
-          direction={this.state.direction}
-          state={this.state.npcState}
-          steps={[7,7,0]}
-          offset={[0,0]}
-          tileWidth={200}
-          tileHeight={100}
-          ticksPerFrame={this.state.ticksPerFrame}
-        />
-        <Sprite
-          repeat={this.state.repeat}
-          src="assets/pulse_rifle_shoot.png"
-          scale={this.context.scale * 1}
-          direction={this.state.direction}
-          steps={[3]}
-          offset={[0,0]}
-          tileWidth={200}
-          tileHeight={100}
-          ticksPerFrame={3}
-          top={-120}
-          display={this.state.npcState!==3?"none":"block"}
-        />
-      </div>
+     <div style={this.getWrapperStyles()} className={`npc`} id={`npc_${this.props.npcIndex}`}>
+       <Sprite
+        ref={(sprite)=> {
+          this.body = sprite
+        }
+        }
+        repeat={this.state.repeat}
+        onPlayStateChanged={this.handlePlayStateChanged}
+        onGetContextLoop={this.getContextLoop}
+        src="assets/alien_0.png"
+        scale={this.context.scale * 1}
+        direction={this.state.direction}
+        state={this.state.npcState}
+        steps={[7, 7, 0]}
+        offset={[0, 0]}
+        tileWidth={200}
+        tileHeight={100}
+        ticksPerFrame={this.state.ticksPerFrame}
+       />
+       <Sprite
+        repeat={this.state.repeat}
+        src="assets/pulse_rifle_shoot.png"
+        scale={this.context.scale * 1}
+        direction={this.state.direction}
+        steps={[3]}
+        offset={[0, 0]}
+        tileWidth={200}
+        tileHeight={100}
+        ticksPerFrame={3}
+        top={-120}
+        display={this.state.npcState !== 3 ? "none" : "block"}
+       />
+     </div>
     );
   }
 
