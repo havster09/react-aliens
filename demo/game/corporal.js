@@ -52,6 +52,7 @@ export default class Corporal extends Component {
   };
 
   shoot = () => {
+    const {store} = this.props;
     this.isShooting = true;
     let direction = this.lastDirection > 0 ? -1 : 1;
     if (this.props.ammo > 0) {
@@ -61,6 +62,7 @@ export default class Corporal extends Component {
         direction,
         repeat: true
       });
+      this.props.store.setCharacterIsAttacking(true);
     }
     else {
       this.reload();
@@ -79,7 +81,7 @@ export default class Corporal extends Component {
       direction,
       repeat: false
     });
-
+    this.props.store.setCharacterIsAttacking(false);
     if (this.state.reloadTimeStamp) {
       if (this.state.contextLoop > this.state.reloadTimeStamp + 50) {
         this.props.onReload();
@@ -136,6 +138,10 @@ export default class Corporal extends Component {
     if (keys.isDown(83)) {
       return this.shoot();
     }
+    else {
+      const {store} = this.props;
+      store.setCharacterIsAttacking(false);
+    }
 
     if (keys.isDown(65)) {
       return this.stop();
@@ -154,6 +160,7 @@ export default class Corporal extends Component {
         store.setStageX(store.stageX + 3);
       }
       direction = -1;
+      store.setCharacterDirection(direction);
       this.move(this.body, -3);
       characterState = 1;
     } else if (keys.isDown(keys.RIGHT)) {
@@ -162,10 +169,9 @@ export default class Corporal extends Component {
       }
       characterState = 0;
       direction = 1;
+      store.setCharacterDirection(direction);
       this.move(this.body, 3);
     }
-
-    // console.log(characterState);
 
     this.setState({
       characterState,
@@ -215,6 +221,7 @@ export default class Corporal extends Component {
 
     this.state = {
       characterState: 2,
+      direction:1,
       loop: false,
       spritePlaying: true,
       ticksPerFrame: 5,
