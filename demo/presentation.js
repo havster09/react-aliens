@@ -29,7 +29,7 @@ export default class Presentation extends Component {
     super(props);
 
     this.state = {
-      gameState: 0,
+      gameState: 1, // 0 reset to intro screen
       slideIndex: 0,
     };
   }
