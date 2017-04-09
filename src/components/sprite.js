@@ -88,8 +88,10 @@ export default class Sprite extends Component {
             if (steps[state] !== 0) {
                 const {currentStep} = this.state;
                 const lastStep = steps[state];
-                const nextStep = currentStep === lastStep ? 0 : currentStep + 1;
-
+                let nextStep = currentStep === lastStep ? 0 : currentStep + 1;
+                if(!repeat && currentStep > nextStep) {
+                    nextStep = currentStep;
+                }
                 this.setState({
                     currentStep: nextStep,
                 });

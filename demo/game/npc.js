@@ -117,7 +117,7 @@ export default class Npc extends Component {
 
       if (this.isDown && this.state.spritePlaying === false) {
         this.isDown = false;
-        console.log(`respawn`);
+        return this.respawn();
       }
     }
     this.lastX = store.npcPositions[npcIndex].x;
@@ -128,11 +128,13 @@ export default class Npc extends Component {
     let npcState = this.state.npcState;
 
     if (store.characterIsAttacking) {
-      if(store.npcPositions[npcIndex].x < store.characterPosition.x && store.characterDirection === -1) {
-        return this.hit();
-      }
-      else if(store.npcPositions[npcIndex].x > store.characterPosition.x && store.characterDirection === 1) {
-        return this.hit();
+      if (Math.abs(store.npcPositions[npcIndex].x - store.characterPosition.x) < Math.random() * 100 + 400) {
+        if (store.npcPositions[npcIndex].x < store.characterPosition.x && store.characterDirection === -1) {
+          return this.hit();
+        }
+        else if (store.npcPositions[npcIndex].x > store.characterPosition.x && store.characterDirection === 1) {
+          return this.hit();
+        }
       }
     }
 
@@ -174,20 +176,20 @@ export default class Npc extends Component {
   hit = () => {
     const {store, npcIndex} = this.props;
     const direction = store.npcPositions[npcIndex].x < store.characterPosition.x ? 1 : -1;
-    if(this.state.hasHit < 3) {
+    if (this.state.hasHit < 3) {
       this.isHit = true;
-      const distance = direction < 0 ? Math.ceil(Math.random()*10) : 0-Math.ceil(Math.random()*10);
+      const distance = direction < 0 ? Math.ceil(Math.random() * 10) : 0 - Math.ceil(Math.random() * 10);
       store.setNpcPosition({x: store.npcPositions[npcIndex].x + distance, y: store.npcPositions[npcIndex].y}, npcIndex);
       this.setState(Object.assign({}, this.state, {
-        npcState:  this.state.hasHit % 2 > 0?8:9,
-        hasHit:this.state.hasHit + 1,
+        npcState: this.state.hasHit % 2 > 0 ? 8 : 9,
+        hasHit: this.state.hasHit + 1,
         direction,
         repeat: false,
         ticksPerFrame: 10
       }));
     }
     else {
-      this.drop();
+      return this.drop();
     }
   };
 
@@ -195,26 +197,41 @@ export default class Npc extends Component {
     this.isDrop = true;
     const {store, npcIndex} = this.props;
     const direction = store.npcPositions[npcIndex].x < store.characterPosition.x ? 1 : -1;
-    const distance = direction < 0 ? Math.ceil(Math.random()*28) : 0-Math.ceil(Math.random()*28);
-    store.setNpcPosition({x: store.npcPositions[npcIndex].x + distance*5, y: store.npcPositions[npcIndex].y}, npcIndex);
+    const distance = direction < 0 ? Math.ceil(Math.random() * 28) : 0 - Math.ceil(Math.random() * 28);
+    store.setNpcPosition({
+      x: store.npcPositions[npcIndex].x + distance * 5,
+      y: store.npcPositions[npcIndex].y
+    }, npcIndex);
     this.setState(Object.assign({}, this.state, {
-      npcState:  10,
-      hasHit:this.state.hasHit + 1,
+      npcState:this.state.hasStopped % 2 > 0 ? 11 : 11,
+      hasHit: this.state.hasHit + 1,
       direction,
       repeat: false,
       ticksPerFrame: 6
     }));
   };
 
+  respawn = () => {
+    const {store, npcIndex} = this.props;
+    const direction = store.npcPositions[npcIndex].x < store.characterPosition.x ? 1 : -1;
+    const distance = direction < 0 ? Math.ceil(Math.random() * 1000) + 1000 : -1000 - Math.ceil(Math.random() * 1000);
+    store.setNpcPosition({x: store.characterPosition.x + distance, y: store.npcPositions[npcIndex].y}, npcIndex);
+    this.setState(Object.assign({}, this.state, {
+      npcState: 4,
+      hasHit: 0,
+      direction,
+      repeat: false,
+      ticksPerFrame: 500
+    }));
+  };
+
   down = () => {
     this.isDown = true;
     this.setState(Object.assign({}, this.state, {
-      npcState:  12,
+      npcState: this.state.npcState === 10 ? 12 : 13,
       repeat: false,
-      ticksPerFrame: 1000
+      ticksPerFrame: 50 // respawn time
     }));
-
-    // respawn off screen
   };
 
   isBehind() {
@@ -285,11 +302,11 @@ export default class Npc extends Component {
 
   stop = () => {
     this.setState(Object.assign({}, this.state, {
-        npcState: 4,
-        ticksPerFrame: 5,
-        repeat: false,
-        hasStopped: this.state.hasStopped + 1
-      }));
+      npcState: 4,
+      ticksPerFrame: 5,
+      repeat: false,
+      hasStopped: this.state.hasStopped + 1
+    }));
   };
 
   render() {
@@ -307,7 +324,22 @@ export default class Npc extends Component {
           scale={this.context.scale * 1}
           direction={this.state.direction}
           state={this.state.npcState}
-          steps={[7,7,7,7,0,3,3,6,1,1,1,1,1]}
+          steps={[
+            7,
+            7,
+            7,
+            7,
+            0,
+            3,
+            3,
+            6,
+            1,
+            1,
+            1,
+            1,//drop 2
+            1,
+            1
+            ]}
           offset={[0, 0]}
           tileWidth={200}
           tileHeight={100}
@@ -324,7 +356,7 @@ export default class Npc extends Component {
           tileHeight={100}
           ticksPerFrame={2}
           top={Math.ceil(-90-Math.ceil(Math.random()*10))}
-          display={this.state.npcState === 9 ? "block" : "none"}
+          display={this.state.npcState === 9 || this.state.npcState === 10 ? "block" : "none"}
         />
         <Sprite
           repeat={this.state.repeat}
