@@ -203,7 +203,7 @@ export default class Npc extends Component {
       y: store.npcPositions[npcIndex].y
     }, npcIndex);
     this.setState(Object.assign({}, this.state, {
-      npcState:this.state.hasStopped % 2 > 0 ? 11 : 11,
+      npcState:Math.random() < .5 ? 10 : 11,
       hasHit: this.state.hasHit + 1,
       direction,
       repeat: false,
@@ -354,7 +354,7 @@ export default class Npc extends Component {
           offset={[0, 0]}
           tileWidth={200}
           tileHeight={100}
-          ticksPerFrame={2}
+          ticksPerFrame={3}
           top={Math.ceil(-90-Math.ceil(Math.random()*10))}
           display={this.state.npcState === 9 || this.state.npcState === 10 ? "block" : "none"}
         />
@@ -367,7 +367,7 @@ export default class Npc extends Component {
           offset={[0, 0]}
           tileWidth={200}
           tileHeight={100}
-          ticksPerFrame={1}
+          ticksPerFrame={6}
           top={-90}
           display={this.state.npcState === 8? "block" : "none"}
         />

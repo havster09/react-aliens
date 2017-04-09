@@ -45,7 +45,7 @@ export default class Intro extends Component {
   render() {
     return (
       <div>
-        {/*<img className="intro" src="assets/intro.png"/>*/}
+        <img className="intro" src="assets/intro.png"/>
         <p
           className="start"
           style={{ display: this.state.blink ? 'block' : 'none' }}

@@ -12,14 +12,14 @@ class GameStore {
   @observable npcPositions = [
     {x: -500, y: floor + 20},
     {x: 500, y: floor + 20},
-    /*{x: 500, y: floor + 20},
-    {x: -500, y: floor + 20},
     {x: 500, y: floor + 20},
     {x: -500, y: floor + 20},
     {x: 500, y: floor + 20},
+    {x: -500, y: floor + 20},
+    {x: 500, y: floor + 20},
     {x: 500, y: floor + 20},
     {x: -500, y: floor + 20},
-    {x: 500, y: floor + 20},*/
+    {x: 500, y: floor + 20},
   ];
 
   setCharacterPosition(position) {
