@@ -12,7 +12,7 @@ export default class Intro extends Component {
 
   handleKeyPress = (e) => {
     if (e.keyCode === 13) {
-      this.startNoise.play();
+      // this.startNoise.play();
       this.props.onStart();
     }
   }
@@ -26,7 +26,7 @@ export default class Intro extends Component {
   }
 
   componentDidMount() {
-    this.startNoise = new AudioPlayer('/assets/start.wav');
+    // this.startNoise = new AudioPlayer('/assets/start.wav');
     window.addEventListener('keypress', this.handleKeyPress);
     this.animationFrame = requestAnimationFrame(this.startUpdate);
     this.interval = setInterval(() => {

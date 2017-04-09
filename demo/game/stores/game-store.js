@@ -1,6 +1,7 @@
 import {observable} from 'mobx';
 
-const floor = 350;
+export const floor = 350;
+export const alienFloor = 370;
 
 class GameStore {
   @observable characterPosition = {x: 100, y: floor};
@@ -10,16 +11,16 @@ class GameStore {
   @observable heroLoopCount = 0;
 
   @observable npcPositions = [
-    {x: -500, y: floor + 20},
-    {x: 500, y: floor + 20},
-    {x: 500, y: floor + 20},
-    {x: -500, y: floor + 20},
-    {x: 500, y: floor + 20},
-    {x: -500, y: floor + 20},
-    {x: 500, y: floor + 20},
-    {x: 500, y: floor + 20},
-    {x: -500, y: floor + 20},
-    {x: 500, y: floor + 20},
+    {x: 600, y: alienFloor},
+    {x: 500, y: alienFloor},
+    {x: 500, y: alienFloor},
+    {x: -500, y: alienFloor},
+    {x: 500, y: alienFloor},
+    {x: -500, y: alienFloor},
+    {x: 500, y: alienFloor},
+    {x: 500, y: alienFloor},
+    {x: -500, y: alienFloor},
+    {x: 500, y: alienFloor},
   ];
 
   setCharacterPosition(position) {
