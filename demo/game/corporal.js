@@ -230,11 +230,12 @@ export default class Corporal extends Component {
   }
 
   componentDidMount() {
-    this.jumpNoise = new AudioPlayer('/assets/jump.wav');
+    this.pulsRifleSound = new AudioPlayer('/assets/pulse_rifle_sound_effect.mp3');
     this.loopID = this.context.loop.subscribe(this.loop);
   }
 
   componentWillUnmount() {
+    this.stopPulsRifleSound();
     this.context.loop.unsubscribe(this.loopID);
   }
 
