@@ -43,6 +43,7 @@ export default class Npc extends Component {
     this.isJumping = false;
     this.isPunching = false;
     this.isBiting = false;
+    this.isCrouchIdle = false;
     this.isWhiping = false;
     this.isHit = false;
     this.isDrop = false;
@@ -93,7 +94,7 @@ export default class Npc extends Component {
   loop = () => {
     const {store, npcIndex} = this.props;
 
-    if (!this.isJumping && !this.isPunching && !this.isBiting && !this.isWhiping && !this.isLeaving && !this.isHit && !this.isDrop && !this.isDown && !this.isLanding) {
+    if (!this.isJumping && !this.isPunching && !this.isBiting && !this.isWhiping && !this.isLeaving && !this.isHit && !this.isDrop && !this.isDown && !this.isLanding && !this.isCrouchIdle) {
       this.npcAction(this.body);
       if (this.isAmbush && this.state.spritePlaying === false) {
         this.isAmbush = false;
@@ -105,6 +106,11 @@ export default class Npc extends Component {
 
       if (this.isBiting && this.state.spritePlaying === false) {
         this.isBiting = false;
+      }
+
+      if (this.isCrouchIdle && this.state.spritePlaying === false) {
+        this.isCrouchIdle = false;
+        return this.ambush();
       }
 
       if (this.isWhiping && this.state.spritePlaying === false) {
@@ -146,8 +152,10 @@ export default class Npc extends Component {
       }
     }
 
-    if (store.npcPositions[npcIndex].y  < 370  && npcState !== 14) {
-      return this.ambush();
+
+
+    if (store.npcPositions[npcIndex].y  < 370  && npcState !== 16 && npcState !== 14) {
+      return this.crouchIdle();
     }
     else if(store.npcPositions[npcIndex].y  < 370 && npcState === 14) {
       return store.setNpcPosition({x: store.npcPositions[npcIndex].x, y: store.npcPositions[npcIndex].y+10}, npcIndex);
@@ -341,6 +349,17 @@ export default class Npc extends Component {
     }));
   };
 
+  crouchIdle = () => {
+    const {store, npcIndex} = this.props;
+    this.isCrouchIdle = true;
+    this.setState(Object.assign({}, this.state, {
+      npcState: 16,
+      direction: store.npcPositions[npcIndex].x < store.characterPosition.x ? 1 : -1,
+      ticksPerFrame: 10,
+      repeat: false
+    }));
+  };
+
   whip = () => {
     this.isWhiping = true;
     this.setState(Object.assign({}, this.state, {
@@ -392,6 +411,7 @@ export default class Npc extends Component {
             1,
             2, // ambush
             1, // land
+            2
             ]}
           offset={[0, 0]}
           tileWidth={200}
