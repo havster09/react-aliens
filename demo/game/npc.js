@@ -48,6 +48,7 @@ export default class Npc extends Component {
     this.isSnarling = false;
     this.isWhiping = false;
     this.isHit = false;
+    this.isDecapitated = false;
     this.isDrop = false;
     this.isDown = false;
     this.isAmbush = false;
@@ -61,6 +62,7 @@ export default class Npc extends Component {
       npcState: 4,
       loop: true,
       spritePlaying: true,
+      decapitated: false,
       ticksPerFrame: 5,
       direction: -1,
       hasStopped: Math.random() < .5 ? 0 : 1,
@@ -96,7 +98,7 @@ export default class Npc extends Component {
   loop = () => {
     const {store, npcIndex} = this.props;
 
-    if (!this.isJumping && !this.isPunching && !this.isBiting && !this.isWhiping && !this.isLeaving && !this.isHit && !this.isDrop && !this.isDown && !this.isLanding && !this.isCrouchIdle && !this.isLookBack && !this.isSnarling) {
+    if (!this.isJumping && !this.isPunching && !this.isBiting && !this.isWhiping && !this.isLeaving && !this.isHit && !this.isDrop && !this.isDown && !this.isLanding && !this.isCrouchIdle && !this.isLookBack && !this.isSnarling && !this.isDecapitated) {
       this.npcAction(this.body);
       if (this.isAmbush && this.state.spritePlaying === false) {
         this.isAmbush = false;
@@ -129,6 +131,11 @@ export default class Npc extends Component {
 
       if (this.isHit && this.state.spritePlaying === false) {
         this.isHit = false;
+      }
+
+      if (this.isDecapitated && this.state.spritePlaying === false) {
+        this.isDecapitated = false;
+        return this.drop();
       }
 
       if (this.isLanding && this.state.spritePlaying === false) {
@@ -231,8 +238,29 @@ export default class Npc extends Component {
       }));
     }
     else {
-      return this.drop();
+      if(Math.random() < .5) {
+        return this.decapitated();
+      }
+      else {
+        return this.drop();
+      }
     }
+  };
+
+  decapitated = () => {
+    const {store, npcIndex} = this.props;
+    const direction = store.npcPositions[npcIndex].x < store.characterPosition.x ? 1 : -1;
+    this.isDecapitated = true;
+    const distance = direction < 0 ? Math.ceil(Math.random() * 10) : 0 - Math.ceil(Math.random() * 10);
+    store.setNpcPosition({x: store.npcPositions[npcIndex].x + distance, y: store.npcPositions[npcIndex].y}, npcIndex);
+    this.setState(Object.assign({}, this.state, {
+      npcState: this.state.hasHit % 2 > 0 ? 19 : 20,
+      hasHit: this.state.hasHit + 1,
+      direction,
+      repeat: false,
+      decapitated: true,
+      ticksPerFrame: 10
+    }));
   };
 
   drop = () => {
@@ -244,8 +272,12 @@ export default class Npc extends Component {
       x: store.npcPositions[npcIndex].x + distance * 5,
       y: store.npcPositions[npcIndex].y
     }, npcIndex);
+    let npcState = Math.random() < .5 ? 10 : 11;
+    if(this.state.decapitated) {
+      npcState = 21;
+    }
     this.setState(Object.assign({}, this.state, {
-      npcState:Math.random() < .5 ? 10 : 11,
+      npcState,
       hasHit: this.state.hasHit + 1,
       direction,
       repeat: false,
@@ -278,14 +310,19 @@ export default class Npc extends Component {
       hasHit: 0,
       direction,
       repeat: false,
+      decapitated: false,
       ticksPerFrame: 500
     }));
   };
 
   down = () => {
     this.isDown = true;
+    let npcState = this.state.npcState === 10 ? 12 : 13;
+    if(this.state.decapitated) {
+      npcState = 22;
+    }
     this.setState(Object.assign({}, this.state, {
-      npcState: this.state.npcState === 10 ? 12 : 13,
+      npcState,
       repeat: false,
       ticksPerFrame: 100 // respawn time
     }));
@@ -449,13 +486,18 @@ export default class Npc extends Component {
             1, // land
             2, //16 crouchIdle
             3, // 17 lookBack
-            2 // 18 snarl
+            2, // 18 snarl
+            1, // 19 decapitation 1
+            1, // 20 decapitation 2
+            1, // 21 fall decapitation
+            1, // 22 down decapitation
             ]}
           offset={[0, 0]}
           tileWidth={200}
           tileHeight={100}
           ticksPerFrame={this.state.ticksPerFrame}
         />
+        {this.state.npcState === 8 &&
         <Sprite
           repeat={this.state.repeat}
           src="assets/acid_0.png"
@@ -467,8 +509,9 @@ export default class Npc extends Component {
           tileHeight={100}
           ticksPerFrame={3}
           top={Math.ceil(-90-Math.ceil(Math.random()*10))}
-          display={this.state.npcState === 8 ? "block" : "none"}
         />
+        }
+        {this.state.npcState === 11 &&
         <Sprite
           repeat={this.state.repeat}
           src="assets/armor_hit.png"
@@ -480,8 +523,21 @@ export default class Npc extends Component {
           tileHeight={100}
           ticksPerFrame={1}
           top={-90}
-          display={this.state.npcState === 11? "block" : "none"}
+        />}
+        {(this.state.npcState === 19 || this.state.npcState === 20) &&
+        <Sprite
+          repeat={this.state.repeat}
+          src="assets/decap_acid.png"
+          scale={this.context.scale * 1}
+          direction={this.state.direction}
+          steps={[5]}
+          offset={[0, 0]}
+          tileWidth={200}
+          tileHeight={100}
+          ticksPerFrame={10}
+          top={Math.ceil(-90-Math.ceil(Math.random()*10))}
         />
+        }
       </div>
     );
   }

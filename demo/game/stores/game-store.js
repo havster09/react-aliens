@@ -11,16 +11,16 @@ class GameStore {
   @observable heroLoopCount = 0;
 
   @observable npcPositions = [
-    {x: 600, y: alienFloor},
-    {x: 500, y: alienFloor},
-    {x: 500, y: alienFloor},
-    {x: -500, y: alienFloor},
-    {x: 500, y: alienFloor},
-    {x: -500, y: alienFloor},
-    {x: 500, y: alienFloor},
+    {x: 3600, y: alienFloor},
+    {x: 3000, y: alienFloor},
+    {x: 5000, y: alienFloor},
+     /*{x: -500, y: alienFloor},
     {x: 500, y: alienFloor},
     {x: -500, y: alienFloor},
     {x: 500, y: alienFloor},
+    {x: 500, y: alienFloor},
+    {x: -500, y: alienFloor},
+    {x: 500, y: alienFloor},*/
   ];
 
   setCharacterPosition(position) {

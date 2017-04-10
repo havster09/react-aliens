@@ -25,36 +25,6 @@ export default class Game extends Component {
     onLeave: PropTypes.func,
   };
 
-  physicsInit = (engine) => {
-    const ground = Matter.Bodies.rectangle(
-      512 * 6, 450,
-      1024 * 6, 64,
-      {
-        isStatic: true,
-      },
-    );
-
-    const leftWall = Matter.Bodies.rectangle(
-      -50, 288,
-      64 * 2, 576,
-      {
-        isStatic: true,
-      },
-    );
-
-    const rightWall = Matter.Bodies.rectangle(
-      2950, 288,
-      64, 576,
-      {
-        isStatic: true,
-      },
-    );
-
-    Matter.World.addBody(engine.world, ground);
-    Matter.World.addBody(engine.world, leftWall);
-    Matter.World.addBody(engine.world, rightWall);
-  };
-
   handleEnterBuilding = (index) => {
     this.setState({
       fade: true,
@@ -122,7 +92,6 @@ export default class Game extends Component {
     return (
       <Loop>
         <Stage style={{ background: '#000' }}>
-          <World onInit={this.physicsInit}>
             <Level store={GameStore}/>
             <Corporal
               onEnterBuilding={this.handleEnterBuilding}
@@ -134,7 +103,6 @@ export default class Game extends Component {
 
             {aliens}
             <Ammo count={this.state.ammo}/>
-          </World>
         </Stage>
         <Fade visible={this.state.fade}/>
       </Loop>
