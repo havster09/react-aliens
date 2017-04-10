@@ -14,13 +14,7 @@ class GameStore {
     {x: 600, y: alienFloor},
     {x: 500, y: alienFloor},
     {x: 500, y: alienFloor},
-    {x: -500, y: alienFloor},
-    {x: 500, y: alienFloor},
-    {x: -500, y: alienFloor},
-    {x: 500, y: alienFloor},
-    {x: 500, y: alienFloor},
-    {x: -500, y: alienFloor},
-    {x: 500, y: alienFloor},
+    {x: -500, y: alienFloor}
   ];
 
   setCharacterPosition(position) {

@@ -152,7 +152,7 @@ export default class Corporal extends Component {
     }
 
     if (keys.isDown(keys.UP)) {
-      return this.enterBuilding(this.body);
+      // return this.enterBuilding(this.body);
     }
 
     if (keys.isDown(keys.LEFT)) {
