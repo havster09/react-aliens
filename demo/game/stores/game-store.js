@@ -7,14 +7,15 @@ class GameStore {
   @observable characterPosition = {x: 100, y: floor};
   @observable characterDirection = 1;
   @observable characterIsAttacking = false;
+
   @observable stageX = 0;
   @observable heroLoopCount = 0;
 
   @observable npcPositions = [
-    {x: 3600, y: alienFloor},
+    {x: 500, y: alienFloor},
     {x: 3000, y: alienFloor},
-    {x: 5000, y: alienFloor},
-     /*{x: -500, y: alienFloor},
+    {x: 5000, y: alienFloor},/*
+     {x: -500, y: alienFloor},
     {x: 500, y: alienFloor},
     {x: -500, y: alienFloor},
     {x: 500, y: alienFloor},

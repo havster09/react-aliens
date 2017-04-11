@@ -13,8 +13,8 @@ export default class Npc extends Component {
   static propTypes = {
     npcIndex: PropTypes.number,
     keys: PropTypes.object,
-    onShoot: PropTypes.func,
-    onReload: PropTypes.func,
+    onCharacterHit: PropTypes.func,
+    onCharacterHitDone: PropTypes.func,
     store: PropTypes.object,
   };
 
@@ -106,10 +106,17 @@ export default class Npc extends Component {
     } else {
       if (this.isPunching && this.state.spritePlaying === false) {
         this.isPunching = false;
+        this.props.onCharacterHitDone();
       }
 
       if (this.isBiting && this.state.spritePlaying === false) {
         this.isBiting = false;
+        this.props.onCharacterHitDone();
+      }
+
+      if (this.isWhiping && this.state.spritePlaying === false) {
+        this.isWhiping = false;
+        this.props.onCharacterHitDone();
       }
 
       if (this.isLookBack && this.state.spritePlaying === false) {
@@ -123,10 +130,6 @@ export default class Npc extends Component {
       if (this.isCrouchIdle && this.state.spritePlaying === false) {
         this.isCrouchIdle = false;
         return this.ambush();
-      }
-
-      if (this.isWhiping && this.state.spritePlaying === false) {
-        this.isWhiping = false;
       }
 
       if (this.isHit && this.state.spritePlaying === false) {
@@ -209,6 +212,7 @@ export default class Npc extends Component {
       this.stop();
     }
     else if (this.state.npcState === 4) {
+      this.props.onCharacterHit();
       const attackRandom = Math.random();
       if (attackRandom > .6 && this.state.direction === 1) {
         this.whip();

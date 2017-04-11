@@ -40,6 +40,21 @@ export default class Game extends Component {
     });
   };
 
+  handleCharacterHit = () => {
+    if(!this.state.isHit) {
+      this.setState(Object.assign({},this.state,{
+        hitCount:this.state.hitCount + 1,
+        isHit: true,
+      }));
+    }
+  };
+
+  handleCharacterHitDone = () => {
+    this.setState(Object.assign({},this.state,{
+      isHit: false,
+    }));
+  };
+
   handleReload = () => {
     this.setState({
       ammo: 990
@@ -51,6 +66,8 @@ export default class Game extends Component {
 
     this.state = {
       fade: true,
+      isHit: false,
+      hitCount: 0,
       ammo: 990
     };
     this.keyListener = new KeyListener();
@@ -85,7 +102,7 @@ export default class Game extends Component {
   render() {
     const aliens = GameStore.npcPositions.map((alien, i) => {
       return (
-        <Npc key={i} store={GameStore} npcIndex={parseInt(i)}/>
+        <Npc key={i} store={GameStore} npcIndex={parseInt(i)} onCharacterHit={this.handleCharacterHit} onCharacterHitDone={this.handleCharacterHitDone}/>
       )
     });
 
@@ -97,6 +114,8 @@ export default class Game extends Component {
               onEnterBuilding={this.handleEnterBuilding}
               onShoot={this.handleShoot}
               onReload={this.handleReload}
+              isHit={this.state.isHit}
+              hitCount={this.state.hitCount}
               store={GameStore}
               ammo={this.state.ammo}
               keys={this.keyListener}/>

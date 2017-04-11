@@ -16,6 +16,7 @@ export default class Corporal extends Component {
     onShoot: PropTypes.func,
     onReload: PropTypes.func,
     store: PropTypes.object,
+    hitCount: PropTypes.number,
   };
 
   static contextTypes = {
@@ -60,6 +61,7 @@ export default class Corporal extends Component {
       this.setState({
         characterState: 3,
         direction,
+        ticksPerFrame: 5,
         repeat: true
       });
       this.props.store.setCharacterIsAttacking(true);
@@ -72,13 +74,15 @@ export default class Corporal extends Component {
   reload = () => {
     if (!this.state.reloadTimeStamp) {
       this.setState({
-        reloadTimeStamp: this.state.contextLoop
+        reloadTimeStamp: this.state.contextLoop,
+        ticksPerFrame: 10
       });
     }
     let direction = this.lastDirection > 0 ? -1 : 1;
     this.setState({
       characterState: 4,
       direction,
+      ticksPerFrame: 5,
       repeat: false
     });
     this.props.store.setCharacterIsAttacking(false);
@@ -101,6 +105,18 @@ export default class Corporal extends Component {
     });
   };
 
+
+  hit = () => {
+      let characterState = this.props.hitCount % 2 > 0?5:6;
+      let direction = this.lastDirection > 0 ? -1 : 1;
+      this.setState({
+        characterState,
+        ticksPerFrame: 12,
+        direction,
+        repeat: false
+      });
+  };
+
   getDoorIndex = (body) => {
     let doorIndex = null;
 
@@ -115,7 +131,7 @@ export default class Corporal extends Component {
     });
 
     return doorIndex;
-  }
+  };
 
   enterBuilding = (body) => {
     const doorIndex = this.getDoorIndex(body);
@@ -181,14 +197,19 @@ export default class Corporal extends Component {
   };
 
   loop = () => {
-    const {store} = this.props;
+    const {store,isHit} = this.props;
+
+    if(isHit && !this.isHit) {
+      return this.hit();
+    }
+
     const midPoint = Math.abs(store.stageX) + 360;
 
     const shouldMoveStageLeft = store.characterPosition.x < midPoint && store.stageX < 0;
     const shouldMoveStageRight = store.characterPosition.x > midPoint && store.stageX > -2048;
 
 
-    if (!this.isJumping && !this.isPunching && !this.isLeaving) {
+    if (!this.isJumping && !this.isPunching && !this.isLeaving && !this.isHit) {
       this.checkKeys(shouldMoveStageLeft, shouldMoveStageRight);
       store.setCharacterPosition(store.characterPosition);
     } else {
@@ -200,12 +221,14 @@ export default class Corporal extends Component {
         this.isShooting = false;
       }
 
+      if (this.isHit && this.state.spritePlaying === false) {
+        this.isHit = false;
+      }
       const targetX = store.stageX + (this.lastX - store.characterPosition.x);
       if (shouldMoveStageLeft || shouldMoveStageRight) {
         store.setStageX(targetX);
       }
     }
-
     this.lastX = store.characterPosition.x;
   };
 
@@ -216,11 +239,13 @@ export default class Corporal extends Component {
     this.isJumping = false;
     this.isPunching = false;
     this.isShooting = false;
+    this.isHit = false;
     this.isLeaving = false;
     this.lastX = 0;
 
     this.state = {
       characterState: 2,
+      hitCount: 0,
       direction:1,
       loop: false,
       spritePlaying: true,
@@ -230,12 +255,12 @@ export default class Corporal extends Component {
   }
 
   componentDidMount() {
-    this.pulsRifleSound = new AudioPlayer('/assets/pulse_rifle_sound_effect.mp3');
+    this.pulseRifleSound = new AudioPlayer('/assets/pulse_rifle_sound_effect.mp3');
     this.loopID = this.context.loop.subscribe(this.loop);
   }
 
   componentWillUnmount() {
-    this.stopPulsRifleSound();
+    this.stopPulseRifleSound();
     this.context.loop.unsubscribe(this.loopID);
   }
 
@@ -267,7 +292,15 @@ export default class Corporal extends Component {
           scale={this.context.scale * 1}
           direction={this.state.direction}
           state={this.state.characterState}
-          steps={[7,7,0,1,0]}
+          steps={[
+            7, // 0
+            7,
+            0, // 2 idle
+            1, // 3 shoot
+            0, // 4 reload
+            1, // 5 hit 1
+            1, // 6 hit 2
+            ]}
           offset={[0,0]}
           tileWidth={160}
           tileHeight={120}
