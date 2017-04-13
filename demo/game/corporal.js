@@ -42,24 +42,38 @@ export default class Corporal extends Component {
   move = (body, x) => {
     const {store} = this.props;
     this.lastDirection = (x < 0 && Math.abs(x) > 2) ? 1 : 0;
-    store.setCharacterPosition({x:store.characterPosition.x + x,y:store.characterPosition.y});
+    store.setCharacterPosition({x: store.characterPosition.x + x, y: store.characterPosition.y});
   };
 
   jump = (body) => {
     const {store} = this.props;
     this.jumpNoise.play();
     this.isJumping = true;
-    store.setCharacterPosition({x:store.characterPosition.x,y:store.characterPosition.y+3});
+    store.setCharacterPosition({x: store.characterPosition.x, y: store.characterPosition.y + 3});
+  };
+
+  crouch = (body) => {
+    const {store} = this.props;
+    this.isCrouching = true;
+    let direction = this.lastDirection > 0 ? -1 : 1;
+    this.setState({
+      characterState: 9,
+      direction,
+      repeat: true
+    });
+    store.setCharacterIsCrouching(true);
   };
 
   shoot = () => {
     const {store} = this.props;
     this.isShooting = true;
     let direction = this.lastDirection > 0 ? -1 : 1;
+    debugger;
+    let characterState = this.isCrouching?8:3;
     if (this.props.ammo > 0) {
       this.props.onShoot();
       this.setState({
-        characterState: 3,
+        characterState,
         direction,
         ticksPerFrame: 5,
         repeat: true
@@ -107,14 +121,24 @@ export default class Corporal extends Component {
 
 
   hit = () => {
-      let characterState = this.props.hitCount % 2 > 0?5:6;
-      let direction = this.lastDirection > 0 ? -1 : 1;
-      this.setState({
-        characterState,
-        ticksPerFrame: 12,
-        direction,
-        repeat: false
-      });
+    const {store} = this.props;
+
+    let characterState = this.props.hitCount % 2 > 0 ? 5 : 6;
+    let direction = this.lastDirection > 0 ? -1 : 1;
+
+    store.npcPositions.forEach((alien)=> {
+      if(store.characterPosition.x < alien.x && direction < 0 || store.characterPosition.x > alien.x && direction > 0) {
+        characterState = 7;
+      }
+    });
+
+
+    this.setState({
+      characterState,
+      ticksPerFrame: 12,
+      direction,
+      repeat: false
+    });
   };
 
   getDoorIndex = (body) => {
@@ -168,7 +192,16 @@ export default class Corporal extends Component {
     }
 
     if (keys.isDown(keys.UP)) {
-      return this.enterBuilding(this.body);
+      // return this.enterBuilding(this.body);
+    }
+    if (keys.isDown(keys.DOWN)) {
+      return this.crouch(this.body);
+    }
+    else {
+      this.isCrouching = false;
+      if(store.characterIsCrouching) {
+        store.setCharacterIsCrouching(false);
+      }
     }
 
     if (keys.isDown(keys.LEFT)) {
@@ -197,9 +230,9 @@ export default class Corporal extends Component {
   };
 
   loop = () => {
-    const {store,isHit} = this.props;
+    const {store, isHit} = this.props;
 
-    if(isHit && !this.isHit) {
+    if (isHit && !this.isHit) {
       return this.hit();
     }
 
@@ -237,6 +270,7 @@ export default class Corporal extends Component {
 
     this.loopID = null;
     this.isJumping = false;
+    this.isCrouch = false;
     this.isPunching = false;
     this.isShooting = false;
     this.isHit = false;
@@ -246,7 +280,7 @@ export default class Corporal extends Component {
     this.state = {
       characterState: 2,
       hitCount: 0,
-      direction:1,
+      direction: 1,
       loop: false,
       spritePlaying: true,
       ticksPerFrame: 5,
@@ -300,6 +334,9 @@ export default class Corporal extends Component {
             0, // 4 reload
             1, // 5 hit 1
             1, // 6 hit 2
+            1, // 7 hit behind
+            1, // 8 crouch shoot
+            0, // 9 crouch
             ]}
           offset={[0,0]}
           tileWidth={160}

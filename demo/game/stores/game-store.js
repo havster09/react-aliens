@@ -7,6 +7,7 @@ class GameStore {
   @observable characterPosition = {x: 100, y: floor};
   @observable characterDirection = 1;
   @observable characterIsAttacking = false;
+  @observable characterIsCrouching = false;
 
   @observable stageX = 0;
   @observable heroLoopCount = 0;
@@ -34,6 +35,10 @@ class GameStore {
 
   setCharacterIsAttacking(isAttacking) {
     this.characterIsAttacking = isAttacking;
+  }
+
+  setCharacterIsCrouching(isCrouching) {
+    this.characterIsCrouching = isCrouching;
   }
 
   setNpcPosition(position, index) {

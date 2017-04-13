@@ -255,7 +255,7 @@ export default class Npc extends Component {
     const {store, npcIndex} = this.props;
     const direction = store.npcPositions[npcIndex].x < store.characterPosition.x ? 1 : -1;
     this.isDecapitated = true;
-    const distance = direction < 0 ? Math.ceil(Math.random() * 10) : 0 - Math.ceil(Math.random() * 10);
+    const distance = direction < 0 ? Math.ceil(Math.random() * 30) : 0 - Math.ceil(Math.random() * 30);
     store.setNpcPosition({x: store.npcPositions[npcIndex].x + distance, y: store.npcPositions[npcIndex].y}, npcIndex);
     this.setState(Object.assign({}, this.state, {
       npcState: this.state.hasHit % 2 > 0 ? 19 : 20,

@@ -89,8 +89,10 @@ export default class Game extends Component {
       this.keyListener.LEFT,
       this.keyListener.RIGHT,
       this.keyListener.UP,
+      this.keyListener.DOWN,
       this.keyListener.SPACE,
-      65, 83
+      65,
+      83, // s key
     ]);
   }
 
