@@ -17,6 +17,7 @@ export default class Sprite extends Component {
         tileHeight: PropTypes.number,
         tileWidth: PropTypes.number,
         top: PropTypes.number,
+        left: PropTypes.number,
         hidden: PropTypes.bool,
     };
 
@@ -116,10 +117,6 @@ export default class Sprite extends Component {
         const left = this.props.offset[0] + (currentStep * tileWidth);
         const top = this.props.offset[1] + (state * tileHeight);
 
-        if(this.props.src !== 'assets/corporal.png'&&this.props.src !== 'assets/pulse_rifle_shoot.png') {
-
-        }
-
         return {
             position: 'absolute',
             transform: `translate(-${left}px, -${top}px) scale(${direction},1)`,
@@ -140,6 +137,11 @@ export default class Sprite extends Component {
         if(this.props.top) {
             wrapperStyles = {
                 ...wrapperStyles,top:`${this.props.top}px`
+            }
+        }
+        if(this.props.left) {
+            wrapperStyles = {
+                ...wrapperStyles,left:`${this.props.left}px`
             }
         }
 

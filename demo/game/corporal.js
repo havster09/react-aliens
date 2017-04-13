@@ -68,7 +68,6 @@ export default class Corporal extends Component {
     const {store} = this.props;
     this.isShooting = true;
     let direction = this.lastDirection > 0 ? -1 : 1;
-    debugger;
     let characterState = this.isCrouching?8:3;
     if (this.props.ammo > 0) {
       this.props.onShoot();
@@ -198,8 +197,8 @@ export default class Corporal extends Component {
       return this.crouch(this.body);
     }
     else {
-      this.isCrouching = false;
       if(store.characterIsCrouching) {
+        this.isCrouching = false;
         store.setCharacterIsCrouching(false);
       }
     }
@@ -312,6 +311,13 @@ export default class Corporal extends Component {
   }
 
   render() {
+    let pulseRifleShotLeft = 0;
+    if(this.state.characterState===8&&this.state.direction > 0) {
+      pulseRifleShotLeft = -30;
+    }
+    else if(this.state.characterState===8&&this.state.direction < 0){
+      pulseRifleShotLeft = 30;
+    }
     return (
       <div style={this.getWrapperStyles()}>
         <Sprite
@@ -353,8 +359,9 @@ export default class Corporal extends Component {
           tileWidth={160}
           tileHeight={120}
           ticksPerFrame={3}
-          top={-120}
-          display={this.state.characterState!==3?"none":"block"}
+          top={this.state.characterState!==8?-120:-102}
+          left={pulseRifleShotLeft}
+          display={this.state.characterState!==3&&this.state.characterState!==8?"none":"block"}
         />
       </div>
     );
