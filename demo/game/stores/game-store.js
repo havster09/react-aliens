@@ -1,8 +1,6 @@
 import {observable} from 'mobx';
 
-export const floor = 350;
-export const alienFloor = 370;
-export const faceHuggerFloor = 394;
+import {floor,alienFloor,faceHuggerFloor} from '../constants';
 
 class GameStore {
   @observable characterPosition = {x: 100, y: floor};

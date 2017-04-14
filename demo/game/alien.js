@@ -1,6 +1,7 @@
 import React, {PropTypes} from 'react';
 import Npc from "./npc"
 import {observer} from 'mobx-react';
+import {alienFloor} from './constants';
 
 import {
   AudioPlayer,
@@ -174,13 +175,13 @@ export default class Alien extends Npc {
       }
     }
 
-    if (store.npcPositions[npcIndex].y  < 370  && npcState !== 16 && npcState !== 14) {
+    if (store.npcPositions[npcIndex].y  < alienFloor  && npcState !== 16 && npcState !== 14) {
       return this.crouchIdle();
     }
-    else if(store.npcPositions[npcIndex].y  < 370 && npcState === 14) {
+    else if(store.npcPositions[npcIndex].y  < alienFloor && npcState === 14) {
       return store.setNpcPosition({x: store.npcPositions[npcIndex].x, y: store.npcPositions[npcIndex].y+10}, npcIndex);
     }
-    else if(store.npcPositions[npcIndex].y  === 370 && npcState === 14 && npcState !== 15) {
+    else if(store.npcPositions[npcIndex].y  === alienFloor && npcState === 14 && npcState !== 15) {
       return this.land();
     }
 
