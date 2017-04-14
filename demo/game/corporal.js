@@ -311,13 +311,7 @@ export default class Corporal extends Component {
   }
 
   render() {
-    let pulseRifleShotLeft = 0;
-    if(this.state.characterState===8&&this.state.direction > 0) {
-      pulseRifleShotLeft = -30;
-    }
-    else if(this.state.characterState===8&&this.state.direction < 0){
-      pulseRifleShotLeft = 30;
-    }
+    const {scale} = this.context;
     return (
       <div style={this.getWrapperStyles()}>
         <Sprite
@@ -351,7 +345,7 @@ export default class Corporal extends Component {
         />
         <Sprite
           repeat={this.state.repeat}
-          src="assets/pulse_rifle_shoot.png"
+          src={this.state.characterState===8?"assets/pulse_rifle_crouch_shoot.png":"assets/pulse_rifle_shoot.png"}
           scale={this.context.scale * 1}
           direction={this.state.direction}
           steps={[3]}
@@ -359,8 +353,8 @@ export default class Corporal extends Component {
           tileWidth={160}
           tileHeight={120}
           ticksPerFrame={3}
-          top={this.state.characterState!==8?-120:-102}
-          left={pulseRifleShotLeft}
+          top={-120}
+          left={0}
           display={this.state.characterState!==3&&this.state.characterState!==8?"none":"block"}
         />
       </div>

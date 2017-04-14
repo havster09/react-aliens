@@ -1,5 +1,6 @@
-import React, {Component, PropTypes} from 'react';
+import React, {PropTypes} from 'react';
 import {observer} from 'mobx-react';
+import Npc from "./npc";
 
 import {
   AudioPlayer,
@@ -8,8 +9,9 @@ import {
 } from '../../src';
 
 
+
 @observer
-export default class Npc extends Component {
+export default class FaceHugger extends Npc {
   static propTypes = {
     npcIndex: PropTypes.number,
     keys: PropTypes.object,
@@ -81,7 +83,7 @@ export default class Npc extends Component {
 
   getWrapperStyles() {
     const {store, npcIndex} = this.props;
-    const npcPosition = store.npcPositions[npcIndex];
+    const npcPosition = store.faceHuggerPositions[npcIndex];
     const {stageX} = store;
     const {scale} = this.context;
     const {x, y} = npcPosition;
@@ -154,30 +156,30 @@ export default class Npc extends Component {
         return this.respawn();
       }
     }
-    this.lastX = store.npcPositions[npcIndex].x;
+    this.lastX = store.faceHuggerPositions[npcIndex].x;
   };
 
   npcAction = (body) => {
     const {store, npcIndex} = this.props;
     let npcState = this.state.npcState;
-    if (store.characterIsAttacking && store.npcPositions[npcIndex].y > 360) {
-      if (Math.abs(store.npcPositions[npcIndex].x - store.characterPosition.x) < Math.random() * 100 + 400) {
-        if (store.npcPositions[npcIndex].x < store.characterPosition.x && store.characterDirection === -1) {
+    if (store.characterIsAttacking && store.faceHuggerPositions[npcIndex].y > 360) {
+      if (Math.abs(store.faceHuggerPositions[npcIndex].x - store.characterPosition.x) < Math.random() * 100 + 400) {
+        if (store.faceHuggerPositions[npcIndex].x < store.characterPosition.x && store.characterDirection === -1) {
           return this.hit();
         }
-        else if (store.npcPositions[npcIndex].x > store.characterPosition.x && store.characterDirection === 1) {
+        else if (store.faceHuggerPositions[npcIndex].x > store.characterPosition.x && store.characterDirection === 1) {
           return this.hit();
         }
       }
     }
 
-    if (store.npcPositions[npcIndex].y  < 370  && npcState !== 16 && npcState !== 14) {
+    if (store.faceHuggerPositions[npcIndex].y  < 394  && npcState !== 16 && npcState !== 14) {
       return this.crouchIdle();
     }
-    else if(store.npcPositions[npcIndex].y  < 370 && npcState === 14) {
-      return store.setNpcPosition({x: store.npcPositions[npcIndex].x, y: store.npcPositions[npcIndex].y+10}, npcIndex);
+    else if(store.faceHuggerPositions[npcIndex].y  < 394 && npcState === 14) {
+      return store.setFaceHuggerPosition({x: store.faceHuggerPositions[npcIndex].x, y: store.faceHuggerPositions[npcIndex].y+10}, npcIndex);
     }
-    else if(store.npcPositions[npcIndex].y  === 370 && npcState === 14 && npcState !== 15) {
+    else if(store.faceHuggerPositions[npcIndex].y  === 394 && npcState === 14 && npcState !== 15) {
       return this.land();
     }
 
@@ -199,12 +201,12 @@ export default class Npc extends Component {
         }
       }
       if (this.state.hasStopped % 2 > 0) {
-        npcState = store.npcPositions[npcIndex].x < store.characterPosition.x ? 0 : 1;
+        npcState = store.faceHuggerPositions[npcIndex].x < store.characterPosition.x ? 0 : 1;
       }
       else {
-        npcState = store.npcPositions[npcIndex].x < store.characterPosition.x ? 2 : 3;
+        npcState = store.faceHuggerPositions[npcIndex].x < store.characterPosition.x ? 2 : 3;
       }
-      const distance = store.npcPositions[npcIndex].x < store.characterPosition.x ? 3 : -3;
+      const distance = store.faceHuggerPositions[npcIndex].x < store.characterPosition.x ? 3 : -3;
       this.move(body, distance, npcState);
     }
     else if (this.state.npcState !== 4) {
@@ -227,11 +229,11 @@ export default class Npc extends Component {
 
   hit = () => {
     const {store, npcIndex} = this.props;
-    const direction = store.npcPositions[npcIndex].x < store.characterPosition.x ? 1 : -1;
+    const direction = store.faceHuggerPositions[npcIndex].x < store.characterPosition.x ? 1 : -1;
     if (this.state.hasHit < 3) {
       this.isHit = true;
       const distance = direction < 0 ? Math.ceil(Math.random() * 10) : 0 - Math.ceil(Math.random() * 10);
-      store.setNpcPosition({x: store.npcPositions[npcIndex].x + distance, y: store.npcPositions[npcIndex].y}, npcIndex);
+      store.setFaceHuggerPosition({x: store.faceHuggerPositions[npcIndex].x + distance, y: store.faceHuggerPositions[npcIndex].y}, npcIndex);
       this.setState(Object.assign({}, this.state, {
         npcState: this.state.hasHit % 2 > 0 ? 8 : 9,
         hasHit: this.state.hasHit + 1,
@@ -252,10 +254,10 @@ export default class Npc extends Component {
 
   decapitated = () => {
     const {store, npcIndex} = this.props;
-    const direction = store.npcPositions[npcIndex].x < store.characterPosition.x ? 1 : -1;
+    const direction = store.faceHuggerPositions[npcIndex].x < store.characterPosition.x ? 1 : -1;
     this.isDecapitated = true;
     const distance = direction < 0 ? Math.ceil(Math.random() * 30) : 0 - Math.ceil(Math.random() * 30);
-    store.setNpcPosition({x: store.npcPositions[npcIndex].x + distance, y: store.npcPositions[npcIndex].y}, npcIndex);
+    store.setFaceHuggerPosition({x: store.faceHuggerPositions[npcIndex].x + distance, y: store.faceHuggerPositions[npcIndex].y}, npcIndex);
     this.setState(Object.assign({}, this.state, {
       npcState: this.state.hasHit % 2 > 0 ? 19 : 20,
       hasHit: this.state.hasHit + 1,
@@ -269,11 +271,11 @@ export default class Npc extends Component {
   drop = () => {
     this.isDrop = true;
     const {store, npcIndex} = this.props;
-    const direction = store.npcPositions[npcIndex].x < store.characterPosition.x ? 1 : -1;
+    const direction = store.faceHuggerPositions[npcIndex].x < store.characterPosition.x ? 1 : -1;
     const distance = direction < 0 ? Math.ceil(Math.random() * 28) : 0 - Math.ceil(Math.random() * 28);
-    store.setNpcPosition({
-      x: store.npcPositions[npcIndex].x + distance * 5,
-      y: store.npcPositions[npcIndex].y
+    store.setFaceHuggerPosition({
+      x: store.faceHuggerPositions[npcIndex].x + distance * 5,
+      y: store.faceHuggerPositions[npcIndex].y
     }, npcIndex);
     let npcState = Math.random() < .5 ? 10 : 11;
     if(this.state.decapitated) {
@@ -290,12 +292,12 @@ export default class Npc extends Component {
 
   respawn = () => {
     const {store, npcIndex} = this.props;
-    const direction = store.npcPositions[npcIndex].x < store.characterPosition.x ? 1 : -1;
+    const direction = store.faceHuggerPositions[npcIndex].x < store.characterPosition.x ? 1 : -1;
     let distance = 0;
     let npcState = 4;
     if(Math.random()<.5) {
       distance = direction < 0 ? Math.ceil(Math.random() * 1000) + 1000 : -1000 - Math.ceil(Math.random() * 1000);
-      store.setNpcPosition({x: store.characterPosition.x + distance, y: store.npcPositions[npcIndex].y}, npcIndex);
+      store.setFaceHuggerPosition({x: store.characterPosition.x + distance, y: store.faceHuggerPositions[npcIndex].y}, npcIndex);
     }
     else {
       let npcState = 14;
@@ -306,7 +308,7 @@ export default class Npc extends Component {
         distance = 0-Math.ceil(Math.random() * 200+100);
       }
 
-      store.setNpcPosition({x: store.characterPosition.x + distance, y: store.npcPositions[npcIndex].y-200}, npcIndex);
+      store.setFaceHuggerPosition({x: store.characterPosition.x + distance, y: store.faceHuggerPositions[npcIndex].y-200}, npcIndex);
     }
     this.setState(Object.assign({}, this.state, {
       npcState,
@@ -342,8 +344,8 @@ export default class Npc extends Component {
 
   isBehind() {
     const {store, npcIndex} = this.props;
-    const turnOffset = store.npcPositions[npcIndex].x < store.characterPosition.x ? -1000 : 1000;
-    return store.npcPositions[npcIndex].x < store.characterPosition.x - turnOffset;
+    const turnOffset = store.faceHuggerPositions[npcIndex].x < store.characterPosition.x ? -1000 : 1000;
+    return store.faceHuggerPositions[npcIndex].x < store.characterPosition.x - turnOffset;
   }
 
   turn(direction) {
@@ -357,19 +359,19 @@ export default class Npc extends Component {
   isFar = () => {
     const {store, npcIndex} = this.props;
     const directionOffset = this.state.direction < 0 ? -40 : 0;
-    const distance = Math.abs(store.npcPositions[npcIndex].x - store.characterPosition.x);
+    const distance = Math.abs(store.faceHuggerPositions[npcIndex].x - store.characterPosition.x);
     return distance > 110 + directionOffset;
   };
 
   move = (body, distance, npcState) => {
     const {store, npcIndex} = this.props;
-    store.setNpcPosition({x: store.npcPositions[npcIndex].x + distance, y: store.npcPositions[npcIndex].y}, npcIndex);
+    store.setFaceHuggerPosition({x: store.faceHuggerPositions[npcIndex].x + distance, y: store.faceHuggerPositions[npcIndex].y}, npcIndex);
     this.setState(Object.assign({}, this.state, {
       npcState,
-      direction: store.npcPositions[npcIndex].x < store.characterPosition.x ? 1 : -1,
+      direction: store.faceHuggerPositions[npcIndex].x < store.characterPosition.x ? 1 : -1,
       repeat: true,
       loop: true,
-      ticksPerFrame: 5
+      ticksPerFrame: 2
     }));
   };
 
@@ -430,7 +432,7 @@ export default class Npc extends Component {
     this.isCrouchIdle = true;
     this.setState(Object.assign({}, this.state, {
       npcState: 16,
-      direction: store.npcPositions[npcIndex].x < store.characterPosition.x ? 1 : -1,
+      direction: store.faceHuggerPositions[npcIndex].x < store.characterPosition.x ? 1 : -1,
       ticksPerFrame: 10,
       repeat: false
     }));
@@ -466,7 +468,7 @@ export default class Npc extends Component {
           repeat={this.state.repeat}
           onPlayStateChanged={this.handlePlayStateChanged}
           onGetContextLoop={this.getContextLoop}
-          src="assets/alien_0.png"
+          src="assets/face_hugger.png"
           scale={this.context.scale * 1}
           direction={this.state.direction}
           state={this.state.npcState}
@@ -496,24 +498,10 @@ export default class Npc extends Component {
             1, // 22 down decapitation
             ]}
           offset={[0, 0]}
-          tileWidth={200}
-          tileHeight={100}
+          tileWidth={140}
+          tileHeight={70}
           ticksPerFrame={this.state.ticksPerFrame}
         />
-        {this.state.npcState === 8 &&
-        <Sprite
-          repeat={this.state.repeat}
-          src="assets/acid_0.png"
-          scale={this.context.scale * 1}
-          direction={this.state.direction}
-          steps={[5]}
-          offset={[0, 0]}
-          tileWidth={200}
-          tileHeight={100}
-          ticksPerFrame={3}
-          top={Math.ceil(-90-Math.ceil(Math.random()*10))}
-        />
-        }
       </div>
     );
   }

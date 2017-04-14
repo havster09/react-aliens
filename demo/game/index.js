@@ -11,7 +11,8 @@ import {
 } from '../../src';
 
 import Corporal from './corporal';
-import Npc from './npc';
+import Alien from './alien';
+import FaceHugger from './faceHugger';
 import Level from './level';
 import Fade from './fade';
 import Ammo from './ammo';
@@ -104,7 +105,14 @@ export default class Game extends Component {
   render() {
     const aliens = GameStore.npcPositions.map((alien, i) => {
       return (
-        <Npc key={i} store={GameStore} npcIndex={parseInt(i)} onCharacterHit={this.handleCharacterHit} onCharacterHitDone={this.handleCharacterHitDone}/>
+        <Alien key={i} store={GameStore} npcIndex={parseInt(i)} onCharacterHit={this.handleCharacterHit}
+               onCharacterHitDone={this.handleCharacterHitDone}/>
+      )
+    });
+    const faceHuggers = GameStore.faceHuggerPositions.map((faceHugger, i) => {
+      return (
+        <FaceHugger key={i} store={GameStore} npcIndex={parseInt(i)} onCharacterHit={this.handleCharacterHit}
+                    onCharacterHitDone={this.handleCharacterHitDone}/>
       )
     });
 
@@ -121,8 +129,8 @@ export default class Game extends Component {
               store={GameStore}
               ammo={this.state.ammo}
               keys={this.keyListener}/>
-
             {aliens}
+            {faceHuggers}
             <Ammo count={this.state.ammo}/>
         </Stage>
         <Fade visible={this.state.fade}/>

@@ -1,4 +1,5 @@
-import React, {Component, PropTypes} from 'react';
+import React, {PropTypes} from 'react';
+import Npc from "./npc"
 import {observer} from 'mobx-react';
 
 import {
@@ -6,10 +7,11 @@ import {
   Body,
   Sprite,
 } from '../../src';
+;
 
 
 @observer
-export default class Npc extends Component {
+export default class Alien extends Npc {
   static propTypes = {
     npcIndex: PropTypes.number,
     keys: PropTypes.object,
@@ -72,6 +74,7 @@ export default class Npc extends Component {
 
 
   componentDidMount() {
+    this.jumpNoise = new AudioPlayer('/assets/jump.wav');
     this.loopID = this.context.loop.subscribe(this.loop);
   }
 
@@ -511,6 +514,33 @@ export default class Npc extends Component {
           tileWidth={200}
           tileHeight={100}
           ticksPerFrame={3}
+          top={Math.ceil(-90-Math.ceil(Math.random()*10))}
+        />
+        }
+        {this.state.npcState === 11 &&
+        <Sprite
+          repeat={this.state.repeat}
+          src="assets/armor_hit.png"
+          scale={this.context.scale * 1}
+          direction={this.state.direction}
+          steps={[5]}
+          offset={[0, 0]}
+          tileWidth={200}
+          tileHeight={100}
+          ticksPerFrame={1}
+          top={-90}
+        />}
+        {(this.state.npcState === 19 || this.state.npcState === 20) &&
+        <Sprite
+          repeat={this.state.repeat}
+          src="assets/decap_acid.png"
+          scale={this.context.scale * 1}
+          direction={this.state.direction}
+          steps={[5]}
+          offset={[0, 0]}
+          tileWidth={200}
+          tileHeight={100}
+          ticksPerFrame={10}
           top={Math.ceil(-90-Math.ceil(Math.random()*10))}
         />
         }

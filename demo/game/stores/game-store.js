@@ -2,6 +2,7 @@ import {observable} from 'mobx';
 
 export const floor = 350;
 export const alienFloor = 370;
+export const faceHuggerFloor = 394;
 
 class GameStore {
   @observable characterPosition = {x: 100, y: floor};
@@ -15,14 +16,11 @@ class GameStore {
   @observable npcPositions = [
     {x: 500, y: alienFloor},
     {x: 3000, y: alienFloor},
-    {x: 5000, y: alienFloor},/*
-     {x: -500, y: alienFloor},
-    {x: 500, y: alienFloor},
-    {x: -500, y: alienFloor},
-    {x: 500, y: alienFloor},
-    {x: 500, y: alienFloor},
-    {x: -500, y: alienFloor},
-    {x: 500, y: alienFloor},*/
+    {x: 5000, y: alienFloor}
+  ];
+  
+  @observable faceHuggerPositions = [
+    {x: 1500, y: faceHuggerFloor}
   ];
 
   setCharacterPosition(position) {
@@ -43,6 +41,9 @@ class GameStore {
 
   setNpcPosition(position, index) {
     this.npcPositions[index] = position;
+  }
+  setFaceHuggerPosition(position, index) {
+    this.faceHuggerPositions[index] = position;
   }
 
   setStageX(x) {
