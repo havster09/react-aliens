@@ -1,10 +1,10 @@
 import React, {PropTypes} from 'react';
 import {observer} from 'mobx-react';
 import Npc from "./npc";
+import {faceHuggerFloor} from './constants';
 
 import {
   AudioPlayer,
-  Body,
   Sprite,
 } from '../../src';
 
@@ -173,13 +173,13 @@ export default class FaceHugger extends Npc {
       }
     }
 
-    if (store.faceHuggerPositions[npcIndex].y  < 394  && npcState !== 16 && npcState !== 14) {
+    if (store.faceHuggerPositions[npcIndex].y  < faceHuggerFloor  && npcState !== 16 && npcState !== 14) {
       return this.crouchIdle();
     }
-    else if(store.faceHuggerPositions[npcIndex].y  < 394 && npcState === 14) {
+    else if(store.faceHuggerPositions[npcIndex].y  < faceHuggerFloor && npcState === 14) {
       return store.setFaceHuggerPosition({x: store.faceHuggerPositions[npcIndex].x, y: store.faceHuggerPositions[npcIndex].y+10}, npcIndex);
     }
-    else if(store.faceHuggerPositions[npcIndex].y  === 394 && npcState === 14 && npcState !== 15) {
+    else if(store.faceHuggerPositions[npcIndex].y  === faceHuggerFloor && npcState === 14 && npcState !== 15) {
       return this.land();
     }
 
@@ -192,54 +192,32 @@ export default class FaceHugger extends Npc {
     }
 
     if (this.isFar()) {
-      if(Math.random()<.5 && this.state.hasStopped % 2 === 0 && npcState < 3) {
-        if(Math.random()<.2) {
-          return this.lookBack();
-        }
-        else {
-          return this.snarl();
-        }
-      }
-      if (this.state.hasStopped % 2 > 0) {
-        npcState = store.faceHuggerPositions[npcIndex].x < store.characterPosition.x ? 0 : 1;
-      }
-      else {
-        npcState = store.faceHuggerPositions[npcIndex].x < store.characterPosition.x ? 2 : 3;
-      }
+      npcState = store.faceHuggerPositions[npcIndex].x < store.characterPosition.x ? 0 : 1;
+
       const distance = store.faceHuggerPositions[npcIndex].x < store.characterPosition.x ? 3 : -3;
       this.move(body, distance, npcState);
     }
-    else if (this.state.npcState !== 4) {
+    else if (this.state.npcState !== 2) {
       this.stop();
     }
-    else if (this.state.npcState === 4) {
+    else if (this.state.npcState === 2 && this.state.direction !== store.characterDirection) {
       this.props.onCharacterHit();
-      const attackRandom = Math.random();
-      if (attackRandom > .6 && this.state.direction === 1) {
-        this.whip();
-      }
-      else if (attackRandom < .6 && attackRandom > .3) {
-        this.bite();
-      }
-      else {
-        this.punch();
-      }
+      this.punch();
     }
   };
 
   hit = () => {
     const {store, npcIndex} = this.props;
     const direction = store.faceHuggerPositions[npcIndex].x < store.characterPosition.x ? 1 : -1;
-    if (this.state.hasHit < 3) {
+    if (this.state.hasHit < 1) {
       this.isHit = true;
-      const distance = direction < 0 ? Math.ceil(Math.random() * 10) : 0 - Math.ceil(Math.random() * 10);
-      store.setFaceHuggerPosition({x: store.faceHuggerPositions[npcIndex].x + distance, y: store.faceHuggerPositions[npcIndex].y}, npcIndex);
+      store.setFaceHuggerPosition({x: store.faceHuggerPositions[npcIndex].x, y: store.faceHuggerPositions[npcIndex].y}, npcIndex);
       this.setState(Object.assign({}, this.state, {
-        npcState: this.state.hasHit % 2 > 0 ? 8 : 9,
+        npcState: 4,
         hasHit: this.state.hasHit + 1,
         direction,
         repeat: false,
-        ticksPerFrame: 10
+        ticksPerFrame: 5
       }));
     }
     else {
@@ -294,7 +272,7 @@ export default class FaceHugger extends Npc {
     const {store, npcIndex} = this.props;
     const direction = store.faceHuggerPositions[npcIndex].x < store.characterPosition.x ? 1 : -1;
     let distance = 0;
-    let npcState = 4;
+    let npcState = 2;
     if(Math.random()<.5) {
       distance = direction < 0 ? Math.ceil(Math.random() * 1000) + 1000 : -1000 - Math.ceil(Math.random() * 1000);
       store.setFaceHuggerPosition({x: store.characterPosition.x + distance, y: store.faceHuggerPositions[npcIndex].y}, npcIndex);
@@ -307,7 +285,6 @@ export default class FaceHugger extends Npc {
       else {
         distance = 0-Math.ceil(Math.random() * 200+100);
       }
-
       store.setFaceHuggerPosition({x: store.characterPosition.x + distance, y: store.faceHuggerPositions[npcIndex].y-200}, npcIndex);
     }
     this.setState(Object.assign({}, this.state, {
@@ -383,7 +360,7 @@ export default class FaceHugger extends Npc {
   punch = () => {
     this.isPunching = true;
     this.setState(Object.assign({}, this.state, {
-      npcState: 5,
+      npcState: 3,
       ticksPerFrame: 5,
       repeat: false
     }));
@@ -394,35 +371,6 @@ export default class FaceHugger extends Npc {
     this.setState(Object.assign({}, this.state, {
       npcState: 14,
       ticksPerFrame: 5,
-      repeat: false
-    }));
-  };
-
-  bite = () => {
-    this.isBiting = true;
-    this.setState(Object.assign({}, this.state, {
-      npcState: 6,
-      ticksPerFrame: 10,
-      repeat: false
-    }));
-  };
-
-  lookBack = () => {
-    this.isLookBack = true;
-    this.setState(Object.assign({}, this.state, {
-      npcState: 17,
-      ticksPerFrame: 10,
-      hasStopped: this.state.hasStopped + 1,
-      repeat: false
-    }));
-  };
-
-  snarl = () => {
-    this.isSnarling = true;
-    this.setState(Object.assign({}, this.state, {
-      npcState: 18,
-      ticksPerFrame: 10,
-      hasStopped: this.state.hasStopped + 1,
       repeat: false
     }));
   };
@@ -438,19 +386,12 @@ export default class FaceHugger extends Npc {
     }));
   };
 
-  whip = () => {
-    this.isWhiping = true;
-    this.setState(Object.assign({}, this.state, {
-      npcState: 7,
-      ticksPerFrame: 5,
-      repeat: false
-    }));
-  };
+
 
 
   stop = () => {
     this.setState(Object.assign({}, this.state, {
-      npcState: 4,
+      npcState: 2,
       ticksPerFrame: 5,
       repeat: false,
       hasStopped: this.state.hasStopped + 1
@@ -473,13 +414,11 @@ export default class FaceHugger extends Npc {
           direction={this.state.direction}
           state={this.state.npcState}
           steps={[
-            7,
-            7,
-            7,
-            7,
-            0,
-            3,
-            3,
+            7, //0
+            7, //1
+            0, //2 stop
+            2, //3 punch
+            1, //4 hit
             6,
             1,
             1,

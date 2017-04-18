@@ -43,6 +43,9 @@ export default class Corporal extends Component {
     const {store} = this.props;
     this.lastDirection = (x < 0 && Math.abs(x) > 2) ? 1 : 0;
     store.setCharacterPosition({x: store.characterPosition.x + x, y: store.characterPosition.y});
+    this.setState({
+      ticksPerFrame: 5
+    });
   };
 
   jump = (body) => {
