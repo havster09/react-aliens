@@ -1,27 +1,37 @@
-import {observable} from 'mobx';
-
+import {computed, observable} from 'mobx';
 import {floor,alienFloor,faceHuggerFloor} from '../constants';
+import * as mobx from "mobx";
 
 class GameStore {
   @observable characterPosition = {x: 100, y: floor};
   @observable characterDirection = 1;
   @observable characterIsAttacking = false;
   @observable characterIsCrouching = false;
-
   @observable stageX = 0;
   @observable heroLoopCount = 0;
 
   @observable npcPositions = [
     /*{x: 500, y: alienFloor},
-    {x: 3000, y: alienFloor},
+     {x: 3000, y: alienFloor},
     {x: 5000, y: alienFloor}*/
   ];
-  
   @observable faceHuggerPositions = [
     {x: -1500, y: faceHuggerFloor},
     {x: 1500, y: faceHuggerFloor},
     {x: 1500, y: faceHuggerFloor},
   ];
+
+  constructor() {
+    mobx.autorun(()=> this.reactToCrouch);
+  }
+
+  @computed get characterCrouch() {
+    return this.characterIsCrouching;
+  }
+
+  @computed get reactToCrouch() {
+    return console.log('character crouch -> ',this.characterCrouch);
+  }
 
   setCharacterPosition(position) {
     this.characterPosition = position;
