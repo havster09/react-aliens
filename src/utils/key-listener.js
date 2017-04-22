@@ -24,6 +24,10 @@ export default class KeyListener {
     return this.keys[keyCode] || false;
   }
 
+  isUp = (keyCode) => {
+    return !this.keys[keyCode] || false;
+  }
+
   subscribe = (keys) => {
     window.addEventListener('keydown', this.down);
     window.addEventListener('keyup', this.up);

@@ -42,7 +42,9 @@ export default class Corporal extends Component {
   move = (body, x) => {
     const {store} = this.props;
     this.lastDirection = (x < 0 && Math.abs(x) > 2) ? 1 : 0;
-    store.setCharacterPosition({x: store.characterPosition.x + x, y: store.characterPosition.y});
+    if(!store.characterIsAttacking && this.state.characterState!==4 && this.state.characterState!==9) {
+      store.setCharacterPosition({x: store.characterPosition.x + x, y: store.characterPosition.y});
+    }
     this.setState({
       ticksPerFrame: 5
     });
@@ -177,14 +179,6 @@ export default class Corporal extends Component {
     let characterState = 2;
     let direction = this.lastDirection > 0 ? -1 : 1;
 
-    if (keys.isDown(83)) {
-      return this.shoot();
-    }
-    else {
-      const {store} = this.props;
-      store.setCharacterIsAttacking(false);
-    }
-
     if (keys.isDown(65)) {
       return this.stop();
     }
@@ -195,15 +189,6 @@ export default class Corporal extends Component {
 
     if (keys.isDown(keys.UP)) {
       // return this.enterBuilding(this.body);
-    }
-    if (keys.isDown(keys.DOWN)) {
-      return this.crouch(this.body);
-    }
-    else {
-      if(store.characterIsCrouching) {
-        this.isCrouching = false;
-        store.setCharacterIsCrouching(false);
-      }
     }
 
     if (keys.isDown(keys.LEFT)) {
@@ -224,9 +209,36 @@ export default class Corporal extends Component {
       this.move(this.body, 3);
     }
 
+    if (keys.isDown(83)) {
+      // todo refactor crouch shooting controls
+      if (keys.isUp(keys.DOWN)) {
+        this.isCrouching = false;
+        store.setCharacterIsCrouching(false);
+      }
+      if (keys.isDown(keys.DOWN)) {
+        this.isCrouching = true;
+        store.setCharacterIsCrouching(true);
+      }
+      return this.shoot();
+    }
+    else {
+      const {store} = this.props;
+      store.setCharacterIsAttacking(false);
+    }
+
+    if (keys.isDown(keys.DOWN)) {
+      return this.crouch(this.body);
+    }
+    else {
+      if(store.characterIsCrouching) {
+        this.isCrouching = false;
+        store.setCharacterIsCrouching(false);
+      }
+    }
+
     this.setState({
       characterState,
-      direction,
+      direction:characterState!==4?direction:this.lastDirection,
       repeat: characterState < 2,
     });
   };
