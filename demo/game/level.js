@@ -61,7 +61,7 @@ export default class Level extends Component {
           layers={[
             [1,1,1,1,1,1,1,1,1,1,1,1],
           ]}
-        />*/}
+        />
 
 
         <TileMap
@@ -88,7 +88,30 @@ export default class Level extends Component {
           layers={[
             [1,2,3,4,5,6],
           ]}
+        />*/}
+
+        <TileMap
+          style={{ top: Math.floor(14 * this.context.scale) }}
+          src="assets/giger_tile.png"
+          rows={1}
+          columns={7}
+          tileSize={440}
+          layers={[
+            [1,1,1,1,1,1,1,1,1],
+          ]}
         />
+
+        <TileMap
+          style={{ top: Math.floor(25 * this.context.scale) }}
+          src="assets/hive_0.png"
+          rows={1}
+          columns={6}
+          tileSize={560}
+          layers={[
+            [1,2,3,1,1,1,1,1,1],
+          ]}
+        />
+
       </div>
     );
   }

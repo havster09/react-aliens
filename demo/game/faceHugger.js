@@ -1,7 +1,7 @@
 import React, {PropTypes} from 'react';
 import {observer} from 'mobx-react';
 import Npc from "./npc";
-import {faceHuggerFloor} from './constants';
+import {faceHuggerFloor,ambushHeight} from './constants';
 
 import {
   AudioPlayer,
@@ -289,7 +289,7 @@ export default class FaceHugger extends Npc {
       else {
         distance = 0-Math.ceil(Math.random() * 200+100);
       }
-      store.setFaceHuggerPosition({x: store.characterPosition.x + distance, y: store.faceHuggerPositions[npcIndex].y-200}, npcIndex);
+      store.setFaceHuggerPosition({x: store.characterPosition.x + distance, y: store.faceHuggerPositions[npcIndex].y-ambushHeight}, npcIndex);
     }
     this.setState(Object.assign({}, this.state, {
       npcState,

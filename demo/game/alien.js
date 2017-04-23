@@ -1,7 +1,7 @@
 import React, {PropTypes} from 'react';
 import Npc from "./npc"
 import {observer} from 'mobx-react';
-import {alienFloor} from './constants';
+import {alienFloor,ambushHeight} from './constants';
 
 import {
   AudioPlayer,
@@ -310,7 +310,7 @@ export default class Alien extends Npc {
         distance = 0-Math.ceil(Math.random() * 200+100);
       }
 
-      store.setNpcPosition({x: store.characterPosition.x + distance, y: store.npcPositions[npcIndex].y-200}, npcIndex);
+      store.setNpcPosition({x: store.characterPosition.x + distance, y: store.npcPositions[npcIndex].y-ambushHeight}, npcIndex);
     }
     this.setState(Object.assign({}, this.state, {
       npcState,
