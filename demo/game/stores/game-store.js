@@ -7,18 +7,18 @@ class GameStore {
   @observable characterDirection = 1;
   @observable characterIsAttacking = false;
   @observable characterIsCrouching = false;
+  @observable characterIsLatched = false;
   @observable stageX = 0;
   @observable heroLoopCount = 0;
 
   @observable npcPositions = [
     {x: 500, y: alienFloor},
-     {x: 3000, y: alienFloor},
+    {x: 3000, y: alienFloor},
     {x: 5000, y: alienFloor}
   ];
   @observable faceHuggerPositions = [
-    {x: -1500, y: faceHuggerFloor},
-    {x: 1500, y: faceHuggerFloor},
-    {x: 1500, y: faceHuggerFloor},
+    {x: 500, y: faceHuggerFloor},
+    {x: -500, y: faceHuggerFloor}
   ];
 
   constructor() {
@@ -47,6 +47,10 @@ class GameStore {
 
   setCharacterIsCrouching(isCrouching) {
     this.characterIsCrouching = isCrouching;
+  }
+
+  setCharacterLatched(isLatched) {
+    this.characterIsLatched = isLatched;
   }
 
   setNpcPosition(position, index) {

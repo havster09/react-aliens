@@ -114,6 +114,31 @@ export default class Corporal extends Component {
     }
   };
 
+  latch = () => {
+    if (!this.state.latchTimeStamp) {
+      this.setState({
+        latchTimeStamp: this.state.contextLoop,
+        ticksPerFrame: 10
+      });
+    }
+    this.setState({
+      characterState: 10,
+      ticksPerFrame: 5,
+      repeat: true
+    });
+    this.props.store.setCharacterIsAttacking(false);
+    if (this.state.latchTimeStamp) {
+      if (this.state.contextLoop > this.state.latchTimeStamp + 100) {
+        this.props.store.setCharacterLatched(false);
+        // kill faceHugger
+        this.setState({
+          latchTimeStamp: null
+        });
+        return this.stop();
+      }
+    }
+  };
+
   stop = () => {
     let direction = this.lastDirection > 0 ? -1 : 1;
     this.setState({
@@ -246,6 +271,10 @@ export default class Corporal extends Component {
   loop = () => {
     const {store, isHit} = this.props;
 
+    if (store.characterIsLatched) {
+      return this.latch();
+    }
+
     if (isHit && !this.isHit) {
       return this.hit();
     }
@@ -352,6 +381,7 @@ export default class Corporal extends Component {
             1, // 7 hit behind
             1, // 8 crouch shoot
             0, // 9 crouch
+            7, // 10 latch
             ]}
           offset={[0,0]}
           tileWidth={160}
