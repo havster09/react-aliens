@@ -356,6 +356,10 @@ export default class Corporal extends Component {
 
   render() {
     const {scale} = this.context;
+
+    // todo add conditional rendering to pulse rifle fire
+    // todo audio set to play and loop adjust volume toggle on off
+
     return (
       <div style={this.getWrapperStyles()}>
         <Sprite
