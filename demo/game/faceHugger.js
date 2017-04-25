@@ -41,12 +41,8 @@ export default class FaceHugger extends Npc {
   constructor(props) {
     super(props);
     this.loopID = null;
-    this.isJumping = false;
-    this.isPunching = false;
+    this.isAttacking = false;
     this.isCrouchIdle = false;
-    this.isLookBack = false;
-    this.isSnarling = false;
-    this.isWhiping = false;
     this.isHit = false;
     this.isInPieces = false;
     this.isDrop = false;
@@ -101,14 +97,14 @@ export default class FaceHugger extends Npc {
   loop = () => {
     const {store, npcIndex} = this.props;
 
-    if (!this.isJumping && !this.isPunching && !this.isBiting && !this.isWhiping && !this.isLeaving && !this.isHit && !this.isDrop && !this.isDown && !this.isLanding && !this.isCrouchIdle && !this.isLookBack && !this.isSnarling && !this.isInPieces && !this.hasLatched) {
+    if (!this.isJumping && !this.isAttacking && !this.isHit && !this.isDrop && !this.isDown && !this.isLanding && !this.isCrouchIdle && !this.isInPieces && !this.hasLatched) {
       this.npcAction(this.body);
       if (this.isAmbush && this.state.spritePlaying === false) {
         this.isAmbush = false;
       }
     } else {
-      if (this.isPunching && this.state.spritePlaying === false) {
-        this.isPunching = false;
+      if (this.isAttacking && this.state.spritePlaying === false) {
+        this.isAttacking = false;
         this.props.onCharacterHitDone();
         if(!store.characterIsLatched && !this.hasLatched) {
           return this.latch();
@@ -118,14 +114,6 @@ export default class FaceHugger extends Npc {
       if(this.hasLatched && !store.characterIsLatched) {
         this.hasLatched = false;
         return this.down();
-      }
-
-      if (this.isLookBack && this.state.spritePlaying === false) {
-        this.isLookBack = false;
-      }
-
-      if (this.isSnarling && this.state.spritePlaying === false) {
-        this.isSnarling = false;
       }
 
       if (this.isCrouchIdle && this.state.spritePlaying === false) {
@@ -163,7 +151,7 @@ export default class FaceHugger extends Npc {
     const {store, npcIndex} = this.props;
     let npcState = this.state.npcState;
     if(store.characterIsAttacking && store.faceHuggerPositions[npcIndex].y  >= faceHuggerFloor) {
-      if (store.characterIsCrouching||(Math.abs(store.characterPosition.x-store.faceHuggerPositions[npcIndex].x) < 120) && store.faceHuggerPositions[npcIndex].y > 390) {
+      if (store.characterIsCrouching && store.faceHuggerPositions[npcIndex].y > 390) {
         if (Math.abs(store.faceHuggerPositions[npcIndex].x - store.characterPosition.x) < Math.random() * 100 + 400) {
           if (store.faceHuggerPositions[npcIndex].x < store.characterPosition.x && store.characterDirection === -1) {
             return this.hit();
@@ -175,7 +163,7 @@ export default class FaceHugger extends Npc {
       }
     }
 
-    if (store.faceHuggerPositions[npcIndex].y  < faceHuggerFloor  && npcState !== 16 && npcState !== 9) {
+    if (store.faceHuggerPositions[npcIndex].y  < faceHuggerFloor  && npcState !== 11 && npcState !== 9) {
       return this.crouchIdle();
     }
     else if(store.faceHuggerPositions[npcIndex].y  < faceHuggerFloor && npcState === 9) {
@@ -205,7 +193,7 @@ export default class FaceHugger extends Npc {
     else if (this.state.npcState === 2 && Math.random() && this.state.direction !== store.characterDirection && !store.characterIsLatched) {
       if(!this.state.latch) {
         this.props.onCharacterHit();
-        this.punch();
+        this.attack();
       }
     }
   };
@@ -356,13 +344,8 @@ export default class FaceHugger extends Npc {
     }));
   };
 
-  jump = (body) => {
-    this.jumpNoise.play();
-    this.isJumping = true;
-  };
-
-  punch = () => {
-    this.isPunching = true;
+  attack = () => {
+    this.isAttacking = true;
     this.setState(Object.assign({}, this.state, {
       npcState: 3,
       ticksPerFrame: 5,
@@ -430,7 +413,7 @@ export default class FaceHugger extends Npc {
             7, //0
             7, //1
             0, //2 stop
-            2, //3 punch
+            2, //3 attack
             1, //4 hit
             1, //5 drop
             1, //6 down

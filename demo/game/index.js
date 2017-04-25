@@ -13,6 +13,7 @@ import {
 import Corporal from './corporal';
 import Alien from './alien';
 import FaceHugger from './faceHugger';
+import Egg from './egg';
 import Level from './level';
 import Fade from './fade';
 import Ammo from './ammo';
@@ -116,6 +117,13 @@ export default class Game extends Component {
       )
     });
 
+    const eggs = GameStore.eggPositions.map((egg, i) => {
+      return (
+        <Egg key={i} store={GameStore} npcIndex={parseInt(i)} onCharacterHit={this.handleCharacterHit}
+                    onCharacterHitDone={this.handleCharacterHitDone}/>
+      )
+    });
+
     return (
       <Loop>
         <Stage style={{ background: '#000' }}>
@@ -131,6 +139,7 @@ export default class Game extends Component {
               keys={this.keyListener}/>
             {aliens}
             {faceHuggers}
+            {eggs}
             <Ammo count={this.state.ammo}/>
         </Stage>
         <Fade visible={this.state.fade}/>

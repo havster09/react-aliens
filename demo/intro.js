@@ -30,6 +30,7 @@ export default class Intro extends Component {
     const preloader = new Preloader({
       resources: [
         'assets/bg_music/Rescue.mp3',
+        'assets/se/bite2.wav',
         'assets/se/mg-1.wav',
         'assets/se/m41.wav',
         'assets/se/mgbolt.ogg',
@@ -37,6 +38,9 @@ export default class Intro extends Component {
         'assets/se/role3_die1.wav',
         'assets/se/swipehit1.wav',
         'assets/corporal.png',
+        'assets/egg.png',
+        'assets/egg_burst.png',
+        'assets/egg_r_burst.png',
         'assets/pulse_rifle_shoot.png',
         'assets/pulse_rifle_crouch_shoot.png',
         'assets/giger_tile.png',

@@ -1,5 +1,5 @@
 import {computed, observable} from 'mobx';
-import {floor,alienFloor,faceHuggerFloor} from '../constants';
+import {floor,alienFloor,faceHuggerFloor,eggFloor} from '../constants';
 import * as mobx from "mobx";
 
 class GameStore {
@@ -13,12 +13,20 @@ class GameStore {
 
   @observable npcPositions = [
     {x: 500, y: alienFloor},
-    {x: 3000, y: alienFloor},
-    {x: 5000, y: alienFloor}
+    {x: 500, y: alienFloor},
   ];
+
   @observable faceHuggerPositions = [
     {x: 500, y: faceHuggerFloor},
-    {x: -500, y: faceHuggerFloor}
+    {x: 500, y: faceHuggerFloor},
+  ];
+
+  @observable eggPositions = [
+    {x: 500, y: eggFloor},
+    {x: 100, y: eggFloor},
+    {x: 150, y: eggFloor},
+    {x: 650, y: eggFloor},
+    {x: 700, y: eggFloor},
   ];
 
   constructor() {

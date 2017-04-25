@@ -144,13 +144,11 @@ export default class Sprite extends Component {
                 ...wrapperStyles,left:`${this.props.left}px`
             }
         }
-
         if(this.props.display) {
             wrapperStyles = {
                 ...wrapperStyles,display:`${this.props.display}`
             }
         }
-
         return wrapperStyles;
     }
 

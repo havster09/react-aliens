@@ -76,6 +76,8 @@ export default class Alien extends Npc {
   componentDidMount() {
     this.alienDieSound = new AudioPlayer('/assets/se/role3_die1.wav');
     this.alienPunchSound = new AudioPlayer('/assets/se/swipehit1.wav');
+    this.alienWhipSound = new AudioPlayer('/assets/se/swipehit2.wav');
+    this.alienBiteSound = new AudioPlayer('/assets/se/bite2.wav');
     this.loopID = this.context.loop.subscribe(this.loop);
   }
 
@@ -407,6 +409,7 @@ export default class Alien extends Npc {
 
   bite = () => {
     this.isBiting = true;
+    this.alienBiteSound.play();
     this.setState(Object.assign({}, this.state, {
       npcState: 6,
       ticksPerFrame: 10,
@@ -447,6 +450,7 @@ export default class Alien extends Npc {
 
   whip = () => {
     this.isWhiping = true;
+    this.alienWhipSound.play();
     this.setState(Object.assign({}, this.state, {
       npcState: 7,
       ticksPerFrame: 5,

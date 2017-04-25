@@ -40,20 +40,10 @@ export default class Npc extends Component {
   constructor(props) {
     super(props);
     this.loopID = null;
-    this.isJumping = false;
     this.isPunching = false;
-    this.isBiting = false;
-    this.isCrouchIdle = false;
-    this.isLookBack = false;
-    this.isSnarling = false;
-    this.isWhiping = false;
-    this.isHit = false;
-    this.isDecapitated = false;
-    this.isDrop = false;
     this.isDown = false;
     this.isAmbush = false;
     this.isLanding = false;
-    this.isLeaving = false;
     this.lastX = 0;
     this.lastDirection = -1;
 
@@ -97,33 +87,12 @@ export default class Npc extends Component {
   loop = () => {
     const {store, npcIndex} = this.props;
 
-    if (!this.isJumping && !this.isPunching && !this.isBiting && !this.isWhiping && !this.isLeaving && !this.isHit && !this.isDrop && !this.isDown && !this.isLanding && !this.isCrouchIdle && !this.isLookBack && !this.isSnarling && !this.isDecapitated) {
+    if (!this.isJumping && !this.isPunching) {
       this.npcAction(this.body);
-      if (this.isAmbush && this.state.spritePlaying === false) {
-        this.isAmbush = false;
-      }
     } else {
       if (this.isPunching && this.state.spritePlaying === false) {
         this.isPunching = false;
         this.props.onCharacterHitDone();
-      }
-
-      if (this.isBiting && this.state.spritePlaying === false) {
-        this.isBiting = false;
-        this.props.onCharacterHitDone();
-      }
-
-      if (this.isWhiping && this.state.spritePlaying === false) {
-        this.isWhiping = false;
-        this.props.onCharacterHitDone();
-      }
-
-      if (this.isLookBack && this.state.spritePlaying === false) {
-        this.isLookBack = false;
-      }
-
-      if (this.isSnarling && this.state.spritePlaying === false) {
-        this.isSnarling = false;
       }
 
       if (this.isCrouchIdle && this.state.spritePlaying === false) {
@@ -133,11 +102,6 @@ export default class Npc extends Component {
 
       if (this.isHit && this.state.spritePlaying === false) {
         this.isHit = false;
-      }
-
-      if (this.isDecapitated && this.state.spritePlaying === false) {
-        this.isDecapitated = false;
-        return this.drop();
       }
 
       if (this.isLanding && this.state.spritePlaying === false) {
@@ -181,7 +145,6 @@ export default class Npc extends Component {
       return this.land();
     }
 
-
     if (this.isBehind()) {
       this.turn(1);
     }
@@ -212,16 +175,7 @@ export default class Npc extends Component {
     }
     else if (this.state.npcState === 4) {
       this.props.onCharacterHit();
-      const attackRandom = Math.random();
-      if (attackRandom > .6 && this.state.direction === 1) {
-        this.whip();
-      }
-      else if (attackRandom < .6 && attackRandom > .3) {
-        this.bite();
-      }
-      else {
-        this.punch();
-      }
+      this.punch();
     }
   };
 
@@ -248,22 +202,6 @@ export default class Npc extends Component {
         return this.drop();
       }
     }
-  };
-
-  decapitated = () => {
-    const {store, npcIndex} = this.props;
-    const direction = store.npcPositions[npcIndex].x < store.characterPosition.x ? 1 : -1;
-    this.isDecapitated = true;
-    const distance = direction < 0 ? Math.ceil(Math.random() * 30) : 0 - Math.ceil(Math.random() * 30);
-    store.setNpcPosition({x: store.npcPositions[npcIndex].x + distance, y: store.npcPositions[npcIndex].y}, npcIndex);
-    this.setState(Object.assign({}, this.state, {
-      npcState: this.state.hasHit % 2 > 0 ? 19 : 20,
-      hasHit: this.state.hasHit + 1,
-      direction,
-      repeat: false,
-      decapitated: true,
-      ticksPerFrame: 10
-    }));
   };
 
   drop = () => {
@@ -373,11 +311,6 @@ export default class Npc extends Component {
     }));
   };
 
-  jump = (body) => {
-    this.jumpNoise.play();
-    this.isJumping = true;
-  };
-
   punch = () => {
     this.isPunching = true;
     this.setState(Object.assign({}, this.state, {
@@ -396,35 +329,6 @@ export default class Npc extends Component {
     }));
   };
 
-  bite = () => {
-    this.isBiting = true;
-    this.setState(Object.assign({}, this.state, {
-      npcState: 6,
-      ticksPerFrame: 10,
-      repeat: false
-    }));
-  };
-
-  lookBack = () => {
-    this.isLookBack = true;
-    this.setState(Object.assign({}, this.state, {
-      npcState: 17,
-      ticksPerFrame: 10,
-      hasStopped: this.state.hasStopped + 1,
-      repeat: false
-    }));
-  };
-
-  snarl = () => {
-    this.isSnarling = true;
-    this.setState(Object.assign({}, this.state, {
-      npcState: 18,
-      ticksPerFrame: 10,
-      hasStopped: this.state.hasStopped + 1,
-      repeat: false
-    }));
-  };
-
   crouchIdle = () => {
     const {store, npcIndex} = this.props;
     this.isCrouchIdle = true;
@@ -435,16 +339,6 @@ export default class Npc extends Component {
       repeat: false
     }));
   };
-
-  whip = () => {
-    this.isWhiping = true;
-    this.setState(Object.assign({}, this.state, {
-      npcState: 7,
-      ticksPerFrame: 5,
-      repeat: false
-    }));
-  };
-
 
   stop = () => {
     this.setState(Object.assign({}, this.state, {
@@ -471,36 +365,25 @@ export default class Npc extends Component {
           direction={this.state.direction}
           state={this.state.npcState}
           steps={[
-            7,
-            7,
-            7,
-            7,
-            0,
-            3,
-            3,
-            6,
-            1,
-            1,
-            1,
-            1,// drop 2
-            1,
-            1,
-            2, // ambush
-            1, // land
-            2, //16 crouchIdle
-            3, // 17 lookBack
-            2, // 18 snarl
-            1, // 19 decapitation 1
-            1, // 20 decapitation 2
-            1, // 21 fall decapitation
-            1, // 22 down decapitation
+            7, //0
+            7, //1
+            0, //2 stop
+            2, //3 attack
+            1, //4 hit
+            1, //5 drop
+            1, //6 down
+            1, //7 pieces
+            1, //8 pieces down
+            2, //9 ambush
+            1, //10 land
+            2 //11 crouchIdle
             ]}
           offset={[0, 0]}
           tileWidth={200}
           tileHeight={100}
           ticksPerFrame={this.state.ticksPerFrame}
         />
-        {this.state.npcState === 8 &&
+        {this.state.npcState === 4 &&
         <Sprite
           repeat={this.state.repeat}
           src="assets/acid_0.png"

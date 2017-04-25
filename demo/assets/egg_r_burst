@@ -1,7 +1,7 @@
 /* ----------------------------------------------------
    created with http://www.codeandweb.com/texturepacker 
    ----------------------------------------------------
-   $TexturePacker:SmartUpdate:1d7a6a8a6d949ac0834d002e894752e8:8f0c116c8930f00ab0ad54afd19f6fb4:8f2295314070aa24f62ca667d8f919c5$
+   $TexturePacker:SmartUpdate:b14e1078f947eb9bff821f61fe7c78a6:8f0c116c8930f00ab0ad54afd19f6fb4:71f798c7884436da281ef99775301cd6$
    ----------------------------------------------------
 
    usage: <span class="{-spritename-} sprite"></span>
@@ -10,7 +10,7 @@
 
 */
 
-.sprite {display:inline-block; overflow:hidden; background-repeat: no-repeat;background-image:url(corporal_b.png);}
+.sprite {display:inline-block; overflow:hidden; background-repeat: no-repeat;background-image:url(egg_r_burst.png);}
 
 .egg_burst_r_0 {width:56px; height:56px; background-position: -0px -0px}
 .egg_burst_r_1 {width:56px; height:56px; background-position: -56px -0px}
