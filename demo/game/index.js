@@ -110,16 +110,17 @@ export default class Game extends Component {
                onCharacterHitDone={this.handleCharacterHitDone}/>
       )
     });
-    const faceHuggers = GameStore.faceHuggerPositions.map((faceHugger, i) => {
-      return (
-        <FaceHugger key={i} store={GameStore} npcIndex={parseInt(i)} onCharacterHit={this.handleCharacterHit}
-                    onCharacterHitDone={this.handleCharacterHitDone}/>
-      )
-    });
 
     const eggs = GameStore.eggPositions.map((egg, i) => {
       return (
         <Egg key={i} store={GameStore} npcIndex={parseInt(i)} onCharacterHit={this.handleCharacterHit}
+                    onCharacterHitDone={this.handleCharacterHitDone}/>
+      )
+    });
+
+    const faceHuggers = GameStore.faceHuggerPositions.map((faceHugger, i) => {
+      return (
+        <FaceHugger key={i} store={GameStore} npcIndex={parseInt(i)} eggIndex={parseInt(i)} onCharacterHit={this.handleCharacterHit}
                     onCharacterHitDone={this.handleCharacterHitDone}/>
       )
     });

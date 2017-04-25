@@ -92,6 +92,7 @@ export default class Egg extends Component {
     } else {
       if (this.isHatching && this.state.spritePlaying === false) {
         this.isHatching = false;
+        store.setEggPosition({x: store.eggPositions[npcIndex].x, y: store.eggPositions[npcIndex].y, hatched:true}, npcIndex);
       }
 
       if (this.isHit && this.state.spritePlaying === false) {
@@ -148,14 +149,13 @@ export default class Egg extends Component {
 
   dead = () => {
     this.isDrop = true;
-    const {store, npcIndex} = this.props;
     let npcState = 1;
     this.setState(Object.assign({}, this.state, {
       npcState,
       dead:true,
       hasHit: this.state.hasHit + 1,
       repeat: true,
-      ticksPerFrame: 60
+      ticksPerFrame: 30
     }));
   };
 
@@ -176,7 +176,7 @@ export default class Egg extends Component {
         distance = 0-Math.ceil(Math.random() * 200+100);
       }
 
-      store.setNpcPosition({x: store.characterPosition.x + distance, y: store.eggPositions[npcIndex].y}, npcIndex);
+      store.setEggPosition({x: store.characterPosition.x + distance, y: store.eggPositions[npcIndex].y}, npcIndex);
     }
     this.setState(Object.assign({}, this.state, {
       npcState,
@@ -227,7 +227,7 @@ export default class Egg extends Component {
           onPlayStateChanged={this.handlePlayStateChanged}
           onGetContextLoop={this.getContextLoop}
           src="assets/egg.png"
-          scale={this.context.scale * 1.2}
+          scale={this.context.scale * 1.3}
           direction={this.state.direction}
           state={this.state.npcState}
           steps={[

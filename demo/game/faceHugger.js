@@ -18,6 +18,7 @@ export default class FaceHugger extends Npc {
     onCharacterHit: PropTypes.func,
     onCharacterHitDone: PropTypes.func,
     store: PropTypes.object,
+    eggIndex: PropTypes.number
   };
 
   static contextTypes = {
@@ -51,13 +52,23 @@ export default class FaceHugger extends Npc {
     this.isLanding = false;
     this.hasLatched = false;
     this.isLeaving = false;
+    this.isInEgg = false;
     this.lastX = 0;
     this.lastDirection = -1;
 
+    const {store} = this.props;
+    let hatched = true;
+    if(store.eggPositions[this.props.eggIndex]) {
+      this.isInEgg = true;
+      if(!store.eggPositions[this.props.eggIndex].hatched) {
+        hatched = false;
+      }
+    }
 
     this.state = {
-      npcState: 4,
-      loop: true,
+      hatched,
+      npcState: 2,
+      loop: false,
       spritePlaying: true,
       inPieces: false,
       ticksPerFrame: 5,
@@ -97,6 +108,14 @@ export default class FaceHugger extends Npc {
   loop = () => {
     const {store, npcIndex} = this.props;
 
+    if(this.isInEgg) {
+      if(store.eggPositions[npcIndex].hatched) {
+        this.isInEgg = false;
+        return this.hatch();
+      }
+    }
+
+    if(this.state.hatched) {
     if (!this.isJumping && !this.isAttacking && !this.isHit && !this.isDrop && !this.isDown && !this.isLanding && !this.isCrouchIdle && !this.isInPieces && !this.hasLatched) {
       this.npcAction(this.body);
       if (this.isAmbush && this.state.spritePlaying === false) {
@@ -145,13 +164,14 @@ export default class FaceHugger extends Npc {
       }
     }
     this.lastX = store.faceHuggerPositions[npcIndex].x;
+    }
   };
 
   npcAction = (body) => {
     const {store, npcIndex} = this.props;
     let npcState = this.state.npcState;
     if(store.characterIsAttacking && store.faceHuggerPositions[npcIndex].y  >= faceHuggerFloor) {
-      if (store.characterIsCrouching && store.faceHuggerPositions[npcIndex].y > 390) {
+      if (store.characterIsCrouching||(Math.abs(store.characterPosition.x-store.faceHuggerPositions[npcIndex].x) < 120) && store.faceHuggerPositions[npcIndex].y > 390) {
         if (Math.abs(store.faceHuggerPositions[npcIndex].x - store.characterPosition.x) < Math.random() * 100 + 400) {
           if (store.faceHuggerPositions[npcIndex].x < store.characterPosition.x && store.characterDirection === -1) {
             return this.hit();
@@ -196,6 +216,12 @@ export default class FaceHugger extends Npc {
         this.attack();
       }
     }
+  };
+
+  hatch = () => {
+    this.setState(Object.assign({}, this.state, {
+      hatched:true
+    }));
   };
 
   hit = () => {
@@ -397,6 +423,7 @@ export default class FaceHugger extends Npc {
   render() {
     return (
       <div style={this.getWrapperStyles()} className={`npc`} id={`npc_${this.props.npcIndex}`}>
+        {!this.isInEgg &&
         <Sprite
           ref={(sprite)=> {
           this.body = sprite
@@ -428,6 +455,7 @@ export default class FaceHugger extends Npc {
           tileHeight={70}
           ticksPerFrame={this.state.ticksPerFrame}
         />
+        }
       </div>
     );
   }
