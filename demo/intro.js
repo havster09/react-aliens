@@ -1,4 +1,5 @@
 import React, { Component, PropTypes } from 'react';
+import Preloader from 'preloader.js'; //https://www.npmjs.com/package/preloader.js
 import { AudioPlayer } from '../src';
 
 export default class Intro extends Component {
@@ -8,25 +9,56 @@ export default class Intro extends Component {
 
   startUpdate = () => {
     this.animationFrame = requestAnimationFrame(this.startUpdate);
-  }
+  };
 
   handleKeyPress = (e) => {
     if (e.keyCode === 13) {
-      // this.startNoise.play();
       this.props.onStart();
     }
-  }
+  };
 
   constructor(props) {
     super(props);
-
     this.state = {
       blink: false,
+      loaded:false,
     };
   }
 
   componentDidMount() {
-    // this.startNoise = new AudioPlayer('/assets/start.wav');
+    const model = this;
+    const preloader = new Preloader({
+      resources: [
+        'assets/bg_music/Rescue.mp3',
+        'assets/se/mg-1.wav',
+        'assets/se/m41.wav',
+        'assets/se/mgbolt.ogg',
+        'assets/se/reload.wav',
+        'assets/se/role3_die1.wav',
+        'assets/se/swipehit1.wav',
+        'assets/corporal.png',
+        'assets/pulse_rifle_shoot.png',
+        'assets/pulse_rifle_crouch_shoot.png',
+        'assets/giger_tile.png',
+        'assets/hive_0.png',
+        'assets/face_hugger.png',
+        'assets/acid_0.png',
+        'assets/alien_0.png'],
+      concurrency: 4
+    });
+
+    preloader.addProgressListener(function (loaded, length) {
+      console.log('loading ', loaded, length, loaded / length)
+    });
+
+    preloader.addCompletionListener(function () {
+      console.log('load completed');
+      model.setState(Object.assign({},...model.state,{
+        loaded:true
+      }))
+    });
+    preloader.start();
+
     window.addEventListener('keypress', this.handleKeyPress);
     this.animationFrame = requestAnimationFrame(this.startUpdate);
     this.interval = setInterval(() => {
@@ -44,14 +76,10 @@ export default class Intro extends Component {
 
   render() {
     return (
-      <div>
+      <div onClick={this.props.onStart}>
         <img className="intro" src="assets/intro.png"/>
-        <p
-          className="start"
-          style={{ display: this.state.blink ? 'block' : 'none' }}
-        >
-            Press Start
-        </p>
+        {this.state.loaded && <p className="start" style={{ display: this.state.blink ? 'block' : 'none' }}>Press Start</p>}
+        {!this.state.loaded && <p className="start" style={{ display: 'block'}}>Loading</p>}
       </div>
     );
   }

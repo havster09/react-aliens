@@ -77,9 +77,9 @@ export default class Game extends Component {
   }
 
   componentDidMount() {
-    /*this.player = new AudioPlayer('/assets/Rescue.mp3', () => {
-      this.stopMusic = this.player.play({loop: true, offset: 1, volume: 0.35});
-    });*/
+    this.player = new AudioPlayer('/assets/bg_music/Rescue.mp3', () => {
+      this.stopMusic = this.player.play({loop: true, offset: 0, volume: 0.35});
+    });
 
 
     this.setState({

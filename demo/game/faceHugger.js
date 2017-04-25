@@ -33,7 +33,6 @@ export default class FaceHugger extends Npc {
   };
 
   getContextLoop = (contextLoop) => {
-    const {store} = this.props;
     this.setState({
       contextLoop: contextLoop
     });

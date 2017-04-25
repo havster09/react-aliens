@@ -1,6 +1,5 @@
 import React, {Component, PropTypes} from 'react';
 import {observer} from 'mobx-react';
-import Matter from 'matter-js';
 
 import {
   AudioPlayer,
@@ -52,7 +51,6 @@ export default class Corporal extends Component {
 
   jump = (body) => {
     const {store} = this.props;
-    this.jumpNoise.play();
     this.isJumping = true;
     store.setCharacterPosition({x: store.characterPosition.x, y: store.characterPosition.y + 3});
   };
@@ -70,11 +68,13 @@ export default class Corporal extends Component {
   };
 
   shoot = () => {
-    const {store} = this.props;
     this.isShooting = true;
     let direction = this.lastDirection > 0 ? -1 : 1;
     let characterState = this.isCrouching?8:3;
     if (this.props.ammo > 0) {
+      if(this.state.contextLoop%4===2) {
+        this.pulseRifleSound.play({loop: false, offset: 0, volume: 0.35});
+      }
       this.props.onShoot();
       this.setState({
         characterState,
@@ -91,6 +91,7 @@ export default class Corporal extends Component {
 
   reload = () => {
     if (!this.state.reloadTimeStamp) {
+      this.pulseRifleReloadSound.play();
       this.setState({
         reloadTimeStamp: this.state.contextLoop,
         ticksPerFrame: 10
@@ -235,7 +236,6 @@ export default class Corporal extends Component {
     }
 
     if (keys.isDown(83)) {
-      // todo refactor crouch shooting controls
       if (keys.isUp(keys.DOWN)) {
         this.isCrouching = false;
         store.setCharacterIsCrouching(false);
@@ -332,12 +332,12 @@ export default class Corporal extends Component {
   }
 
   componentDidMount() {
-    this.pulseRifleSound = new AudioPlayer('/assets/pulse_rifle_sound_effect.mp3');
+    this.pulseRifleSound = new AudioPlayer('/assets/se/m41.wav');
+    this.pulseRifleReloadSound = new AudioPlayer('/assets/se/mgbolt.ogg');
     this.loopID = this.context.loop.subscribe(this.loop);
   }
 
   componentWillUnmount() {
-    this.stopPulseRifleSound();
     this.context.loop.unsubscribe(this.loopID);
   }
 
@@ -355,11 +355,6 @@ export default class Corporal extends Component {
   }
 
   render() {
-    const {scale} = this.context;
-
-    // todo add conditional rendering to pulse rifle fire
-    // todo audio set to play and loop adjust volume toggle on off
-
     return (
       <div style={this.getWrapperStyles()}>
         <Sprite
@@ -392,20 +387,22 @@ export default class Corporal extends Component {
           tileHeight={120}
           ticksPerFrame={this.state.ticksPerFrame}
         />
-        <Sprite
-          repeat={this.state.repeat}
-          src={this.state.characterState===8?"assets/pulse_rifle_crouch_shoot.png":"assets/pulse_rifle_shoot.png"}
-          scale={this.context.scale * 1}
-          direction={this.state.direction}
-          steps={[3]}
-          offset={[0,0]}
-          tileWidth={160}
-          tileHeight={120}
-          ticksPerFrame={3}
-          top={-120}
-          left={0}
-          display={this.state.characterState!==3&&this.state.characterState!==8?"none":"block"}
-        />
+        {this.props.store.characterIsAttacking &&
+          <Sprite
+            repeat={this.state.repeat}
+            src={this.state.characterState === 8 ? "assets/pulse_rifle_crouch_shoot.png" : "assets/pulse_rifle_shoot.png"}
+            scale={this.context.scale * 1}
+            direction={this.state.direction}
+            steps={[3]}
+            offset={[0, 0]}
+            tileWidth={160}
+            tileHeight={120}
+            ticksPerFrame={3}
+            top={-120}
+            left={0}
+            display={this.state.characterState !== 3 && this.state.characterState !== 8 ? "none" : "block"}
+          />
+        }
       </div>
     );
   }

@@ -34,7 +34,6 @@ export default class Alien extends Npc {
   };
 
   getContextLoop = (contextLoop) => {
-    const {store} = this.props;
     this.setState({
       contextLoop: contextLoop
     });
@@ -75,7 +74,8 @@ export default class Alien extends Npc {
 
 
   componentDidMount() {
-    this.jumpNoise = new AudioPlayer('/assets/jump.wav');
+    this.alienDieSound = new AudioPlayer('/assets/se/role3_die1.wav');
+    this.alienPunchSound = new AudioPlayer('/assets/se/swipehit1.wav');
     this.loopID = this.context.loop.subscribe(this.loop);
   }
 
@@ -283,6 +283,10 @@ export default class Alien extends Npc {
     if(this.state.decapitated) {
       npcState = 21;
     }
+    else {
+      this.alienDieSound.play();
+    }
+
     this.setState(Object.assign({}, this.state, {
       npcState,
       hasHit: this.state.hasHit + 1,
@@ -384,6 +388,7 @@ export default class Alien extends Npc {
 
   punch = () => {
     this.isPunching = true;
+    this.alienPunchSound.play();
     this.setState(Object.assign({}, this.state, {
       npcState: 5,
       ticksPerFrame: 5,
