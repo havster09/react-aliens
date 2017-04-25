@@ -17,12 +17,12 @@ class GameStore {
   ];
 
   @observable faceHuggerPositions = [
-    {x: 500, y: faceHuggerFloor},
-    {x: 550, y: faceHuggerFloor},
+    {x: 600, y: faceHuggerFloor},
+    {x: 550, y: faceHuggerFloor}
   ];
 
   @observable eggPositions = [
-    {x: 500, y: eggFloor, hatched:false},
+    {x: 600, y: eggFloor, hatched:false},
     {x: 550, y: eggFloor, hatched:false},
   ];
 

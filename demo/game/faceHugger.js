@@ -58,10 +58,12 @@ export default class FaceHugger extends Npc {
 
     const {store} = this.props;
     let hatched = true;
-    if(store.eggPositions[this.props.eggIndex]) {
-      this.isInEgg = true;
-      if(!store.eggPositions[this.props.eggIndex].hatched) {
-        hatched = false;
+    if(this.props.eggIndex <= store.eggPositions.length-1) {
+      if(store.eggPositions[this.props.eggIndex]) {
+        this.isInEgg = true;
+        if(!store.eggPositions[this.props.eggIndex].hatched) {
+          hatched = false;
+        }
       }
     }
 
@@ -219,16 +221,21 @@ export default class FaceHugger extends Npc {
   };
 
   hatch = () => {
+    const {store, npcIndex} = this.props;
+    const direction = store.faceHuggerPositions[npcIndex].x < store.characterPosition.x ? 1 : -1;
+    const distance = direction < 0?-90:-10;
     this.setState(Object.assign({}, this.state, {
+      direction,
       hatched:true
     }));
+    store.setFaceHuggerPosition({x: store.faceHuggerPositions[npcIndex].x+distance, y: store.faceHuggerPositions[npcIndex].y+-10}, npcIndex);
+    return this.ambush();
   };
 
   hit = () => {
     const {store, npcIndex} = this.props;
     const direction = store.faceHuggerPositions[npcIndex].x < store.characterPosition.x ? 1 : -1;
     if (this.state.hasHit < 3) {
-
       this.isHit = true;
       store.setFaceHuggerPosition({x: store.faceHuggerPositions[npcIndex].x, y: store.faceHuggerPositions[npcIndex].y}, npcIndex);
       this.setState(Object.assign({}, this.state, {
