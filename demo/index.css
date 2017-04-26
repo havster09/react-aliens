@@ -44,7 +44,7 @@ pre {
 }
 
 .intro {
-  margin: auto;
+  margin: 1em auto;
   width: 100%;
   max-width: 1024px;
   display: block;

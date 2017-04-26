@@ -44,6 +44,7 @@ export default class Egg extends Component {
     this.isDown = false;
     this.isAmbush = false;
     this.isLanding = false;
+    this.hasLatched = false;
     this.lastX = 0;
     this.lastDirection = -1;
 
@@ -68,6 +69,7 @@ export default class Egg extends Component {
 
   componentWillUnmount() {
     this.context.loop.unsubscribe(this.loopID);
+    this.respawn();
   }
 
   getWrapperStyles() {
@@ -127,9 +129,21 @@ export default class Egg extends Component {
       }
     }
 
-    if (!this.isFar() && !this.state.dead) {
+    if (!this.isFar(200) && !this.state.dead) {
       this.hatch();
     }
+
+    if (this.isOver() && !this.state.dead && !this.hasLatched && this.state.hatched) {
+      this.latch();
+    }
+  };
+
+  latch = () => {
+    // todo show facehugger jumping increase height of egg to display
+    // after latch show facehugger dead
+    const {store} = this.props;
+    this.hasLatched = true;
+    store.setCharacterLatched(true);
   };
 
   hit = () => {
@@ -165,8 +179,8 @@ export default class Egg extends Component {
     let distance = 0;
     let npcState = 2;
     if(Math.random()<.5) {
-      distance = direction < 0 ? Math.ceil(Math.random() * 1000) + 1000 : -1000 - Math.ceil(Math.random() * 1000);
-      store.setNpcPosition({x: store.characterPosition.x + distance, y: store.eggPositions[npcIndex].y}, npcIndex);
+      distance = direction < 0 ? Math.ceil(Math.random() * 100) + 800 : -800 - Math.ceil(Math.random() * 100);
+      store.setEggPosition({x: store.characterPosition.x + distance, y: store.eggPositions[npcIndex].y}, npcIndex);
     }
     else {
       if(store.characterDirection < 0) {
@@ -188,12 +202,19 @@ export default class Egg extends Component {
     }));
   };
 
-  isFar = () => {
+  isFar = (dist) => {
     const {store, npcIndex} = this.props;
     const directionOffset = this.state.direction < 0 ? -40 : 0;
     const distance = Math.abs(store.eggPositions[npcIndex].x - store.characterPosition.x);
-    return distance > 300 + directionOffset;
+    return distance > dist + directionOffset;
   };
+
+  isOver = () => {
+    const {store, npcIndex} = this.props;
+    const distance = store.eggPositions[npcIndex].x - store.characterPosition.x;
+    return distance < 55 && distance > 45;
+  };
+
 
   hatch = () => {
     this.isHatching = true;

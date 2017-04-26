@@ -83,6 +83,7 @@ export default class Alien extends Npc {
 
   componentWillUnmount() {
     this.context.loop.unsubscribe(this.loopID);
+    this.respawn();
   }
 
   getWrapperStyles() {

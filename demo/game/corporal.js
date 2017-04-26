@@ -188,15 +188,16 @@ export default class Corporal extends Component {
   };
 
   enterBuilding = (body) => {
-    const doorIndex = this.getDoorIndex(body);
-
-    if (doorIndex !== null) {
-      this.setState({
-        characterState: 3,
-      });
-      this.isLeaving = true;
+    const {store} = this.props;
+    this.setState({
+      characterState: 2,
+    });
+    this.isLeaving = true;
+   /*
+    const doorIndex = this.getDoorIndex(0);
+   if (doorIndex !== null) {
       this.props.onEnterBuilding(doorIndex);
-    }
+    }*/
   };
 
   checkKeys = (shouldMoveStageLeft, shouldMoveStageRight) => {
@@ -214,6 +215,9 @@ export default class Corporal extends Component {
     }
 
     if (keys.isDown(keys.UP)) {
+      console.log(store.characterPosition.x);
+      this.enterBuilding(this.body);
+      this.props.onEnterBuilding(0);
       // return this.enterBuilding(this.body);
     }
 

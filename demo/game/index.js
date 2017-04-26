@@ -1,5 +1,4 @@
 import React, {Component, PropTypes} from 'react';
-import Matter from 'matter-js';
 
 import {
   AudioPlayer,
@@ -21,19 +20,22 @@ import Ammo from './ammo';
 import GameStore from './stores/game-store';
 
 export default class Game extends Component {
-
-
   static propTypes = {
     onLeave: PropTypes.func,
   };
 
-  handleEnterBuilding = (index) => {
+  handleEnterBuilding = (level) => {
+    this.resetLevel();
     this.setState({
       fade: true,
     });
     setTimeout(() => {
-      this.props.onLeave(index);
-    }, 500);
+      // this.props.onLeave(level);
+      this.setState({
+        fade: false,
+        level
+      });
+    }, 1000);
   };
 
   handleShoot = () => {
@@ -63,11 +65,16 @@ export default class Game extends Component {
     });
   };
 
+  resetLevel() {
+
+  }
+
   constructor(props) {
     super(props);
 
     this.state = {
       fade: true,
+      levelUpdate:false,
       isHit: false,
       hitCount: 0,
       ammo: 990
@@ -129,7 +136,7 @@ export default class Game extends Component {
       <Loop>
         <Stage style={{ background: '#000' }}>
             <Level store={GameStore}/>
-            <Corporal
+          {!this.state.fade && <Corporal
               onEnterBuilding={this.handleEnterBuilding}
               onShoot={this.handleShoot}
               onReload={this.handleReload}
@@ -137,15 +144,14 @@ export default class Game extends Component {
               hitCount={this.state.hitCount}
               store={GameStore}
               ammo={this.state.ammo}
-              keys={this.keyListener}/>
-            {aliens}
-            {faceHuggers}
-            {eggs}
+              keys={this.keyListener}/>}
+            {!this.state.fade && aliens}
+            {!this.state.fade && faceHuggers}
+            {!this.state.fade && eggs}
             <Ammo count={this.state.ammo}/>
         </Stage>
         <Fade visible={this.state.fade}/>
       </Loop>
     );
   }
-
 }
