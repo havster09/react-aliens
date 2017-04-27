@@ -1,4 +1,5 @@
 import React, {Component, PropTypes} from 'react';
+import {observer} from 'mobx-react';
 
 import {
   AudioPlayer,
@@ -19,6 +20,7 @@ import Ammo from './ammo';
 
 import GameStore from './stores/game-store';
 
+@observer
 export default class Game extends Component {
   static propTypes = {
     onLeave: PropTypes.func,
@@ -127,7 +129,7 @@ export default class Game extends Component {
 
     const faceHuggers = GameStore.faceHuggerPositions.map((faceHugger, i) => {
       return (
-        <FaceHugger key={i} store={GameStore} npcIndex={parseInt(i)} eggIndex={parseInt(i)} onCharacterHit={this.handleCharacterHit}
+        <FaceHugger key={i} store={GameStore} npcIndex={parseInt(i)} onCharacterHit={this.handleCharacterHit}
                     onCharacterHitDone={this.handleCharacterHitDone}/>
       )
     });

@@ -1,4 +1,5 @@
 import React, {Component, PropTypes} from 'react';
+import {faceHuggerFloor} from './constants';
 import {observer} from 'mobx-react';
 
 import {
@@ -95,6 +96,9 @@ export default class Egg extends Component {
       if (this.isHatching && this.state.spritePlaying === false) {
         this.isHatching = false;
         store.setEggPosition({x: store.eggPositions[npcIndex].x, y: store.eggPositions[npcIndex].y, hatched:true}, npcIndex);
+        const direction = store.eggPositions[npcIndex].x < store.characterPosition.x ? 1 : -1;
+        const distance = direction < 0?-60:-30;
+        store.addFaceHugger({x: store.eggPositions[npcIndex].x+distance, y: faceHuggerFloor+-30});
       }
 
       if (this.isHit && this.state.spritePlaying === false) {
@@ -129,18 +133,15 @@ export default class Egg extends Component {
       }
     }
 
-    if (!this.isFar(200) && !this.state.dead) {
+    if (!this.isFar(300) && !this.state.dead && !store.eggPositions[npcIndex].hatched) {
       this.hatch();
     }
-
     if (this.isOver() && !this.state.dead && !this.hasLatched && this.state.hatched) {
-      this.latch();
+      // this.latch();
     }
   };
 
   latch = () => {
-    // todo show facehugger jumping increase height of egg to display
-    // after latch show facehugger dead
     const {store} = this.props;
     this.hasLatched = true;
     store.setCharacterLatched(true);

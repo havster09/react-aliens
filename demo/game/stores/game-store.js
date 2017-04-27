@@ -3,7 +3,7 @@ import {floor,alienFloor,faceHuggerFloor,eggFloor} from '../constants';
 import * as mobx from "mobx";
 
 class GameStore {
-  @observable characterPosition = {x: 100, y: floor};
+  @observable characterPosition = {x: 300, y: floor};
   @observable characterDirection = 1;
   @observable characterIsAttacking = false;
   @observable characterIsCrouching = false;
@@ -12,18 +12,20 @@ class GameStore {
   @observable heroLoopCount = 0;
 
   @observable npcPositions = [
-    {x: 500, y: alienFloor},
-    {x: 500, y: alienFloor},
+   /* {x: 500, y: alienFloor},
+    {x: 500, y: alienFloor},*/
   ];
 
+  // todo add new item to arrays
+
   @observable faceHuggerPositions = [
-    {x: 600, y: faceHuggerFloor},
-    {x: 550, y: faceHuggerFloor}
+    /*{x: 600, y: faceHuggerFloor},
+    {x: 550, y: faceHuggerFloor}*/
   ];
 
   @observable eggPositions = [
-    {x: 600, y: eggFloor, hatched:false},
-    {x: 550, y: eggFloor, hatched:false},
+    {x: 800, y: eggFloor, hatched:false},
+    {x: 150, y: eggFloor, hatched:false},
   ];
 
   constructor() {
@@ -66,6 +68,9 @@ class GameStore {
   }
   setEggPosition(position, index) {
     this.eggPositions[index] = position;
+  }
+  addFaceHugger(position) {
+    this.faceHuggerPositions = [...this.faceHuggerPositions,position];
   }
 
   setStageX(x) {

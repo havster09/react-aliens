@@ -1,13 +1,12 @@
 import React, {PropTypes} from 'react';
 import {observer} from 'mobx-react';
 import Npc from "./npc";
-import {faceHuggerFloor,ambushHeight} from './constants';
+import {faceHuggerFloor, ambushHeight,faceHuggerThreshold} from './constants';
 
 import {
   AudioPlayer,
   Sprite,
 } from '../../src';
-
 
 
 @observer
@@ -17,8 +16,7 @@ export default class FaceHugger extends Npc {
     keys: PropTypes.object,
     onCharacterHit: PropTypes.func,
     onCharacterHitDone: PropTypes.func,
-    store: PropTypes.object,
-    eggIndex: PropTypes.number
+    store: PropTypes.object
   };
 
   static contextTypes = {
@@ -56,19 +54,8 @@ export default class FaceHugger extends Npc {
     this.lastX = 0;
     this.lastDirection = -1;
 
-    const {store} = this.props;
-    let hatched = true;
-    if(this.props.eggIndex <= store.eggPositions.length-1) {
-      if(store.eggPositions[this.props.eggIndex]) {
-        this.isInEgg = true;
-        if(!store.eggPositions[this.props.eggIndex].hatched) {
-          hatched = false;
-        }
-      }
-    }
 
     this.state = {
-      hatched,
       npcState: 2,
       loop: false,
       spritePlaying: true,
@@ -77,7 +64,7 @@ export default class FaceHugger extends Npc {
       direction: -1,
       hasStopped: Math.random() < .5 ? 0 : 1,
       hasHit: Math.random() < .5 ? 0 : 1,
-      latch:false
+      latch: false
     };
   }
 
@@ -98,7 +85,7 @@ export default class FaceHugger extends Npc {
     const {scale} = this.context;
     const {x, y} = npcPosition;
     const targetX = x + stageX;
-    const visibility = this.state.latch?'hidden':'visible';
+    const visibility = this.state.latch ? 'hidden' : 'visible';
 
     return {
       visibility,
@@ -111,14 +98,6 @@ export default class FaceHugger extends Npc {
   loop = () => {
     const {store, npcIndex} = this.props;
 
-    if(this.isInEgg) {
-      if(store.eggPositions[npcIndex].hatched) {
-        this.isInEgg = false;
-        return this.hatch();
-      }
-    }
-
-    if(this.state.hatched) {
     if (!this.isJumping && !this.isAttacking && !this.isHit && !this.isDrop && !this.isDown && !this.isLanding && !this.isCrouchIdle && !this.isInPieces && !this.hasLatched) {
       this.npcAction(this.body);
       if (this.isAmbush && this.state.spritePlaying === false) {
@@ -128,12 +107,12 @@ export default class FaceHugger extends Npc {
       if (this.isAttacking && this.state.spritePlaying === false) {
         this.isAttacking = false;
         this.props.onCharacterHitDone();
-        if(!store.characterIsLatched && !this.hasLatched) {
+        if (!store.characterIsLatched && !this.hasLatched) {
           return this.latch();
         }
       }
 
-      if(this.hasLatched && !store.characterIsLatched) {
+      if (this.hasLatched && !store.characterIsLatched) {
         this.hasLatched = false;
         return this.down();
       }
@@ -167,32 +146,35 @@ export default class FaceHugger extends Npc {
       }
     }
     this.lastX = store.faceHuggerPositions[npcIndex].x;
-    }
+
   };
 
   npcAction = (body) => {
     const {store, npcIndex} = this.props;
     let npcState = this.state.npcState;
-    if(store.characterIsAttacking && store.faceHuggerPositions[npcIndex].y  >= faceHuggerFloor) {
-      if (store.characterIsCrouching||(Math.abs(store.characterPosition.x-store.faceHuggerPositions[npcIndex].x) < 120) && store.faceHuggerPositions[npcIndex].y > 390) {
-        if (Math.abs(store.faceHuggerPositions[npcIndex].x - store.characterPosition.x) < Math.random() * 100 + 400) {
-          if (store.faceHuggerPositions[npcIndex].x < store.characterPosition.x && store.characterDirection === -1) {
-            return this.hit();
-          }
-          else if (store.faceHuggerPositions[npcIndex].x > store.characterPosition.x && store.characterDirection === 1) {
-            return this.hit();
-          }
+    if (store.characterIsAttacking && store.faceHuggerPositions[npcIndex].y === faceHuggerFloor) {
+      if (store.characterIsCrouching || (Math.abs(store.characterPosition.x - store.faceHuggerPositions[npcIndex].x) < 120)) {
+        if (store.faceHuggerPositions[npcIndex].x < store.characterPosition.x && store.characterDirection === -1) {
+          return this.hit();
         }
+        else if (store.faceHuggerPositions[npcIndex].x > store.characterPosition.x && store.characterDirection === 1) {
+          return this.hit();
+        }
+
       }
     }
 
-    if (store.faceHuggerPositions[npcIndex].y  < faceHuggerFloor  && npcState !== 11 && npcState !== 9) {
+    if (store.faceHuggerPositions[npcIndex].y < faceHuggerFloor && npcState !== 11 && npcState !== 9) {
       return this.crouchIdle();
     }
-    else if(store.faceHuggerPositions[npcIndex].y  < faceHuggerFloor && npcState === 9) {
-      return store.setFaceHuggerPosition({x: store.faceHuggerPositions[npcIndex].x, y: store.faceHuggerPositions[npcIndex].y+10}, npcIndex);
+    else if (store.faceHuggerPositions[npcIndex].y < faceHuggerFloor && npcState === 9) {
+      return store.setFaceHuggerPosition({
+        x: store.faceHuggerPositions[npcIndex].x,
+        y: store.faceHuggerPositions[npcIndex].y + 10
+      }, npcIndex);
     }
-    else if(store.faceHuggerPositions[npcIndex].y  === faceHuggerFloor && npcState === 9 && npcState !== 10) {
+    else if (store.faceHuggerPositions[npcIndex].y === faceHuggerFloor && npcState === 9 && npcState !== 10) {
+      store.setFaceHuggerPosition({x: store.faceHuggerPositions[npcIndex].x, y: faceHuggerFloor}, npcIndex);
       return this.land();
     }
 
@@ -214,7 +196,7 @@ export default class FaceHugger extends Npc {
       this.stop();
     }
     else if (this.state.npcState === 2 && Math.random() && this.state.direction !== store.characterDirection && !store.characterIsLatched) {
-      if(!this.state.latch) {
+      if (!this.state.latch) {
         this.props.onCharacterHit();
         this.attack();
       }
@@ -224,12 +206,15 @@ export default class FaceHugger extends Npc {
   hatch = () => {
     const {store, npcIndex} = this.props;
     const direction = store.faceHuggerPositions[npcIndex].x < store.characterPosition.x ? 1 : -1;
-    const distance = direction < 0?-90:-10;
+    const distance = direction < 0 ? -90 : -10;
     this.setState(Object.assign({}, this.state, {
       direction,
-      hatched:true
+      hatched: true
     }));
-    store.setFaceHuggerPosition({x: store.faceHuggerPositions[npcIndex].x+distance, y: store.faceHuggerPositions[npcIndex].y+-10}, npcIndex);
+    store.setFaceHuggerPosition({
+      x: store.faceHuggerPositions[npcIndex].x + distance,
+      y: store.faceHuggerPositions[npcIndex].y + -10
+    }, npcIndex);
     return this.ambush();
   };
 
@@ -238,7 +223,10 @@ export default class FaceHugger extends Npc {
     const direction = store.faceHuggerPositions[npcIndex].x < store.characterPosition.x ? 1 : -1;
     if (this.state.hasHit < 3) {
       this.isHit = true;
-      store.setFaceHuggerPosition({x: store.faceHuggerPositions[npcIndex].x, y: store.faceHuggerPositions[npcIndex].y}, npcIndex);
+      store.setFaceHuggerPosition({
+        x: store.faceHuggerPositions[npcIndex].x,
+        y: store.faceHuggerPositions[npcIndex].y
+      }, npcIndex);
       this.setState(Object.assign({}, this.state, {
         npcState: 4,
         hasHit: this.state.hasHit + 1,
@@ -248,7 +236,7 @@ export default class FaceHugger extends Npc {
       }));
     }
     else {
-      if(Math.random() < .5) {
+      if (Math.random() < .5) {
         return this.inPieces();
       }
       else {
@@ -261,7 +249,10 @@ export default class FaceHugger extends Npc {
     const {store, npcIndex} = this.props;
     const direction = store.faceHuggerPositions[npcIndex].x < store.characterPosition.x ? 1 : -1;
     this.isInPieces = true;
-    store.setFaceHuggerPosition({x: store.faceHuggerPositions[npcIndex].x, y: store.faceHuggerPositions[npcIndex].y}, npcIndex);
+    store.setFaceHuggerPosition({
+      x: store.faceHuggerPositions[npcIndex].x,
+      y: store.faceHuggerPositions[npcIndex].y
+    }, npcIndex);
     this.setState(Object.assign({}, this.state, {
       npcState: 7,
       hasHit: this.state.hasHit + 1,
@@ -281,7 +272,7 @@ export default class FaceHugger extends Npc {
       y: store.faceHuggerPositions[npcIndex].y
     }, npcIndex);
     let npcState = 5;
-    if(this.state.inPieces) {
+    if (this.state.inPieces) {
       npcState = 8;
     }
     this.setState(Object.assign({}, this.state, {
@@ -298,19 +289,25 @@ export default class FaceHugger extends Npc {
     const direction = store.faceHuggerPositions[npcIndex].x < store.characterPosition.x ? 1 : -1;
     let distance = 0;
     let npcState = 2;
-    if(Math.random()<.5) {
+    if (Math.random() < .5) {
       distance = direction < 0 ? Math.ceil(Math.random() * 1000) + 1000 : -1000 - Math.ceil(Math.random() * 1000);
-      store.setFaceHuggerPosition({x: store.characterPosition.x + distance, y: store.faceHuggerPositions[npcIndex].y}, npcIndex);
+      store.setFaceHuggerPosition({
+        x: store.characterPosition.x + distance,
+        y: store.faceHuggerPositions[npcIndex].y
+      }, npcIndex);
     }
     else {
       let npcState = 14;
-      if(store.characterDirection < 0) {
-        distance = Math.ceil(Math.random() * 200+100);
+      if (store.characterDirection < 0) {
+        distance = Math.ceil(Math.random() * 200 + 100);
       }
       else {
-        distance = 0-Math.ceil(Math.random() * 200+100);
+        distance = 0 - Math.ceil(Math.random() * 200 + 100);
       }
-      store.setFaceHuggerPosition({x: store.characterPosition.x + distance, y: store.faceHuggerPositions[npcIndex].y-ambushHeight}, npcIndex);
+      store.setFaceHuggerPosition({
+        x: store.characterPosition.x + distance,
+        y: store.faceHuggerPositions[npcIndex].y - ambushHeight
+      }, npcIndex);
     }
     this.setState(Object.assign({}, this.state, {
       npcState,
@@ -325,13 +322,13 @@ export default class FaceHugger extends Npc {
   down = () => {
     this.isDown = true;
     let npcState = 6;
-    if(this.state.inPieces) {
+    if (this.state.inPieces) {
       npcState = 8;
     }
     this.setState(Object.assign({}, this.state, {
       npcState,
       repeat: false,
-      latch:false,
+      latch: false,
       ticksPerFrame: 100 // respawn time
     }));
   };
@@ -368,7 +365,10 @@ export default class FaceHugger extends Npc {
 
   move = (body, distance, npcState) => {
     const {store, npcIndex} = this.props;
-    store.setFaceHuggerPosition({x: store.faceHuggerPositions[npcIndex].x + distance, y: store.faceHuggerPositions[npcIndex].y}, npcIndex);
+    store.setFaceHuggerPosition({
+      x: store.faceHuggerPositions[npcIndex].x + distance,
+      y: store.faceHuggerPositions[npcIndex].y
+    }, npcIndex);
     this.setState(Object.assign({}, this.state, {
       npcState,
       direction: store.faceHuggerPositions[npcIndex].x < store.characterPosition.x ? 1 : -1,
@@ -393,7 +393,7 @@ export default class FaceHugger extends Npc {
     store.setCharacterLatched(true);
     this.hasLatched = true;
     this.setState(Object.assign({}, this.state, {
-      latch:true,
+      latch: true,
       ticksPerFrame: 5,
       repeat: false
     }));
@@ -433,10 +433,10 @@ export default class FaceHugger extends Npc {
       <div style={this.getWrapperStyles()} className={`npc`} id={`npc_${this.props.npcIndex}`}>
         {!this.isInEgg &&
         <Sprite
-          ref={(sprite)=> {
-          this.body = sprite
+          ref={(sprite) => {
+            this.body = sprite
           }
-        }
+          }
           repeat={this.state.repeat}
           onPlayStateChanged={this.handlePlayStateChanged}
           onGetContextLoop={this.getContextLoop}
@@ -457,7 +457,7 @@ export default class FaceHugger extends Npc {
             2, //9 ambush
             1, //10 land
             2 //11 crouchIdle
-            ]}
+          ]}
           offset={[0, 0]}
           tileWidth={140}
           tileHeight={70}

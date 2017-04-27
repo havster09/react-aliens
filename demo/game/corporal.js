@@ -68,8 +68,9 @@ export default class Corporal extends Component {
   };
 
   shoot = () => {
+    const {store} = this.props;
     this.isShooting = true;
-    let direction = this.lastDirection > 0 ? -1 : 1;
+    let direction = store.characterDirection;
     let characterState = this.isCrouching?8:3;
     if (this.props.ammo > 0) {
       if(this.state.contextLoop%4===2) {
@@ -190,6 +191,7 @@ export default class Corporal extends Component {
   enterBuilding = (body) => {
     const {store} = this.props;
     this.setState({
+      direction:store.characterDirection,
       characterState: 2,
     });
     this.isLeaving = true;
@@ -327,7 +329,6 @@ export default class Corporal extends Component {
     this.state = {
       characterState: 2,
       hitCount: 0,
-      direction: 1,
       loop: false,
       spritePlaying: true,
       ticksPerFrame: 5,
@@ -371,7 +372,7 @@ export default class Corporal extends Component {
           onGetContextLoop={this.getContextLoop}
           src="assets/corporal.png"
           scale={this.context.scale * 1}
-          direction={this.state.direction}
+          direction={this.props.store.characterDirection}
           state={this.state.characterState}
           steps={[
             7, // 0
