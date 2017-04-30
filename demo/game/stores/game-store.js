@@ -16,8 +16,6 @@ class GameStore {
     {x: 500, y: alienFloor},*/
   ];
 
-  // todo add new item to arrays
-
   @observable faceHuggerPositions = [
     /*{x: 600, y: faceHuggerFloor},
     {x: 550, y: faceHuggerFloor}*/
@@ -70,7 +68,19 @@ class GameStore {
     this.eggPositions[index] = position;
   }
   addFaceHugger(position) {
-    this.faceHuggerPositions = [...this.faceHuggerPositions,position];
+    let downFaceHuggerIndex;
+    const downFaceHugger = this.faceHuggerPositions.find((faceHugger, index)=> {
+      downFaceHuggerIndex = index;
+      return faceHugger.npcState === 6 || faceHugger.npcState === 8}
+    );
+
+    if(downFaceHugger && downFaceHuggerIndex) {
+      debugger;
+    }
+    else {
+      this.faceHuggerPositions = [...this.faceHuggerPositions,position];
+    }
+
   }
 
   setStageX(x) {

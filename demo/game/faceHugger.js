@@ -320,6 +320,7 @@ export default class FaceHugger extends Npc {
   };
 
   down = () => {
+    const {store, npcIndex} = this.props;
     this.isDown = true;
     let npcState = 6;
     if (this.state.inPieces) {
@@ -331,6 +332,8 @@ export default class FaceHugger extends Npc {
       latch: false,
       ticksPerFrame: 100 // respawn time
     }));
+    debugger;
+   store.setFaceHuggerPosition(Object.assign({},{x:store.faceHuggerPositions[npcIndex].x,y:store.faceHuggerPositions[npcIndex].y},{npcState}), npcIndex);
   };
 
   land = () => {
