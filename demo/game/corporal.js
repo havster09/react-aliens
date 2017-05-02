@@ -218,6 +218,12 @@ export default class Corporal extends Component {
 
     if (keys.isDown(keys.UP)) {
       console.log(store.characterPosition.x);
+      if(store.levelCount < 1) {
+        store.setLevelCount(1);
+      }
+      else {
+        store.setLevelCount(0);
+      }
       this.enterBuilding(this.body);
       this.props.onEnterBuilding(0);
       // return this.enterBuilding(this.body);

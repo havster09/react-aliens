@@ -9,6 +9,11 @@ import GameStore from './stores/game-store';
 
 export default class Level extends Component {
 
+  static propTypes = {
+    store: PropTypes.object,
+    fade: PropTypes.bool,
+  };
+
   static contextTypes = {
     scale: PropTypes.number,
   };
@@ -50,7 +55,7 @@ export default class Level extends Component {
   }
 
   render() {
-    const {store} = this.props;
+    const {store,fade} = this.props;
     return (
       <div style={this.getWrapperStyles()}>
         {/*<TileMap
@@ -78,7 +83,7 @@ export default class Level extends Component {
             [1,2,3,4,5,6],
           ]}
         />*/}
-        {store.levelCount===0 && <TileMap
+        {(store.levelCount===0&&!fade) && <TileMap
           style={{ top: Math.floor(200 * this.context.scale) }}
           src="assets/tile_bg_outdoor_square.png"
           rows={1}
@@ -89,7 +94,7 @@ export default class Level extends Component {
           ]}
         />}
 
-        {store.levelCount===1 && <TileMap
+        {(store.levelCount===1&&!fade) && <TileMap
           style={{ top: Math.floor(110 * this.context.scale) }}
           src="assets/giger_tile.png"
           rows={1}
@@ -100,8 +105,7 @@ export default class Level extends Component {
           ]}
         />}
 
-        {store.levelCount===1
-        && <TileMap
+        {(store.levelCount===1&&!fade) && <TileMap
           style={{ top: Math.floor(110 * this.context.scale) }}
           src="assets/hive_0.png"
           rows={1}

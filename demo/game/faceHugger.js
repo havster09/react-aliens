@@ -74,8 +74,14 @@ export default class FaceHugger extends Npc {
   }
 
   componentWillUnmount() {
+    const {store,npcIndex} = this.props;
     this.context.loop.unsubscribe(this.loopID);
-    this.respawn();
+    if(store.faceHuggerPositions.length > store.eggPositions.length) {
+      store.removeFaceHugger(npcIndex);
+    }
+    else {
+      this.respawn();
+    }
   }
 
   getWrapperStyles() {
@@ -98,6 +104,10 @@ export default class FaceHugger extends Npc {
 
   loop = () => {
     const {store, npcIndex} = this.props;
+
+    if(!store.faceHuggerPositions[npcIndex]) {
+      return;
+    }
 
     if (!this.isJumping && !this.isAttacking && !this.isHit && !this.isDrop && !this.isDown && !this.isLanding && !this.isCrouchIdle && !this.isInPieces && !this.hasLatched) {
       this.npcAction(this.body);
@@ -300,16 +310,13 @@ export default class FaceHugger extends Npc {
       hasHit: this.state.hasHit + 1,
       direction,
       repeat: false,
-      ticksPerFrame: 1000
+      ticksPerFrame: 100
     }));
   };
 
   respawn = () => {
     const {store, npcIndex} = this.props;
-    if(store.faceHuggerPositions.length > store.eggPositions.length) {
-      store.removeFaceHugger(npcIndex);
-    }
-    else if(store.faceHuggerPositions[npcIndex]){
+    if(store.faceHuggerPositions[npcIndex]){
       const direction = store.faceHuggerPositions[npcIndex].x < store.characterPosition.x ? 1 : -1;
       let distance = 0;
       let npcState = 2;

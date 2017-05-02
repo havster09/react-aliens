@@ -137,7 +137,7 @@ export default class Game extends Component {
     return (
       <Loop>
         <Stage style={{ background: '#000' }}>
-            <Level store={GameStore}/>
+            <Level store={GameStore} fade={this.state.fade}/>
           {!this.state.fade && <Corporal
               onEnterBuilding={this.handleEnterBuilding}
               onShoot={this.handleShoot}
