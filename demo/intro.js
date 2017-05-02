@@ -47,6 +47,7 @@ export default class Intro extends Component {
         'assets/hive_0.png',
         'assets/face_hugger.png',
         'assets/acid_0.png',
+        'assets/tile_bg_outdoor_square.png',
         'assets/alien_0.png'],
       concurrency: 4
     });
