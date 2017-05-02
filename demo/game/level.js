@@ -50,21 +50,10 @@ export default class Level extends Component {
   }
 
   render() {
+    const {store} = this.props;
     return (
       <div style={this.getWrapperStyles()}>
         {/*<TileMap
-          style={{ top: Math.floor(220 * this.context.scale) }}
-          src="assets/tile_bg_outdoor_square.png"
-          rows={1}
-          columns={12}
-          tileSize={256}
-          layers={[
-            [1,1,1,1,1,1,1,1,1,1,1,1],
-          ]}
-        />
-
-
-        <TileMap
           style={{ top: Math.floor(74 * this.context.scale) }}
           src="assets/boardwalktile.png"
           tileSize={128}
@@ -89,8 +78,18 @@ export default class Level extends Component {
             [1,2,3,4,5,6],
           ]}
         />*/}
+        {store.levelCount===0 && <TileMap
+          style={{ top: Math.floor(200 * this.context.scale) }}
+          src="assets/tile_bg_outdoor_square.png"
+          rows={1}
+          columns={12}
+          tileSize={280}
+          layers={[
+            [1,1,1,1,1,1,1,1,1,1,1,1],
+          ]}
+        />}
 
-        <TileMap
+        {store.levelCount===1 && <TileMap
           style={{ top: Math.floor(110 * this.context.scale) }}
           src="assets/giger_tile.png"
           rows={1}
@@ -99,9 +98,10 @@ export default class Level extends Component {
           layers={[
             [1,1,1,1,1,1,1,1,1,1,1,1,1],
           ]}
-        />
+        />}
 
-        <TileMap
+        {store.levelCount===1
+        && <TileMap
           style={{ top: Math.floor(110 * this.context.scale) }}
           src="assets/hive_0.png"
           rows={1}
@@ -110,7 +110,7 @@ export default class Level extends Component {
           layers={[
             [1,2,3,4,2,3,4,1,2,3,1,2,1,1],
           ]}
-        />
+        />}
 
       </div>
     );

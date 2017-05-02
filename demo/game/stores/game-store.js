@@ -11,19 +11,18 @@ class GameStore {
   @observable stageX = 0;
   @observable heroLoopCount = 0;
 
+  @observable levelCount = 0;
+
   @observable npcPositions = [
-   /* {x: 500, y: alienFloor},
-    {x: 500, y: alienFloor},*/
+    {x: 500, y: alienFloor},
+    {x: 500, y: alienFloor},
   ];
 
-  @observable faceHuggerPositions = [
-    /*{x: 600, y: faceHuggerFloor},
-    {x: 550, y: faceHuggerFloor}*/
-  ];
+  @observable faceHuggerPositions = [];
 
   @observable eggPositions = [
     {x: 800, y: eggFloor, hatched:false},
-    {x: 150, y: eggFloor, hatched:false},
+    {x: 150, y: eggFloor, hatched:false}
   ];
 
   constructor() {
@@ -68,19 +67,14 @@ class GameStore {
     this.eggPositions[index] = position;
   }
   addFaceHugger(position) {
-    let downFaceHuggerIndex;
-    const downFaceHugger = this.faceHuggerPositions.find((faceHugger, index)=> {
-      downFaceHuggerIndex = index;
-      return faceHugger.npcState === 6 || faceHugger.npcState === 8}
-    );
+    this.faceHuggerPositions = [...this.faceHuggerPositions,position];
+  }
+  removeFaceHugger(npcIndex) {
+    this.faceHuggerPositions.splice(1,npcIndex);
+  }
 
-    if(downFaceHugger && downFaceHuggerIndex) {
-      debugger;
-    }
-    else {
-      this.faceHuggerPositions = [...this.faceHuggerPositions,position];
-    }
-
+  setLevelCount(levelCount) {
+    this.levelCount = levelCount;
   }
 
   setStageX(x) {

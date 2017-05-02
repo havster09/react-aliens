@@ -304,7 +304,7 @@ export default class Alien extends Npc {
     const direction = store.npcPositions[npcIndex].x < store.characterPosition.x ? 1 : -1;
     let distance = 0;
     let npcState = 4;
-    if(Math.random()<.5) {
+    if(Math.random()<.5 || store.levelCount < 1) {
       distance = direction < 0 ? Math.ceil(Math.random() * 1000) + 1000 : -1000 - Math.ceil(Math.random() * 1000);
       store.setNpcPosition({x: store.characterPosition.x + distance, y: store.npcPositions[npcIndex].y}, npcIndex);
     }
