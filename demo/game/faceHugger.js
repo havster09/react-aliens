@@ -162,6 +162,11 @@ export default class FaceHugger extends Npc {
 
   npcAction = (body) => {
     const {store, npcIndex} = this.props;
+
+    if(!store.faceHuggerPositions[npcIndex]) {
+      return;
+    }
+
     let npcState = this.state.npcState;
     if (store.characterIsAttacking && store.faceHuggerPositions[npcIndex].y === faceHuggerFloor) {
       if (store.characterIsCrouching || (Math.abs(store.characterPosition.x - store.faceHuggerPositions[npcIndex].x) < 120)) {
@@ -340,6 +345,7 @@ export default class FaceHugger extends Npc {
           y: store.faceHuggerPositions[npcIndex].y - ambushHeight
         }), npcIndex);
       }
+
       this.setState(Object.assign({}, this.state, {
         npcState,
         hasHit: 0,

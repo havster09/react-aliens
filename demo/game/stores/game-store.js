@@ -70,7 +70,10 @@ class GameStore {
     this.faceHuggerPositions = [...this.faceHuggerPositions,position];
   }
   removeFaceHugger(npcIndex) {
-    this.faceHuggerPositions.splice(1,npcIndex);
+    const removedFaceHugger = this.faceHuggerPositions.filter((faceHugger,i)=>{
+      return i !== npcIndex;
+    });
+    this.faceHuggerPositions = removedFaceHugger;
   }
 
   setLevelCount(levelCount) {

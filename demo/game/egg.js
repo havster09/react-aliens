@@ -238,6 +238,7 @@ export default class Egg extends Component {
 
   render() {
     const {store} = this.props;
+    // todo review burst offset with smaller screens
     return (
       <div style={this.getWrapperStyles()} className={'npc'} id={`npc_${this.props.npcIndex}`}>
         <Sprite
