@@ -58,31 +58,6 @@ export default class Level extends Component {
     const {store,fade} = this.props;
     return (
       <div style={this.getWrapperStyles()}>
-        {/*<TileMap
-          style={{ top: Math.floor(74 * this.context.scale) }}
-          src="assets/boardwalktile.png"
-          tileSize={128}
-          columns={24}
-          rows={4}
-          layers={[
-            [
-              0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-              0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-              0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-              1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-            ],
-          ]}
-        />
-        <TileMap
-          style={{ top: Math.floor(-53 * this.context.scale) }}
-          src="assets/buildings.png"
-          rows={1}
-          columns={6}
-          tileSize={512}
-          layers={[
-            [1,2,3,4,5,6],
-          ]}
-        />*/}
         {(store.levelCount===0&&!fade) && <TileMap
           style={{ top: Math.floor(200 * this.context.scale) }}
           src="assets/tile_bg_outdoor_square.png"
@@ -113,6 +88,39 @@ export default class Level extends Component {
           tileSize={460}
           layers={[
             [1,2,3,4,2,3,4,1,2,3,1,2,1,1],
+          ]}
+        />}
+
+        {(store.levelCount===2&&!fade) && <TileMap
+          style={{ top: Math.floor(110 * this.context.scale) }}
+          src="assets/bathroom_0.png"
+          rows={1}
+          columns={10}
+          tileSize={460}
+          layers={[
+            [1,2,3,4,1,2,3,4,1,2,3,4,1,2,3]
+          ]}
+        />}
+
+        {(store.levelCount===3&&!fade) && <TileMap
+          style={{ top: Math.floor(110 * this.context.scale) }}
+          src="assets/hangar_0.png"
+          rows={1}
+          columns={10}
+          tileSize={460}
+          layers={[
+            [1,2,3,4,1,2,3,4,1,2,3,4,1,2,3]
+          ]}
+        />}
+
+        {(store.levelCount===4&&!fade) && <TileMap
+          style={{ top: Math.floor(110 * this.context.scale) }}
+          src="assets/hospital_0.png"
+          rows={1}
+          columns={10}
+          tileSize={460}
+          layers={[
+            [1,2,3,4,1,2,3,4,1,2,3,4,1,2,3]
           ]}
         />}
 

@@ -15,14 +15,14 @@ class GameStore {
 
   @observable npcPositions = [
     {x: 500, y: alienFloor},
-    {x: 500, y: alienFloor},
+    {x: 1500, y: alienFloor},
+    {x: 2500, y: alienFloor},
   ];
 
   @observable faceHuggerPositions = [];
 
   @observable eggPositions = [
-    {x: 800, y: eggFloor, hatched:false},
-    {x: 150, y: eggFloor, hatched:false}
+    {x: 800, y: eggFloor, hatched:false}
   ];
 
   constructor() {

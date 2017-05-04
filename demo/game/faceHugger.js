@@ -1,7 +1,8 @@
 import React, {PropTypes} from 'react';
 import {observer} from 'mobx-react';
 import Npc from "./npc";
-import {faceHuggerFloor, ambushHeight,faceHuggerThreshold} from './constants';
+import {faceHuggerFloor} from './constants';
+import {getAmbushHeight} from './helpers/ambushHeight';
 
 import {
   AudioPlayer,
@@ -342,7 +343,7 @@ export default class FaceHugger extends Npc {
         }
         store.setFaceHuggerPosition(Object.assign({}, ...store.faceHuggerPositions[npcIndex],{
           x: store.characterPosition.x + distance,
-          y: store.faceHuggerPositions[npcIndex].y - ambushHeight
+          y: store.faceHuggerPositions[npcIndex].y - getAmbushHeight(store.levelCount)
         }), npcIndex);
       }
 

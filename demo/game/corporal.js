@@ -218,12 +218,7 @@ export default class Corporal extends Component {
 
     if (keys.isDown(keys.UP)) {
       console.log(store.characterPosition.x);
-      if(store.levelCount < 1) {
-        store.setLevelCount(1);
-      }
-      else {
-        store.setLevelCount(0);
-      }
+      store.setLevelCount(store.levelCount + 1);
       this.enterBuilding(this.body);
       this.props.onEnterBuilding(0);
       // return this.enterBuilding(this.body);
@@ -397,6 +392,7 @@ export default class Corporal extends Component {
           tileWidth={160}
           tileHeight={120}
           ticksPerFrame={this.state.ticksPerFrame}
+          transformOrigin="left top"
         />
         {this.props.store.characterIsAttacking &&
           <Sprite

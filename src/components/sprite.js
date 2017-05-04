@@ -19,6 +19,7 @@ export default class Sprite extends Component {
         top: PropTypes.number,
         left: PropTypes.number,
         hidden: PropTypes.bool,
+        transformOrigin: PropTypes.string,
     };
 
     static defaultProps = {
@@ -35,6 +36,7 @@ export default class Sprite extends Component {
         ticksPerFrame: 4,
         tileHeight: 64,
         tileWidth: 64,
+        transformOrigin: 'left top'
     };
 
     static contextTypes = {
@@ -130,7 +132,7 @@ export default class Sprite extends Component {
             overflow: 'hidden',
             position: 'relative',
             transform: `scale(${this.props.scale || this.context.scale})`,
-            transformOrigin: 'top left',
+            transformOrigin: this.props.transformOrigin,
             imageRendering: 'pixelated'
         };
 

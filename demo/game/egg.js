@@ -238,7 +238,6 @@ export default class Egg extends Component {
 
   render() {
     const {store} = this.props;
-    // todo review burst offset with smaller screens
     return (
       <div style={this.getWrapperStyles()} className={'npc'} id={`npc_${this.props.npcIndex}`}>
         <Sprite
@@ -262,10 +261,11 @@ export default class Egg extends Component {
           tileWidth={32}
           tileHeight={32}
           ticksPerFrame={this.state.ticksPerFrame}
+          transformOrigin="center top"
         />
         {this.isHit &&
         <Sprite
-          repeat={this.state.repeat}
+          repeat={false}
           src={store.characterDirection>0?"assets/egg_burst.png":"assets/egg_r_burst.png"}
           scale={this.context.scale * 1}
           direction={store.characterDirection}
@@ -274,8 +274,9 @@ export default class Egg extends Component {
           tileWidth={56}
           tileHeight={56}
           ticksPerFrame={3}
-          top={-50}
-          left={store.characterDirection>0?30:-60}
+          top={-40}
+          transformOrigin="left top"
+          left={store.characterDirection>0?56*this.context.scale/2:0-(56*this.context.scale)}
         />}
       </div>
     );
