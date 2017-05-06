@@ -16,7 +16,7 @@ import FaceHugger from './faceHugger';
 import Egg from './egg';
 import Level from './level';
 import Fade from './fade';
-import Ammo from './ammo';
+import UserInterface from './userInterface';
 
 import GameStore from './stores/game-store';
 
@@ -88,9 +88,8 @@ export default class Game extends Component {
 
   componentDidMount() {
     this.player = new AudioPlayer('/assets/bg_music/Rescue.mp3', () => {
-      this.stopMusic = this.player.play({loop: true, offset: 0, volume: 0.35});
+      this.stopMusic = this.player.play({loop: true, offset: 0, volume: 0.1});
     });
-
 
     this.setState({
       fade: false,
@@ -109,10 +108,15 @@ export default class Game extends Component {
 
   componentWillUnmount() {
     this.stopMusic();
+    this.stopMotionTrackerSound();
     this.keyListener.unsubscribe();
+
   }
 
   render() {
+    if(this.motionTrackerSound) {
+      console.log(this.motionTrackerSound);
+    }
     const aliens = GameStore.npcPositions.map((alien, i) => {
       return (
         <Alien key={i} store={GameStore} npcIndex={parseInt(i)} onCharacterHit={this.handleCharacterHit}
@@ -150,9 +154,9 @@ export default class Game extends Component {
             {!this.state.fade && aliens}
             {!this.state.fade && faceHuggers}
             {!this.state.fade && eggs}
-            <Ammo count={this.state.ammo}/>
+            <UserInterface context={this.context} ammo={this.state.ammo}/>
         </Stage>
-        <Fade visible={this.state.fade}/>
+        {/*<Fade visible={this.state.fade}/>*/}
       </Loop>
     );
   }

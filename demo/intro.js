@@ -30,6 +30,7 @@ export default class Intro extends Component {
     const preloader = new Preloader({
       resources: [
         'assets/bg_music/Rescue.mp3',
+        'assets/se/motion_tracker.wav',
         'assets/se/bite2.wav',
         'assets/se/mg-1.wav',
         'assets/se/m41.wav',
@@ -48,6 +49,10 @@ export default class Intro extends Component {
         'assets/face_hugger.png',
         'assets/acid_0.png',
         'assets/tile_bg_outdoor_square.png',
+        'assets/motion_tracker.png',
+        'assets/bathroom_0.png',
+        'assets/hangar_0.png',
+        'assets/hospital_0.png',
         'assets/alien_0.png'],
       concurrency: 4
     });

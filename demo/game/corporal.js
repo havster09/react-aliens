@@ -224,7 +224,7 @@ export default class Corporal extends Component {
       // return this.enterBuilding(this.body);
     }
 
-    if (keys.isDown(keys.LEFT)) {
+    if (keys.isDown(keys.LEFT)&& store.characterPosition.x > -39) {
       if (shouldMoveStageLeft) {
         store.setStageX(store.stageX + 3);
       }
@@ -232,7 +232,7 @@ export default class Corporal extends Component {
       store.setCharacterDirection(direction);
       this.move(this.body, -3);
       characterState = 1;
-    } else if (keys.isDown(keys.RIGHT)) {
+    } else if (keys.isDown(keys.RIGHT) && store.characterPosition.x < 2952) {
       if (shouldMoveStageRight) {
         store.setStageX(store.stageX - 3);
       }

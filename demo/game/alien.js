@@ -79,11 +79,17 @@ export default class Alien extends Npc {
     this.alienPunchSound = new AudioPlayer('/assets/se/swipehit1.wav');
     this.alienWhipSound = new AudioPlayer('/assets/se/swipehit2.wav');
     this.alienBiteSound = new AudioPlayer('/assets/se/bite2.wav');
+
+    this.motionTrackerSound = new AudioPlayer('/assets/se/motion_tracker.wav',()=> {
+      this.stopMotionTrackerSound = this.motionTrackerSound.play({loop:true});
+    });
+
     this.loopID = this.context.loop.subscribe(this.loop);
   }
 
   componentWillUnmount() {
     this.context.loop.unsubscribe(this.loopID);
+    this.stopMotionTrackerSound();
     this.respawn();
   }
 
@@ -159,6 +165,7 @@ export default class Alien extends Npc {
 
       if (this.isDown && this.state.spritePlaying === false) {
         this.isDown = false;
+        this.stopMotionTrackerSound = this.motionTrackerSound.play({loop:true});
         return this.respawn();
       }
     }
@@ -188,7 +195,6 @@ export default class Alien extends Npc {
     else if(store.npcPositions[npcIndex].y  === alienFloor && npcState === 14 && npcState !== 15) {
       return this.land();
     }
-
 
     if (this.isBehind()) {
       this.turn(1);
@@ -298,6 +304,8 @@ export default class Alien extends Npc {
       repeat: false,
       ticksPerFrame: 10
     }));
+
+    this.stopMotionTrackerSound();
   };
 
   respawn = () => {
@@ -327,6 +335,7 @@ export default class Alien extends Npc {
       decapitated: false,
       ticksPerFrame: 500
     }));
+
   };
 
   down = () => {
@@ -338,7 +347,7 @@ export default class Alien extends Npc {
     this.setState(Object.assign({}, this.state, {
       npcState,
       repeat: false,
-      ticksPerFrame: 100 // respawn time
+      ticksPerFrame: 200 // respawn time
     }));
   };
 
@@ -356,6 +365,12 @@ export default class Alien extends Npc {
     const turnOffset = store.npcPositions[npcIndex].x < store.characterPosition.x ? -1000 : 1000;
     return store.npcPositions[npcIndex].x < store.characterPosition.x - turnOffset;
   }
+
+  isClose = () => {
+    const {store, npcIndex} = this.props;
+    const distance = store.npcPositions[npcIndex].x - store.characterPosition.x;
+    return distance < 100;
+  };
 
   turn(direction) {
     const {store, npcIndex} = this.props;

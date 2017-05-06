@@ -71,6 +71,10 @@ export default class FaceHugger extends Npc {
 
 
   componentDidMount() {
+    this.motionTrackerSound = new AudioPlayer('/assets/se/motion_tracker.wav',()=> {
+      this.stopMotionTrackerSound = this.motionTrackerSound.play({loop:true});
+    });
+
     this.loopID = this.context.loop.subscribe(this.loop);
   }
 
@@ -81,6 +85,7 @@ export default class FaceHugger extends Npc {
       store.removeFaceHugger(npcIndex);
     }
     else {
+      this.stopMotionTrackerSound();
       this.respawn();
     }
   }
@@ -120,6 +125,7 @@ export default class FaceHugger extends Npc {
         this.isAttacking = false;
         this.props.onCharacterHitDone();
         if (!store.characterIsLatched && !this.hasLatched) {
+          this.stopMotionTrackerSound();
           return this.latch();
         }
       }
@@ -154,6 +160,7 @@ export default class FaceHugger extends Npc {
 
       if (this.isDown && this.state.spritePlaying === false) {
         this.isDown = false;
+        this.stopMotionTrackerSound = this.motionTrackerSound.play({loop:true});
         return this.respawn();
       }
     }
@@ -318,6 +325,7 @@ export default class FaceHugger extends Npc {
       repeat: false,
       ticksPerFrame: 100
     }));
+    this.stopMotionTrackerSound();
   };
 
   respawn = () => {

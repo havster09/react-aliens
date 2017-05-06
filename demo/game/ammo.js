@@ -1,16 +1,19 @@
-import React from 'react';
-import * as PropTypes from "react/lib/ReactPropTypes";
+import React, {Component, PropTypes} from 'react';
 
-const ammo = ({count}) => {
+export default class Ammo extends Component {
+  render() {
     return (
-        <div className="ui" style={{width: 300 ,height: 138,overflow: 'hidden',position: 'absolute'}}>
-            <p>AMMO {Math.floor(count/10)}</p>
-        </div>
+      <div className="ammo-interface" style={{direction: 'rtl', left:96*this.context.scale, top:1*this.context.scale, position: 'absolute',width:60*this.context.scale}}>
+        <p style={{textAlign: 'center',color:'red', fontSize:26*this.context.scale}}>{(`0${Math.floor(this.props.count/10)}`).slice(-2)}</p>
+      </div>
     );
+  }
 };
 
-ammo.propTypes = {
+Ammo.propTypes = {
     count: PropTypes.number.isRequired
 };
 
-export default ammo;
+Ammo.contextTypes = {
+  scale: PropTypes.number
+};

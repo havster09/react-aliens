@@ -11,12 +11,11 @@ class GameStore {
   @observable stageX = 0;
   @observable heroLoopCount = 0;
 
-  @observable levelCount = 0;
+  @observable levelCount = 3;
 
   @observable npcPositions = [
     {x: 500, y: alienFloor},
-    {x: 1500, y: alienFloor},
-    {x: 2500, y: alienFloor},
+    {x: 600, y: alienFloor}
   ];
 
   @observable faceHuggerPositions = [];
