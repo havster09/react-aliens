@@ -13,7 +13,6 @@ export default class userInterface extends Component {
   }
 
   componentDidMount() {
-
   }
 
   componentWillUnmount() {

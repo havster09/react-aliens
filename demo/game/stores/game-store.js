@@ -1,9 +1,9 @@
 import {computed, observable} from 'mobx';
-import {floor,alienFloor,faceHuggerFloor,eggFloor} from '../constants';
+import {FLOOR,ALIEN_FLOOR,FACEHUGGER_FLOOR,EGG_FLOOR} from '../constants';
 import * as mobx from "mobx";
 
 class GameStore {
-  @observable characterPosition = {x: 300, y: floor};
+  @observable characterPosition = {x: 300, y: FLOOR};
   @observable characterDirection = 1;
   @observable characterIsAttacking = false;
   @observable characterIsCrouching = false;
@@ -11,17 +11,18 @@ class GameStore {
   @observable stageX = 0;
   @observable heroLoopCount = 0;
 
-  @observable levelCount = 3;
+  @observable levelCount = 0;
+  @observable killCount = 0;
 
   @observable npcPositions = [
-    {x: 500, y: alienFloor},
-    {x: 600, y: alienFloor}
+    {x: 500, y: ALIEN_FLOOR},
+    {x: 600, y: ALIEN_FLOOR}
   ];
 
   @observable faceHuggerPositions = [];
 
   @observable eggPositions = [
-    {x: 800, y: eggFloor, hatched:false}
+    {x: 800, y: EGG_FLOOR, hatched:false}
   ];
 
   constructor() {
@@ -77,6 +78,7 @@ class GameStore {
 
   setLevelCount(levelCount) {
     this.levelCount = levelCount;
+    this.killCount = 0;
   }
 
   setStageX(x) {
@@ -91,6 +93,10 @@ class GameStore {
 
   setHeroLoopCount(count) {
     this.heroLoopCount = count;
+  }
+
+  setKillCount(count) {
+    this.killCount = count;
   }
 }
 

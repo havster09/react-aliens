@@ -1,5 +1,6 @@
 import React, {Component, PropTypes} from 'react';
 import {observer} from 'mobx-react';
+import {KILL_THRESHOLD} from './constants';
 
 import {
   AudioPlayer,
@@ -202,6 +203,15 @@ export default class Corporal extends Component {
     }*/
   };
 
+  roundClear = () => {
+    // todo add check for all aliens to be npcState dead
+    const {store} = this.props;
+    console.log(store.characterPosition.x);
+    store.setLevelCount(store.levelCount + 1);
+    this.enterBuilding(this.body);
+    this.props.onEnterBuilding(0);
+  };
+
   checkKeys = (shouldMoveStageLeft, shouldMoveStageRight) => {
     const {keys, store} = this.props;
 
@@ -277,6 +287,10 @@ export default class Corporal extends Component {
 
   loop = () => {
     const {store, isHit} = this.props;
+
+    if(store.killCount > KILL_THRESHOLD) {
+      return this.roundClear();
+    }
 
     if (store.characterIsLatched) {
       return this.latch();

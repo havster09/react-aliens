@@ -1,7 +1,7 @@
 import React, {PropTypes} from 'react';
 import Npc from "./npc"
 import {observer} from 'mobx-react';
-import {alienFloor} from './constants';
+import {ALIEN_FLOOR, KILL_THRESHOLD} from './constants';
 import {getAmbushHeight} from './helpers/ambushHeight';
 
 import {
@@ -160,13 +160,19 @@ export default class Alien extends Npc {
 
       if (this.isDrop && this.state.spritePlaying === false) {
         this.isDrop = false;
-        this.down();
+        store.setKillCount(store.killCount + 1);
+        return this.down();
       }
 
       if (this.isDown && this.state.spritePlaying === false) {
         this.isDown = false;
-        this.stopMotionTrackerSound = this.motionTrackerSound.play({loop:true});
-        return this.respawn();
+        if(store.killCount < 10) {
+          this.stopMotionTrackerSound = this.motionTrackerSound.play({loop:true});
+          return this.respawn();
+        }
+        else {
+          return this.down();
+        }
       }
     }
     this.lastX = store.npcPositions[npcIndex].x;
@@ -186,13 +192,13 @@ export default class Alien extends Npc {
       }
     }
 
-    if (store.npcPositions[npcIndex].y  < alienFloor  && npcState !== 16 && npcState !== 14) {
+    if (store.npcPositions[npcIndex].y  < ALIEN_FLOOR  && npcState !== 16 && npcState !== 14) {
       return this.crouchIdle();
     }
-    else if(store.npcPositions[npcIndex].y  < alienFloor && npcState === 14) {
+    else if(store.npcPositions[npcIndex].y  < ALIEN_FLOOR && npcState === 14) {
       return store.setNpcPosition({x: store.npcPositions[npcIndex].x, y: store.npcPositions[npcIndex].y+10}, npcIndex);
     }
-    else if(store.npcPositions[npcIndex].y  === alienFloor && npcState === 14 && npcState !== 15) {
+    else if(store.npcPositions[npcIndex].y  === ALIEN_FLOOR && npcState === 14 && npcState !== 15) {
       return this.land();
     }
 

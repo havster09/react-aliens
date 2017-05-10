@@ -101,8 +101,8 @@ export default class Game extends Component {
       this.keyListener.UP,
       this.keyListener.DOWN,
       this.keyListener.SPACE,
-      65,
-      83, // s key
+      this.keyListener.A_KEY,
+      this.keyListener.S_KEY
     ]);
   }
 
@@ -114,9 +114,6 @@ export default class Game extends Component {
   }
 
   render() {
-    if(this.motionTrackerSound) {
-      console.log(this.motionTrackerSound);
-    }
     const aliens = GameStore.npcPositions.map((alien, i) => {
       return (
         <Alien key={i} store={GameStore} npcIndex={parseInt(i)} onCharacterHit={this.handleCharacterHit}

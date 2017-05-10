@@ -1,5 +1,5 @@
 import React, {Component, PropTypes} from 'react';
-import {faceHuggerFloor} from './constants';
+import {FACEHUGGER_FLOOR} from './constants';
 import {observer} from 'mobx-react';
 
 import {
@@ -98,7 +98,7 @@ export default class Egg extends Component {
         store.setEggPosition({x: store.eggPositions[npcIndex].x, y: store.eggPositions[npcIndex].y, hatched:true}, npcIndex);
         const direction = store.eggPositions[npcIndex].x < store.characterPosition.x ? 1 : -1;
         const distance = direction < 0?-60:-30;
-        store.addFaceHugger({x: store.eggPositions[npcIndex].x+distance, y: faceHuggerFloor+-30,npcState:2});
+        store.addFaceHugger({x: store.eggPositions[npcIndex].x+distance, y: FACEHUGGER_FLOOR+-30,npcState:2});
       }
 
       if (this.isHit && this.state.spritePlaying === false) {

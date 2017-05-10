@@ -1,7 +1,7 @@
 import React, {PropTypes} from 'react';
 import {observer} from 'mobx-react';
 import Npc from "./npc";
-import {faceHuggerFloor} from './constants';
+import {FACEHUGGER_FLOOR, KILL_THRESHOLD} from './constants';
 import {getAmbushHeight} from './helpers/ambushHeight';
 
 import {
@@ -146,6 +146,7 @@ export default class FaceHugger extends Npc {
 
       if (this.isInPieces && this.state.spritePlaying === false) {
         this.isInPieces = false;
+        store.setKillCount(store.killCount + 1);
         return this.drop();
       }
 
@@ -155,13 +156,19 @@ export default class FaceHugger extends Npc {
 
       if (this.isDrop && this.state.spritePlaying === false) {
         this.isDrop = false;
-        this.down();
+        store.setKillCount(store.killCount + 1);
+        return this.down();
       }
 
       if (this.isDown && this.state.spritePlaying === false) {
         this.isDown = false;
-        this.stopMotionTrackerSound = this.motionTrackerSound.play({loop:true});
-        return this.respawn();
+        if(store.killCount < 10) {
+          this.stopMotionTrackerSound = this.motionTrackerSound.play({loop:true});
+          return this.respawn();
+        }
+        else {
+          return this.down();
+        }
       }
     }
     this.lastX = store.faceHuggerPositions[npcIndex].x;
@@ -176,7 +183,7 @@ export default class FaceHugger extends Npc {
     }
 
     let npcState = this.state.npcState;
-    if (store.characterIsAttacking && store.faceHuggerPositions[npcIndex].y === faceHuggerFloor) {
+    if (store.characterIsAttacking && store.faceHuggerPositions[npcIndex].y === FACEHUGGER_FLOOR) {
       if (store.characterIsCrouching || (Math.abs(store.characterPosition.x - store.faceHuggerPositions[npcIndex].x) < 120)) {
         if (store.faceHuggerPositions[npcIndex].x < store.characterPosition.x && store.characterDirection === -1) {
           return this.hit();
@@ -188,18 +195,18 @@ export default class FaceHugger extends Npc {
       }
     }
 
-    if (store.faceHuggerPositions[npcIndex].y < faceHuggerFloor && npcState !== 11 && npcState !== 9) {
+    if (store.faceHuggerPositions[npcIndex].y < FACEHUGGER_FLOOR && npcState !== 11 && npcState !== 9) {
       return this.crouchIdle();
     }
-    else if (store.faceHuggerPositions[npcIndex].y < faceHuggerFloor && npcState === 9) {
+    else if (store.faceHuggerPositions[npcIndex].y < FACEHUGGER_FLOOR && npcState === 9) {
       return store.setFaceHuggerPosition(Object.assign({}, ...store.faceHuggerPositions[npcIndex],{
         x: store.faceHuggerPositions[npcIndex].x,
         y: store.faceHuggerPositions[npcIndex].y + 10
       }), npcIndex);
     }
-    else if (store.faceHuggerPositions[npcIndex].y === faceHuggerFloor && npcState === 9 && npcState !== 10) {
+    else if (store.faceHuggerPositions[npcIndex].y === FACEHUGGER_FLOOR && npcState === 9 && npcState !== 10) {
       store.setFaceHuggerPosition(Object.assign({}, ...store.faceHuggerPositions[npcIndex],{
-        x: store.faceHuggerPositions[npcIndex].x, y: faceHuggerFloor}), npcIndex);
+        x: store.faceHuggerPositions[npcIndex].x, y: FACEHUGGER_FLOOR}), npcIndex);
       return this.land();
     }
 
