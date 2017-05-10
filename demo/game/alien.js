@@ -166,7 +166,7 @@ export default class Alien extends Npc {
 
       if (this.isDown && this.state.spritePlaying === false) {
         this.isDown = false;
-        if(store.killCount < 10) {
+        if(store.killCount < KILL_THRESHOLD) {
           this.stopMotionTrackerSound = this.motionTrackerSound.play({loop:true});
           return this.respawn();
         }
