@@ -15,7 +15,6 @@ class GameStore {
   @observable killCount = 0;
 
   @observable npcPositions = [
-    {x: 500, y: ALIEN_FLOOR},
     {x: 600, y: ALIEN_FLOOR}
   ];
 
@@ -23,6 +22,7 @@ class GameStore {
 
   @observable eggPositions = [
     {x: 800, y: EGG_FLOOR, hatched:false},
+    {x: 850, y: EGG_FLOOR, hatched:false},
     {x: 900, y: EGG_FLOOR, hatched:false}
   ];
 
