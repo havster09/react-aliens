@@ -43,6 +43,8 @@ export default class Intro extends Component {
         'assets/se/swipehit1.wav',
         'assets/corporal.png',
         'assets/egg.png',
+        'assets/d_pad.png',
+        'assets/pad_btn.png',
         'assets/egg_burst.png',
         'assets/egg_r_burst.png',
         'assets/pulse_rifle_shoot.png',

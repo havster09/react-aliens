@@ -117,7 +117,9 @@ mobileControls.propTypes = {
   onDirectionPadLeftPressStart:PropTypes.func,
   onDirectionPadLeftPressEnd:PropTypes.func,
   onDirectionPadRightPressStart:PropTypes.func,
-  onDirectionPadRightPressEnd:PropTypes.func
+  onDirectionPadRightPressEnd:PropTypes.func,
+  onDirectionPadDownPressStart:PropTypes.func,
+  onDirectionPadDownPressEnd:PropTypes.func
 };
 
 mobileControls.contextTypes = {

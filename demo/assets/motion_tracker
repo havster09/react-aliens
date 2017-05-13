@@ -1,0 +1,21 @@
+/* ----------------------------------------------------
+   created with http://www.codeandweb.com/texturepacker 
+   ----------------------------------------------------
+   $TexturePacker:SmartUpdate:b14e3f828d2e9e67e8246214cb75c3a7:926c64f4118a63993b16c7250dc60204:86f53c8856b3d7824f19be62bb473ed3$
+   ----------------------------------------------------
+
+   usage: <span class="{-spritename-} sprite"></span>
+
+   replace {-spritename-} with the sprite you like to use
+
+*/
+
+.sprite {display:inline-block; overflow:hidden; background-repeat: no-repeat;background-image:url(motion_tracker.png);}
+
+.motion_tracker_0 {width:48px; height:48px; background-position: -0px -0px}
+.motion_tracker_1 {width:48px; height:48px; background-position: -48px -0px}
+.motion_tracker_2 {width:48px; height:48px; background-position: -96px -0px}
+.motion_tracker_3 {width:48px; height:48px; background-position: -144px -0px}
+.motion_tracker_4 {width:48px; height:48px; background-position: -192px -0px}
+.motion_tracker_5 {width:48px; height:48px; background-position: -240px -0px}
+.motion_tracker_6 {width:48px; height:48px; background-position: -288px -0px}

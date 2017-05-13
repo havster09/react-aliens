@@ -259,7 +259,7 @@ export default class Corporal extends Component {
         this.isCrouching = false;
         store.setCharacterIsCrouching(false);
       }
-      if (keys.isDown(keys.DOWN)) {
+      if (keys.isDown(keys.DOWN) || this.props.mobileControlsDirection[1]==='down') {
         this.isCrouching = true;
         store.setCharacterIsCrouching(true);
       }

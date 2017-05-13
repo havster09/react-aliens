@@ -1,0 +1,22 @@
+/* ----------------------------------------------------
+   created with http://www.codeandweb.com/texturepacker 
+   ----------------------------------------------------
+   $TexturePacker:SmartUpdate:b594bab1f80042768e70f4ded8955c73:c5a7f22cff46c17039712a0926b2724b:430b55d0f484482f7dc91f15872f86e6$
+   ----------------------------------------------------
+
+   usage: <span class="{-spritename-} sprite"></span>
+
+   replace {-spritename-} with the sprite you like to use
+
+*/
+
+.sprite {display:inline-block; overflow:hidden; background-repeat: no-repeat;background-image:url(face_hugger_r.png);}
+
+.face_hugger_walk_0 {width:140px; height:70px; background-position: -0px -0px}
+.face_hugger_walk_1 {width:140px; height:70px; background-position: -140px -0px}
+.face_hugger_walk_2 {width:140px; height:70px; background-position: -280px -0px}
+.face_hugger_walk_3 {width:140px; height:70px; background-position: -420px -0px}
+.face_hugger_walk_4 {width:140px; height:70px; background-position: -560px -0px}
+.face_hugger_walk_5 {width:140px; height:70px; background-position: -700px -0px}
+.face_hugger_walk_6 {width:140px; height:70px; background-position: -840px -0px}
+.face_hugger_walk_7 {width:140px; height:70px; background-position: -980px -0px}
