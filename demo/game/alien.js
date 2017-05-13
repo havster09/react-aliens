@@ -75,12 +75,12 @@ export default class Alien extends Npc {
 
 
   componentDidMount() {
-    this.alienDieSound = new AudioPlayer('/assets/se/role3_die1.wav');
-    this.alienPunchSound = new AudioPlayer('/assets/se/swipehit1.wav');
-    this.alienWhipSound = new AudioPlayer('/assets/se/swipehit2.wav');
-    this.alienBiteSound = new AudioPlayer('/assets/se/bite2.wav');
+    this.alienDieSound = new AudioPlayer('assets/se/role3_die1.wav');
+    this.alienPunchSound = new AudioPlayer('assets/se/swipehit1.wav');
+    this.alienWhipSound = new AudioPlayer('assets/se/swipehit2.wav');
+    this.alienBiteSound = new AudioPlayer('assets/se/bite2.wav');
 
-    this.motionTrackerSound = new AudioPlayer('/assets/se/motion_tracker.wav',()=> {
+    this.motionTrackerSound = new AudioPlayer('assets/se/motion_tracker.wav',()=> {
       this.stopMotionTrackerSound = this.motionTrackerSound.play({loop:true});
     });
 

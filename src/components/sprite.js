@@ -122,6 +122,7 @@ export default class Sprite extends Component {
 
         return {
             position: 'absolute',
+            pointerEvents: 'none',
             transform: `translate(-${left}px, -${top}px) scale(${direction},1)`,
         };
     }
@@ -157,9 +158,10 @@ export default class Sprite extends Component {
 
     render() {
         return (
-            <div style={{ ...this.getWrapperStyles(), ...this.props.style }}>
+            <div
+              id={this.props.elementId}
+              style={{ ...this.getWrapperStyles(), ...this.props.style }}>
                 <img
-                    id={this.props.elementId}
                     style={this.getImageStyles()}
                     src={this.props.src}
                 />

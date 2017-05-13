@@ -71,7 +71,7 @@ export default class FaceHugger extends Npc {
 
 
   componentDidMount() {
-    this.motionTrackerSound = new AudioPlayer('/assets/se/motion_tracker.wav',()=> {
+    this.motionTrackerSound = new AudioPlayer('assets/se/motion_tracker.wav',()=> {
       this.stopMotionTrackerSound = this.motionTrackerSound.play({loop:true});
     });
 

@@ -93,7 +93,7 @@ export default class Game extends Component {
   }
 
   componentDidMount() {
-    this.player = new AudioPlayer('/assets/bg_music/Rescue.mp3', () => {
+    this.player = new AudioPlayer('assets/bg_music/Rescue.mp3', () => {
       this.stopMusic = this.player.play({loop: true, offset: 0, volume: 0.1});
     });
 
@@ -131,34 +131,41 @@ export default class Game extends Component {
     }));
   }
 
-  handleDirectionPadPressStart(event, scale) {
-    let direction = [];
-    if(event.touches[0].clientX < 150*scale) {
-      direction[0]='left';
-    }
-    else {
-      direction[0] = 'right';
-    }
+  handleDirectionLeftPadPressStart(event) {
+    let direction = [...this.state.mobileControlsDirection];
+    direction[0]='left';
+    this.setState(Object.assign({}, ...this.state, {
+      mobileControlsDirection: direction
+    }));
+  }
 
-    if(event.touches[0].clientY * scale < 620*scale) {
-      direction[1] = 'up';
-      console.log('up');
-    }
-    else {
-      direction[1] = 'down';
-      console.log('down');
-    }
+  handleDirectionRightPadPressStart(event) {
+    let direction = [...this.state.mobileControlsDirection];
+    direction[0]='right';
+    this.setState(Object.assign({}, ...this.state, {
+      mobileControlsDirection: direction
+    }));
+  }
 
+  handleDirectionDownPadPressStart(event) {
+    let direction = [...this.state.mobileControlsDirection];
+    direction[1]='down';
     this.setState(Object.assign({}, ...this.state, {
       mobileControlsDirection: direction
     }));
   }
 
   handleDirectionPadPressEnd(event) {
+    let direction = [];
+    direction[0]='neutral';
+    direction[1]='neutral';
     this.setState(Object.assign({}, ...this.state, {
-      mobileControlsDirection: []
+      mobileControlsDirection: direction
     }));
   }
+
+
+
 
   render() {
     const aliens = GameStore.npcPositions.map((alien, i) => {
@@ -203,8 +210,12 @@ export default class Game extends Component {
           <MobileControls
             onShootPressStart={this.handleShootPressStart.bind(this)}
             onShootPressEnd={this.handleShootPressEnd.bind(this)}
-            onDirectionPadPressStart={this.handleDirectionPadPressStart.bind(this)}
-            onDirectionPadPressEnd={this.handleDirectionPadPressEnd.bind(this)}
+            onDirectionPadLeftPressStart={this.handleDirectionLeftPadPressStart.bind(this)}
+            onDirectionPadRightPressStart={this.handleDirectionRightPadPressStart.bind(this)}
+            onDirectionPadDownPressStart={this.handleDirectionDownPadPressStart.bind(this)}
+            onDirectionPadLeftPressEnd={this.handleDirectionPadPressEnd.bind(this)}
+            onDirectionPadRightPressEnd={this.handleDirectionPadPressEnd.bind(this)}
+            onDirectionPadDownPressEnd={this.handleDirectionPadPressEnd.bind(this)}
             context={this.context}/>
           <UserInterface context={this.context} ammo={this.state.ammo}/>
         </Stage>

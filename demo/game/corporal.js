@@ -352,8 +352,8 @@ export default class Corporal extends Component {
   }
 
   componentDidMount() {
-    this.pulseRifleSound = new AudioPlayer('/assets/se/m41.wav');
-    this.pulseRifleReloadSound = new AudioPlayer('/assets/se/mgbolt.ogg');
+    this.pulseRifleSound = new AudioPlayer('assets/se/m41.wav');
+    this.pulseRifleReloadSound = new AudioPlayer('assets/se/mgbolt.ogg');
     this.loopID = this.context.loop.subscribe(this.loop);
   }
 
