@@ -25,6 +25,9 @@ export default class Intro extends Component {
     };
   }
 
+  componentWillMount() {
+  }
+
   componentDidMount() {
     const model = this;
     const preloader = new Preloader({

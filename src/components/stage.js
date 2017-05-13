@@ -16,7 +16,7 @@ export default class Stage extends Component {
 
   static contextTypes = {
     loop: PropTypes.object,
-  }
+  };
 
   static childContextTypes = {
     loop: PropTypes.object,

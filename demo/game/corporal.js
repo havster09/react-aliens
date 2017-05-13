@@ -17,6 +17,8 @@ export default class Corporal extends Component {
     onReload: PropTypes.func,
     store: PropTypes.object,
     hitCount: PropTypes.number,
+    mobileControlsShoot: PropTypes.bool,
+    mobileControlsDirection: PropTypes.array
   };
 
   static contextTypes = {
@@ -234,7 +236,7 @@ export default class Corporal extends Component {
       // return this.enterBuilding(this.body);
     }
 
-    if (keys.isDown(keys.LEFT)&& store.characterPosition.x > -39) {
+    if ((keys.isDown(keys.LEFT) || this.props.mobileControlsDirection[0]==='left')&& store.characterPosition.x > -39) {
       if (shouldMoveStageLeft) {
         store.setStageX(store.stageX + 3);
       }
@@ -242,7 +244,7 @@ export default class Corporal extends Component {
       store.setCharacterDirection(direction);
       this.move(this.body, -3);
       characterState = 1;
-    } else if (keys.isDown(keys.RIGHT) && store.characterPosition.x < 2952) {
+    } else if ((keys.isDown(keys.RIGHT)  || this.props.mobileControlsDirection[0]==='right') && store.characterPosition.x < 2952) {
       if (shouldMoveStageRight) {
         store.setStageX(store.stageX - 3);
       }
@@ -252,7 +254,7 @@ export default class Corporal extends Component {
       this.move(this.body, 3);
     }
 
-    if (keys.isDown(83)) {
+    if (keys.isDown(83) || this.props.mobileControlsShoot) {
       if (keys.isUp(keys.DOWN)) {
         this.isCrouching = false;
         store.setCharacterIsCrouching(false);
@@ -271,7 +273,7 @@ export default class Corporal extends Component {
       }
     }
 
-    if (keys.isDown(keys.DOWN)) {
+    if (keys.isDown(keys.DOWN) || this.props.mobileControlsDirection[1]==='down' ) {
       return this.crouch(this.body);
     }
     else {

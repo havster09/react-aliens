@@ -17,6 +17,7 @@ import Egg from './egg';
 import Level from './level';
 import Fade from './fade';
 import UserInterface from './userInterface';
+import MobileControls from './mobileControls';
 
 import GameStore from './stores/game-store';
 
@@ -47,16 +48,16 @@ export default class Game extends Component {
   };
 
   handleCharacterHit = () => {
-    if(!this.state.isHit) {
-      this.setState(Object.assign({},this.state,{
-        hitCount:this.state.hitCount + 1,
+    if (!this.state.isHit) {
+      this.setState(Object.assign({}, this.state, {
+        hitCount: this.state.hitCount + 1,
         isHit: true,
       }));
     }
   };
 
   handleCharacterHitDone = () => {
-    this.setState(Object.assign({},this.state,{
+    this.setState(Object.assign({}, this.state, {
       isHit: false,
     }));
   };
@@ -76,14 +77,19 @@ export default class Game extends Component {
 
     this.state = {
       fade: true,
-      levelUpdate:false,
+      levelUpdate: false,
       isHit: false,
+      mobileControlsShoot: false,
       hitCount: 0,
-      ammo: 990
+      ammo: 990,
+      mobileControlsDirection: ['neutral','neutral']
     };
     this.keyListener = new KeyListener();
     window.AudioContext = window.AudioContext || window.webkitAudioContext;
     window.context = window.context || new AudioContext();
+
+    this.handleShootPressStart.bind(this);
+
   }
 
   componentDidMount() {
@@ -113,6 +119,47 @@ export default class Game extends Component {
 
   }
 
+  handleShootPressStart(...args) {
+    this.setState(Object.assign({}, ...this.state, {
+      mobileControlsShoot: true
+    }));
+  }
+
+  handleShootPressEnd(...args) {
+    this.setState(Object.assign({}, ...this.state, {
+      mobileControlsShoot: false
+    }));
+  }
+
+  handleDirectionPadPressStart(event, scale) {
+    let direction = [];
+    if(event.touches[0].clientX < 150*scale) {
+      direction[0]='left';
+    }
+    else {
+      direction[0] = 'right';
+    }
+
+    if(event.touches[0].clientY * scale < 620*scale) {
+      direction[1] = 'up';
+      console.log('up');
+    }
+    else {
+      direction[1] = 'down';
+      console.log('down');
+    }
+
+    this.setState(Object.assign({}, ...this.state, {
+      mobileControlsDirection: direction
+    }));
+  }
+
+  handleDirectionPadPressEnd(event) {
+    this.setState(Object.assign({}, ...this.state, {
+      mobileControlsDirection: []
+    }));
+  }
+
   render() {
     const aliens = GameStore.npcPositions.map((alien, i) => {
       return (
@@ -124,7 +171,7 @@ export default class Game extends Component {
     const eggs = GameStore.eggPositions.map((egg, i) => {
       return (
         <Egg key={i} store={GameStore} npcIndex={parseInt(i)} onCharacterHit={this.handleCharacterHit}
-                    onCharacterHitDone={this.handleCharacterHitDone}/>
+             onCharacterHitDone={this.handleCharacterHitDone}/>
       )
     });
 
@@ -137,21 +184,29 @@ export default class Game extends Component {
 
     return (
       <Loop>
-        <Stage style={{ background: '#000' }}>
-            <Level store={GameStore} fade={this.state.fade}/>
+        <Stage style={{background: '#000'}}>
+          <Level store={GameStore} fade={this.state.fade}/>
           {!this.state.fade && <Corporal
-              onEnterBuilding={this.handleEnterBuilding}
-              onShoot={this.handleShoot}
-              onReload={this.handleReload}
-              isHit={this.state.isHit}
-              hitCount={this.state.hitCount}
-              store={GameStore}
-              ammo={this.state.ammo}
-              keys={this.keyListener}/>}
-            {!this.state.fade && aliens}
-            {!this.state.fade && faceHuggers}
-            {!this.state.fade && eggs}
-            <UserInterface context={this.context} ammo={this.state.ammo}/>
+            onEnterBuilding={this.handleEnterBuilding}
+            onShoot={this.handleShoot}
+            onReload={this.handleReload}
+            isHit={this.state.isHit}
+            hitCount={this.state.hitCount}
+            store={GameStore}
+            ammo={this.state.ammo}
+            mobileControlsShoot={this.state.mobileControlsShoot}
+            mobileControlsDirection={this.state.mobileControlsDirection}
+            keys={this.keyListener}/>}
+          {!this.state.fade && aliens}
+          {!this.state.fade && faceHuggers}
+          {!this.state.fade && eggs}
+          <MobileControls
+            onShootPressStart={this.handleShootPressStart.bind(this)}
+            onShootPressEnd={this.handleShootPressEnd.bind(this)}
+            onDirectionPadPressStart={this.handleDirectionPadPressStart.bind(this)}
+            onDirectionPadPressEnd={this.handleDirectionPadPressEnd.bind(this)}
+            context={this.context}/>
+          <UserInterface context={this.context} ammo={this.state.ammo}/>
         </Stage>
         {/*<Fade visible={this.state.fade}/>*/}
       </Loop>

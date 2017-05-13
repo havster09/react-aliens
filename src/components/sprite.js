@@ -20,6 +20,7 @@ export default class Sprite extends Component {
         left: PropTypes.number,
         hidden: PropTypes.bool,
         transformOrigin: PropTypes.string,
+        elementId: PropTypes.string
     };
 
     static defaultProps = {
@@ -158,6 +159,7 @@ export default class Sprite extends Component {
         return (
             <div style={{ ...this.getWrapperStyles(), ...this.props.style }}>
                 <img
+                    id={this.props.elementId}
                     style={this.getImageStyles()}
                     src={this.props.src}
                 />

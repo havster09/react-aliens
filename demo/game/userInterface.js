@@ -1,5 +1,6 @@
 import React, {Component, PropTypes} from 'react';
 
+
 import {
   AudioPlayer,
   Sprite
@@ -24,6 +25,10 @@ export default class userInterface extends Component {
       position: 'absolute',
       transform: `translate(${1 * scale}px, ${1 * scale}px)`
     };
+  }
+
+  handleTouchStart() {
+    console.log('touch');
   }
 
   render() {
