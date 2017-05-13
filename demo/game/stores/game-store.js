@@ -17,6 +17,10 @@ class GameStore {
   @observable npcPositions = [
     {x: 500, y: ALIEN_FLOOR},
     {x: 900, y: ALIEN_FLOOR},
+    {x: 900, y: ALIEN_FLOOR},
+    {x: 900, y: ALIEN_FLOOR},
+    {x: 900, y: ALIEN_FLOOR},
+    {x: 900, y: ALIEN_FLOOR},
     {x: 600, y: ALIEN_FLOOR}
   ];
 
