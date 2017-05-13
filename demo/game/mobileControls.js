@@ -25,6 +25,7 @@ export default class mobileControls extends Component {
     };
   }
 
+
   render() {
     return (
       <div style={this.getWrapperStyles()}>
@@ -33,14 +34,14 @@ export default class mobileControls extends Component {
           onTouchStart={this.props.onDirectionPadLeftPressStart}
           onTouchEnd={this.props.onDirectionPadLeftPressEnd}>
           <Sprite
-            style={{overflow: 'hidden',position: 'absolute'}}
+            style={{overflow: 'hidden',position: 'absolute', opacity:.4}}
             transformOrigin="center top"
             tileWidth={100}
-            tileHeight={100}
-            left={100 * this.context.scale}
-            top={450 * this.context.scale}
+            tileHeight={77}
+            left={75 * this.context.scale}
+            top={430 * this.context.scale}
             repeat={false}
-            src="assets/d_pad.png"
+            src="assets/d_pad_left.png"
             scale={this.context.scale * 1}
             state={0}
             steps={[0]}
@@ -52,14 +53,14 @@ export default class mobileControls extends Component {
           onTouchStart={this.props.onDirectionPadRightPressStart}
           onTouchEnd={this.props.onDirectionPadRightPressEnd}>
           <Sprite
-            style={{overflow: 'hidden',position: 'absolute'}}
+            style={{overflow: 'hidden',position: 'absolute', opacity:.4}}
             transformOrigin="center top"
             tileWidth={100}
-            tileHeight={100}
+            tileHeight={77}
             left={200 * this.context.scale}
-            top={450 * this.context.scale}
+            top={430 * this.context.scale}
             repeat={false}
-            src="assets/d_pad.png"
+            src="assets/d_pad_right.png"
             scale={this.context.scale * 1}
             state={0}
             steps={[0]}
@@ -71,14 +72,31 @@ export default class mobileControls extends Component {
           onTouchStart={this.props.onDirectionPadDownPressStart}
           onTouchEnd={this.props.onDirectionPadDownPressEnd}>
           <Sprite
-            style={{overflow: 'hidden',position: 'absolute'}}
+            style={{overflow: 'hidden',position: 'absolute', opacity:.4}}
             transformOrigin="center top"
-            tileWidth={100}
-            tileHeight={100}
-            left={150 * this.context.scale}
-            top={500 * this.context.scale}
+            tileWidth={89}
+            tileHeight={93}
+            left={142 * this.context.scale}
+            top={480 * this.context.scale}
             repeat={false}
-            src="assets/d_pad.png"
+            src="assets/d_pad_down.png"
+            scale={this.context.scale * 1}
+            state={0}
+            steps={[0]}
+            ticksPerFrame={0}
+          />
+        </div>
+
+        <div>
+          <Sprite
+            style={{overflow: 'hidden',position: 'absolute', opacity:.4}}
+            transformOrigin="center top"
+            tileWidth={89}
+            tileHeight={102}
+            left={142 * this.context.scale}
+            top={360 * this.context.scale}
+            repeat={false}
+            src="assets/d_pad_up.png"
             scale={this.context.scale * 1}
             state={0}
             steps={[0]}
@@ -90,12 +108,12 @@ export default class mobileControls extends Component {
           onTouchStart={this.props.onShootPressStart}
           onTouchEnd={this.props.onShootPressEnd}>
           <Sprite
-            style={{overflow: 'hidden',position: 'absolute'}}
-            transformOrigin="center top"
-            tileWidth={80}
-            tileHeight={80}
-            left={760 * this.context.scale}
-            top={480 * this.context.scale}
+            style={{overflow: 'hidden',position: 'absolute', opacity:.4}}
+            transformOrigin="center center"
+            tileWidth={150}
+            tileHeight={144}
+            left={840 * this.context.scale}
+            top={420 * this.context.scale}
             repeat={false}
             src="assets/pad_btn.png"
             scale={this.context.scale * 1}

@@ -209,7 +209,13 @@ export default class Corporal extends Component {
     // todo add check for all aliens to be npcState dead
     const {store} = this.props;
     console.log(store.characterPosition.x);
-    store.setLevelCount(store.levelCount + 1);
+    if(store.levelCount === 4) {
+      store.setLevelCount(0);
+    }
+    else {
+      store.setLevelCount(store.levelCount + 1);
+    }
+
     this.enterBuilding(this.body);
     this.props.onEnterBuilding(0);
   };
@@ -230,7 +236,6 @@ export default class Corporal extends Component {
 
     if (keys.isDown(keys.UP)) {
       console.log(store.characterPosition.x);
-      store.setLevelCount(store.levelCount + 1);
       this.enterBuilding(this.body);
       this.props.onEnterBuilding(0);
       // return this.enterBuilding(this.body);

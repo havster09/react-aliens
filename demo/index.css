@@ -45,7 +45,7 @@ pre {
 
 .intro {
   margin: 1em auto;
-  width: 100%;
+  width: 80%;
   max-width: 1024px;
   display: block;
 }
@@ -54,7 +54,7 @@ pre {
   font-family: '8BIT WONDER';
   display: block;
   width: 400px;
-  font-size: 24px;
+  font-size: 16px;
   margin: -1% auto 0px;
   text-align: center;
   color: white;

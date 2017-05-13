@@ -207,6 +207,7 @@ export default class Game extends Component {
           {!this.state.fade && aliens}
           {!this.state.fade && faceHuggers}
           {!this.state.fade && eggs}
+          <Fade visible={this.state.fade}/>
           <MobileControls
             onShootPressStart={this.handleShootPressStart.bind(this)}
             onShootPressEnd={this.handleShootPressEnd.bind(this)}
@@ -219,7 +220,6 @@ export default class Game extends Component {
             context={this.context}/>
           <UserInterface context={this.context} ammo={this.state.ammo}/>
         </Stage>
-        {/*<Fade visible={this.state.fade}/>*/}
       </Loop>
     );
   }

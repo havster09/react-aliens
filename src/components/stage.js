@@ -109,7 +109,7 @@ export default class Stage extends Component {
       width: Math.floor(scale.width),
       position: 'absolute',
       overflow: 'hidden',
-      transform: `translate(${xOffset}px, ${yOffset}px)`,
+      transform: `translate(${xOffset}px, 0px)`,
     };
   }
 

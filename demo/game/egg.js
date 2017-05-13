@@ -1,5 +1,5 @@
 import React, {Component, PropTypes} from 'react';
-import {FACEHUGGER_FLOOR} from './constants';
+import {FACEHUGGER_FLOOR, EGG_FLOOR} from './constants';
 import {observer} from 'mobx-react';
 
 import {
@@ -121,7 +121,7 @@ export default class Egg extends Component {
     const {store, npcIndex} = this.props;
     let npcState = this.state.npcState;
     if(store.characterIsAttacking && !this.state.dead) {
-      if (store.characterIsCrouching && store.eggPositions[npcIndex].y > 390) {
+      if (store.characterIsCrouching && store.eggPositions[npcIndex].y === EGG_FLOOR) {
         if (Math.abs(store.eggPositions[npcIndex].x - store.characterPosition.x) < Math.random() * 100 + 400) {
           if (store.eggPositions[npcIndex].x < store.characterPosition.x && store.characterDirection === -1) {
             return this.hit();

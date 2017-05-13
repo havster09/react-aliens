@@ -39,7 +39,8 @@ export default class userInterface extends Component {
           style={{overflow: 'hidden',position: 'absolute'}}
           tileWidth={146}
           tileHeight={96}
-          left={50 * this.context.scale}
+          left={350 * this.context.scale}
+          top={475 * this.context.scale}
           repeat={false}
           src="assets/ammo_counter.png"
           scale={this.context.scale * 1}
@@ -52,6 +53,7 @@ export default class userInterface extends Component {
           tileWidth={96}
           tileHeight={96}
           left={500 * this.context.scale}
+          top={475 * this.context.scale}
           repeat={true}
           src="assets/motion_tracker.png"
           scale={this.props.context * 1}

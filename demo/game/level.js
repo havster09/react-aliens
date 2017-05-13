@@ -59,7 +59,7 @@ export default class Level extends Component {
     return (
       <div style={this.getWrapperStyles()}>
         {(store.levelCount===0&&!fade) && <TileMap
-          style={{ top: Math.floor(200 * this.context.scale) }}
+          style={{ top: Math.floor(90 * this.context.scale) }}
           src="assets/tile_bg_outdoor_square.png"
           rows={1}
           columns={12}
@@ -70,7 +70,7 @@ export default class Level extends Component {
         />}
 
         {(store.levelCount===1&&!fade) && <TileMap
-          style={{ top: Math.floor(110 * this.context.scale) }}
+          style={{ top: Math.floor(0 * this.context.scale) }}
           src="assets/giger_tile.png"
           rows={1}
           columns={10}
@@ -81,7 +81,7 @@ export default class Level extends Component {
         />}
 
         {(store.levelCount===1&&!fade) && <TileMap
-          style={{ top: Math.floor(110 * this.context.scale) }}
+          style={{ top: Math.floor(0 * this.context.scale) }}
           src="assets/hive_0.png"
           rows={1}
           columns={10}
@@ -92,7 +92,7 @@ export default class Level extends Component {
         />}
 
         {(store.levelCount===2&&!fade) && <TileMap
-          style={{ top: Math.floor(110 * this.context.scale) }}
+          style={{ top: Math.floor(0 * this.context.scale) }}
           src="assets/bathroom_0.png"
           rows={1}
           columns={10}
@@ -103,7 +103,7 @@ export default class Level extends Component {
         />}
 
         {(store.levelCount===3&&!fade) && <TileMap
-          style={{ top: Math.floor(110 * this.context.scale) }}
+          style={{ top: Math.floor(0 * this.context.scale) }}
           src="assets/hangar_0.png"
           rows={1}
           columns={10}
@@ -114,7 +114,7 @@ export default class Level extends Component {
         />}
 
         {(store.levelCount===4&&!fade) && <TileMap
-          style={{ top: Math.floor(110 * this.context.scale) }}
+          style={{ top: Math.floor(0 * this.context.scale) }}
           src="assets/hospital_0.png"
           rows={1}
           columns={10}

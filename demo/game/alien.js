@@ -181,7 +181,7 @@ export default class Alien extends Npc {
   npcAction = (body) => {
     const {store, npcIndex} = this.props;
     let npcState = this.state.npcState;
-    if (store.characterIsAttacking && store.npcPositions[npcIndex].y > 360) {
+    if (store.characterIsAttacking && store.npcPositions[npcIndex].y === ALIEN_FLOOR) {
       if (Math.abs(store.npcPositions[npcIndex].x - store.characterPosition.x) < Math.random() * 100 + 400) {
         if (store.npcPositions[npcIndex].x < store.characterPosition.x && store.characterDirection === -1) {
           return this.hit();
