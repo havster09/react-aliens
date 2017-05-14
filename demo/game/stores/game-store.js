@@ -15,12 +15,7 @@ class GameStore {
   @observable killCount = 0;
 
   @observable npcPositions = [
-    {x: 900, y: ALIEN_FLOOR},
-    {x: 600, y: ALIEN_FLOOR},
-    {x: 600, y: ALIEN_FLOOR},
-    {x: 600, y: ALIEN_FLOOR},
-    {x: 600, y: ALIEN_FLOOR},
-    {x: 800, y: ALIEN_FLOOR}
+    {x: 900, y: ALIEN_FLOOR}
   ];
 
   @observable faceHuggerPositions = [];
