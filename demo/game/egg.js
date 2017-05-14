@@ -1,5 +1,5 @@
 import React, {Component, PropTypes} from 'react';
-import {FACEHUGGER_FLOOR, EGG_FLOOR} from './constants';
+import {FACEHUGGER_FLOOR, EGG_FLOOR, RESPAWN_DISTANCE} from './constants';
 import {observer} from 'mobx-react';
 
 import {
@@ -177,22 +177,9 @@ export default class Egg extends Component {
   respawn = () => {
     const {store, npcIndex} = this.props;
     const direction = store.eggPositions[npcIndex].x < store.characterPosition.x ? 1 : -1;
-    let distance = 0;
     let npcState = 2;
-    if(Math.random()<.5) {
-      distance = direction < 0 ? Math.ceil(Math.random() * 100) + 800 : -800 - Math.ceil(Math.random() * 100);
-      store.setEggPosition({x: store.characterPosition.x + distance, y: store.eggPositions[npcIndex].y}, npcIndex);
-    }
-    else {
-      if(store.characterDirection < 0) {
-        distance = Math.ceil(Math.random() * 200+100);
-      }
-      else {
-        distance = 0-Math.ceil(Math.random() * 200+100);
-      }
-
-      store.setEggPosition({x: store.characterPosition.x + distance, y: store.eggPositions[npcIndex].y}, npcIndex);
-    }
+    let distance = direction < 0 ? Math.ceil(Math.random() * RESPAWN_DISTANCE) + RESPAWN_DISTANCE : 0 - Math.ceil(Math.random() * RESPAWN_DISTANCE) - RESPAWN_DISTANCE;
+    store.setEggPosition({x: store.characterPosition.x + distance, y: store.eggPositions[npcIndex].y}, npcIndex);
     this.setState(Object.assign({}, this.state, {
       npcState,
       hasHit: 0,

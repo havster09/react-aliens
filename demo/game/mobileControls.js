@@ -38,7 +38,7 @@ export default class mobileControls extends Component {
             transformOrigin="center top"
             tileWidth={100}
             tileHeight={77}
-            left={75 * this.context.scale}
+            left={20 * this.context.scale}
             top={430 * this.context.scale}
             repeat={false}
             src="assets/d_pad_left.png"
@@ -57,7 +57,7 @@ export default class mobileControls extends Component {
             transformOrigin="center top"
             tileWidth={100}
             tileHeight={77}
-            left={200 * this.context.scale}
+            left={145 * this.context.scale}
             top={430 * this.context.scale}
             repeat={false}
             src="assets/d_pad_right.png"
@@ -76,7 +76,7 @@ export default class mobileControls extends Component {
             transformOrigin="center top"
             tileWidth={89}
             tileHeight={93}
-            left={142 * this.context.scale}
+            left={90 * this.context.scale}
             top={480 * this.context.scale}
             repeat={false}
             src="assets/d_pad_down.png"
@@ -93,7 +93,7 @@ export default class mobileControls extends Component {
             transformOrigin="center top"
             tileWidth={89}
             tileHeight={102}
-            left={142 * this.context.scale}
+            left={90 * this.context.scale}
             top={360 * this.context.scale}
             repeat={false}
             src="assets/d_pad_up.png"
@@ -109,11 +109,11 @@ export default class mobileControls extends Component {
           onTouchEnd={this.props.onShootPressEnd}>
           <Sprite
             style={{overflow: 'hidden',position: 'absolute', opacity:.4}}
-            transformOrigin="center center"
+            transformOrigin="center top"
             tileWidth={150}
             tileHeight={144}
-            left={840 * this.context.scale}
-            top={420 * this.context.scale}
+            left={750 * this.context.scale}
+            top={400 * this.context.scale}
             repeat={false}
             src="assets/pad_btn.png"
             scale={this.context.scale * 1}

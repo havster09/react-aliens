@@ -1,7 +1,7 @@
 import React, {PropTypes} from 'react';
 import Npc from "./npc"
 import {observer} from 'mobx-react';
-import {ALIEN_FLOOR, KILL_THRESHOLD} from './constants';
+import {ALIEN_FLOOR, KILL_THRESHOLD, RESPAWN_DISTANCE} from './constants';
 import {getAmbushHeight} from './helpers/ambushHeight';
 
 import {
@@ -320,7 +320,7 @@ export default class Alien extends Npc {
     let distance = 0;
     let npcState = 4;
     if(Math.random()<.5 || store.levelCount < 1) {
-      distance = direction < 0 ? Math.ceil(Math.random() * 1000) + 1000 : -1000 - Math.ceil(Math.random() * 1000);
+      distance = direction < 0 ? RESPAWN_DISTANCE: -RESPAWN_DISTANCE;
       store.setNpcPosition({x: store.characterPosition.x + distance, y: store.npcPositions[npcIndex].y}, npcIndex);
     }
     else {
@@ -353,7 +353,7 @@ export default class Alien extends Npc {
     this.setState(Object.assign({}, this.state, {
       npcState,
       repeat: false,
-      ticksPerFrame: 200 // respawn time
+      ticksPerFrame: 100 // respawn time
     }));
   };
 

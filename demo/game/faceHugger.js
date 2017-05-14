@@ -1,7 +1,7 @@
 import React, {PropTypes} from 'react';
 import {observer} from 'mobx-react';
 import Npc from "./npc";
-import {FACEHUGGER_FLOOR, KILL_THRESHOLD} from './constants';
+import {FACEHUGGER_FLOOR, KILL_THRESHOLD, RESPAWN_DISTANCE} from './constants';
 import {getAmbushHeight} from './helpers/ambushHeight';
 
 import {
@@ -341,14 +341,14 @@ export default class FaceHugger extends Npc {
       let distance = 0;
       let npcState = 2;
       if (Math.random() < .5 || store.levelCount < 1) {
-        distance = direction < 0 ? Math.ceil(Math.random() * 1000) + 1000 : -1000 - Math.ceil(Math.random() * 1000);
+        distance = direction < 0 ? RESPAWN_DISTANCE : -RESPAWN_DISTANCE;
         store.setFaceHuggerPosition(Object.assign({}, ...store.faceHuggerPositions[npcIndex],{
           x: store.characterPosition.x + distance,
           y: store.faceHuggerPositions[npcIndex].y
         }), npcIndex);
       }
       else {
-        let npcState = 14;
+        npcState = 14;
         if (store.characterDirection < 0) {
           distance = Math.ceil(Math.random() * 200 + 100);
         }
