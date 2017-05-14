@@ -71,23 +71,12 @@ export default class Level extends Component {
 
         {(store.levelCount===1&&!fade) && <TileMap
           style={{ top: Math.floor(0 * this.context.scale) }}
-          src="assets/giger_tile.png"
-          rows={1}
-          columns={10}
-          tileSize={340}
-          layers={[
-            [1,1,1,1,1,1,1,1,1,1,1,1,1],
-          ]}
-        />}
-
-        {(store.levelCount===1&&!fade) && <TileMap
-          style={{ top: Math.floor(0 * this.context.scale) }}
-          src="assets/hive_0.png"
+          src="assets/hospital_0.png"
           rows={1}
           columns={10}
           tileSize={460}
           layers={[
-            [1,2,3,4,2,3,4,1,2,3,1,2,1,1],
+            [1,2,3,4,1,2,3,4,1,2,3,4,1,2,3]
           ]}
         />}
 
@@ -115,12 +104,23 @@ export default class Level extends Component {
 
         {(store.levelCount===4&&!fade) && <TileMap
           style={{ top: Math.floor(0 * this.context.scale) }}
-          src="assets/hospital_0.png"
+          src="assets/giger_tile.png"
+          rows={1}
+          columns={10}
+          tileSize={340}
+          layers={[
+            [1,1,1,1,1,1,1,1,1,1,1,1,1],
+          ]}
+        />}
+
+        {(store.levelCount===4&&!fade) && <TileMap
+          style={{ top: Math.floor(0 * this.context.scale) }}
+          src="assets/hive_0.png"
           rows={1}
           columns={10}
           tileSize={460}
           layers={[
-            [1,2,3,4,1,2,3,4,1,2,3,4,1,2,3]
+            [1,2,3,4,2,3,4,1,2,3,1,2,1,1],
           ]}
         />}
 

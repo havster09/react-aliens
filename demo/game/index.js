@@ -1,6 +1,8 @@
 import React, {Component, PropTypes} from 'react';
 import {observer} from 'mobx-react';
 
+import {IS_MOBILE} from './constants';
+
 import {
   AudioPlayer,
   Loop,
@@ -208,7 +210,7 @@ export default class Game extends Component {
           {!this.state.fade && faceHuggers}
           {!this.state.fade && eggs}
           <Fade visible={this.state.fade}/>
-          <MobileControls
+          {IS_MOBILE && <MobileControls
             onShootPressStart={this.handleShootPressStart.bind(this)}
             onShootPressEnd={this.handleShootPressEnd.bind(this)}
             onDirectionPadLeftPressStart={this.handleDirectionLeftPadPressStart.bind(this)}
@@ -217,7 +219,7 @@ export default class Game extends Component {
             onDirectionPadLeftPressEnd={this.handleDirectionPadPressEnd.bind(this)}
             onDirectionPadRightPressEnd={this.handleDirectionPadPressEnd.bind(this)}
             onDirectionPadDownPressEnd={this.handleDirectionPadPressEnd.bind(this)}
-            context={this.context}/>
+            context={this.context}/>}
           <UserInterface context={this.context} ammo={this.state.ammo}/>
         </Stage>
       </Loop>

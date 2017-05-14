@@ -273,7 +273,7 @@ export default class Corporal extends Component {
     else {
       const {store} = this.props;
       store.setCharacterIsAttacking(false);
-      if(store.killCount > KILL_THRESHOLD) {
+      if(store.killCount >= KILL_THRESHOLD) {
         return this.roundClear();
       }
     }

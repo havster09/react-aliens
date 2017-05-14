@@ -45,17 +45,17 @@ pre {
 
 .intro {
   margin: 1em auto;
-  width: 80%;
+  width: 60%;
   max-width: 1024px;
   display: block;
 }
 
-.start {
+.start, .instructions {
   font-family: '8BIT WONDER';
   display: block;
   width: 400px;
   font-size: 16px;
-  margin: -1% auto 0px;
+  margin:10px  auto;
   text-align: center;
   color: white;
 }

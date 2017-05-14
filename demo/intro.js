@@ -1,5 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import Preloader from 'preloader.js'; //https://www.npmjs.com/package/preloader.js
+import {IS_MOBILE} from './game/constants';
 import { AudioPlayer } from '../src';
 
 export default class Intro extends Component {
@@ -20,7 +21,6 @@ export default class Intro extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      blink: false,
       loaded:false,
     };
   }
@@ -80,11 +80,6 @@ export default class Intro extends Component {
 
     window.addEventListener('keypress', this.handleKeyPress);
     this.animationFrame = requestAnimationFrame(this.startUpdate);
-    this.interval = setInterval(() => {
-      this.setState({
-        blink: !this.state.blink,
-      });
-    }, 500);
   }
 
   componentWillUnmount() {
@@ -97,7 +92,8 @@ export default class Intro extends Component {
     return (
       <div onClick={this.props.onStart}>
         <img className="intro" src="assets/intro.png"/>
-        {this.state.loaded && <p className="start" style={{ display: this.state.blink ? 'block' : 'none' }}>Press Start</p>}
+        {!IS_MOBILE && <p className="instructions">S Key to shoot</p>}
+        {this.state.loaded && <p className="start" style={{ display: 'block'}}>Press Start</p>}
         {!this.state.loaded && <p className="start" style={{ display: 'block'}}>Loading</p>}
       </div>
     );
