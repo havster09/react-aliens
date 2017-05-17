@@ -1,7 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import Preloader from 'preloader.js'; //https://www.npmjs.com/package/preloader.js
 import {IS_MOBILE} from './game/constants';
-import { AudioPlayer } from '../src';
 
 export default class Intro extends Component {
   static propTypes = {

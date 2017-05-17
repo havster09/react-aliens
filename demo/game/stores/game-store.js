@@ -1,5 +1,5 @@
 import {computed, observable} from 'mobx';
-import {FLOOR,ALIEN_FLOOR,FACEHUGGER_FLOOR,EGG_FLOOR} from '../constants';
+import {FLOOR,ALIEN_FLOOR,FACEHUGGER_FLOOR,EGG_FLOOR, IS_MOBILE} from '../constants';
 import * as mobx from "mobx";
 
 class GameStore {
@@ -15,10 +15,10 @@ class GameStore {
   @observable killCount = 0;
 
   @observable npcPositions = [
-    {x: 900, y: ALIEN_FLOOR},
-    {x: 1000, y: ALIEN_FLOOR},
-    {x: 1100, y: ALIEN_FLOOR}
+    {x: 900, y: ALIEN_FLOOR}
   ];
+
+
 
   @observable faceHuggerPositions = [];
 
@@ -28,6 +28,18 @@ class GameStore {
 
   constructor() {
     mobx.autorun(()=> this.reactToCrouch);
+
+    if(!IS_MOBILE) {
+      this.npcPositions = [
+        ...this.npcPositions,
+        {x: 1000, y: ALIEN_FLOOR},
+        {x: 1200, y: ALIEN_FLOOR},
+        {x: 1300, y: ALIEN_FLOOR},
+        {x: 1400, y: ALIEN_FLOOR},
+        {x: 1500, y: ALIEN_FLOOR},
+        {x: 1600, y: ALIEN_FLOOR}
+      ];
+    }
   }
 
   @computed get characterCrouch() {
