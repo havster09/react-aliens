@@ -7,6 +7,7 @@ export default class KeyListener {
   SPACE = 32;
   A_KEY = 65;
   S_KEY = 83;
+  D_KEY = 68;
 
   down = (event) => {
     if (event.keyCode in this.keys) {

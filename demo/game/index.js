@@ -49,6 +49,12 @@ export default class Game extends Component {
     });
   };
 
+  handleGrenadeLaunch = () => {
+    this.setState({
+      grenadeAmmo: this.state.grenadeAmmo - 1
+    });
+  };
+
   handleCharacterHit = () => {
     if (!this.state.isHit) {
       this.setState(Object.assign({}, this.state, {
@@ -70,6 +76,12 @@ export default class Game extends Component {
     });
   };
 
+  handleReloadGrenade = () => {
+    this.setState({
+      grenadeAmmo: 100
+    });
+  };
+
   resetLevel() {
 
   }
@@ -84,6 +96,7 @@ export default class Game extends Component {
       mobileControlsShoot: false,
       hitCount: 0,
       ammo: 990,
+      grenadeAmmo: 100,
       mobileControlsDirection: ['neutral','neutral']
     };
     this.keyListener = new KeyListener();
@@ -110,7 +123,8 @@ export default class Game extends Component {
       this.keyListener.DOWN,
       this.keyListener.SPACE,
       this.keyListener.A_KEY,
-      this.keyListener.S_KEY
+      this.keyListener.S_KEY,
+      this.keyListener.D_KEY
     ]);
   }
 
@@ -198,11 +212,14 @@ export default class Game extends Component {
           {!this.state.fade && <Corporal
             onEnterBuilding={this.handleEnterBuilding}
             onShoot={this.handleShoot}
+            onGrenadeLaunch={this.handleGrenadeLaunch}
             onReload={this.handleReload}
+            onReloadGrenade={this.handleReloadGrenade}
             isHit={this.state.isHit}
             hitCount={this.state.hitCount}
             store={GameStore}
             ammo={this.state.ammo}
+            grenadeAmmo={this.state.grenadeAmmo}
             mobileControlsShoot={this.state.mobileControlsShoot}
             mobileControlsDirection={this.state.mobileControlsDirection}
             keys={this.keyListener}/>}

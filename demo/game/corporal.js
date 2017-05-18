@@ -14,7 +14,9 @@ export default class Corporal extends Component {
     keys: PropTypes.object,
     onEnterBuilding: PropTypes.func,
     onShoot: PropTypes.func,
+    onGrenadeLaunch: PropTypes.func,
     onReload: PropTypes.func,
+    onReloadGrenade: PropTypes.func,
     store: PropTypes.object,
     hitCount: PropTypes.number,
     mobileControlsShoot: PropTypes.bool,
@@ -93,6 +95,29 @@ export default class Corporal extends Component {
     }
   };
 
+  grenadeLaunch = () => {
+    const {store} = this.props;
+    this.isGrenadeLaunching = true;
+    let direction = store.characterDirection;
+    let characterState = 11;
+    if (this.props.grenadeAmmo > 0) {
+      this.props.onGrenadeLaunch();
+      this.setState({
+        characterState,
+        direction,
+        ticksPerFrame: 20,
+        repeat: false
+      });
+      this.props.store.setCharacterIsAttacking(true);
+    }
+    else {
+      this.setState({
+        grenadeTimeStamp: null
+      });
+      this.reloadGrenade();
+    }
+  };
+
   reload = () => {
     if (!this.state.reloadTimeStamp) {
       this.pulseRifleReloadSound.play();
@@ -112,6 +137,32 @@ export default class Corporal extends Component {
     if (this.state.reloadTimeStamp) {
       if (this.state.contextLoop > this.state.reloadTimeStamp + 50) {
         this.props.onReload();
+        this.setState({
+          reloadTimeStamp: null
+        });
+      }
+    }
+  };
+
+  reloadGrenade = () => {
+    if (!this.state.reloadTimeStamp) {
+      this.pulseRifleReloadSound.play();
+      this.setState({
+        reloadTimeStamp: this.state.contextLoop,
+        ticksPerFrame: 10
+      });
+    }
+    let direction = this.lastDirection > 0 ? -1 : 1;
+    this.setState({
+      characterState: 4,
+      direction,
+      ticksPerFrame: 5,
+      repeat: false
+    });
+    this.props.store.setCharacterIsAttacking(false);
+    if (this.state.reloadTimeStamp) {
+      if (this.state.contextLoop > this.state.reloadTimeStamp + 10) {
+        this.props.onReloadGrenade();
         this.setState({
           reloadTimeStamp: null
         });
@@ -227,7 +278,7 @@ export default class Corporal extends Component {
     let direction = this.lastDirection > 0 ? -1 : 1;
 
     if (keys.isDown(65)) {
-      return this.stop();
+      return this.reload();
     }
 
     if (keys.isDown(keys.SPACE)) {
@@ -259,7 +310,11 @@ export default class Corporal extends Component {
       this.move(this.body, 3);
     }
 
-    if (keys.isDown(83) || this.props.mobileControlsShoot) {
+    if (keys.isDown(keys.D_KEY)) {
+      return this.grenadeLaunch();
+    }
+
+    if (keys.isDown(keys.S_KEY) || this.props.mobileControlsShoot) {
       if (keys.isUp(keys.DOWN)) {
         this.isCrouching = false;
         store.setCharacterIsCrouching(false);
@@ -323,6 +378,10 @@ export default class Corporal extends Component {
         this.isShooting = false;
       }
 
+      if (this.isGrenadeLaunching && this.state.spritePlaying === false) {
+        this.isGrenadeLaunching = false;
+      }
+
       if (this.isHit && this.state.spritePlaying === false) {
         this.isHit = false;
       }
@@ -342,6 +401,7 @@ export default class Corporal extends Component {
     this.isCrouch = false;
     this.isPunching = false;
     this.isShooting = false;
+    this.isGrenadeLaunching = false;
     this.isHit = false;
     this.isLeaving = false;
     this.lastX = 0;
@@ -406,6 +466,7 @@ export default class Corporal extends Component {
             1, // 8 crouch shoot
             0, // 9 crouch
             7, // 10 latch
+            2  // 11 grenade launch
             ]}
           offset={[0,0]}
           tileWidth={160}
