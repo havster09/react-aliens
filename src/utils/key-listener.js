@@ -25,11 +25,11 @@ export default class KeyListener {
 
   isDown = (keyCode) => {
     return this.keys[keyCode] || false;
-  }
+  };
 
   isUp = (keyCode) => {
     return !this.keys[keyCode] || false;
-  }
+  };
 
   subscribe = (keys) => {
     window.addEventListener('keydown', this.down);

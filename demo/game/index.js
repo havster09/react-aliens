@@ -78,7 +78,7 @@ export default class Game extends Component {
 
   handleReloadGrenade = () => {
     this.setState({
-      grenadeAmmo: 100
+      grenadeAmmo: 1
     });
   };
 
@@ -96,7 +96,7 @@ export default class Game extends Component {
       mobileControlsShoot: false,
       hitCount: 0,
       ammo: 990,
-      grenadeAmmo: 100,
+      grenadeAmmo: 1,
       mobileControlsDirection: ['neutral','neutral']
     };
     this.keyListener = new KeyListener();

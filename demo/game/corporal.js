@@ -95,25 +95,31 @@ export default class Corporal extends Component {
     }
   };
 
+  press = (event) => {
+    const {keys} = this.props;
+    if (event.keyCode === keys.D_KEY) {
+      event.preventDefault();
+      return this.grenadeLaunch();
+    }
+  };
+
   grenadeLaunch = () => {
     const {store} = this.props;
-    this.isGrenadeLaunching = true;
     let direction = store.characterDirection;
     let characterState = 11;
     if (this.props.grenadeAmmo > 0) {
+      this.isGrenadeLaunching = true;
+      this.pulseRifleGrenadeSound.play();
       this.props.onGrenadeLaunch();
       this.setState({
         characterState,
         direction,
-        ticksPerFrame: 20,
+        ticksPerFrame: 12,
         repeat: false
       });
       this.props.store.setCharacterIsAttacking(true);
     }
     else {
-      this.setState({
-        grenadeTimeStamp: null
-      });
       this.reloadGrenade();
     }
   };
@@ -122,6 +128,7 @@ export default class Corporal extends Component {
     if (!this.state.reloadTimeStamp) {
       this.pulseRifleReloadSound.play();
       this.setState({
+        ngcState: 4,
         reloadTimeStamp: this.state.contextLoop,
         ticksPerFrame: 10
       });
@@ -145,29 +152,17 @@ export default class Corporal extends Component {
   };
 
   reloadGrenade = () => {
-    if (!this.state.reloadTimeStamp) {
-      this.pulseRifleReloadSound.play();
-      this.setState({
-        reloadTimeStamp: this.state.contextLoop,
-        ticksPerFrame: 10
-      });
-    }
+    this.pulseRifleReloadSound.play();
+    this.isGrenadeReloading = true;
     let direction = this.lastDirection > 0 ? -1 : 1;
     this.setState({
-      characterState: 4,
+      characterState: 12,
       direction,
       ticksPerFrame: 5,
       repeat: false
     });
     this.props.store.setCharacterIsAttacking(false);
-    if (this.state.reloadTimeStamp) {
-      if (this.state.contextLoop > this.state.reloadTimeStamp + 10) {
-        this.props.onReloadGrenade();
-        this.setState({
-          reloadTimeStamp: null
-        });
-      }
-    }
+    return this.props.onReloadGrenade();
   };
 
   latch = () => {
@@ -282,7 +277,6 @@ export default class Corporal extends Component {
     }
 
     if (keys.isDown(keys.SPACE)) {
-      //  this.jump(this.body);
     }
 
     if (keys.isDown(keys.UP)) {
@@ -308,10 +302,6 @@ export default class Corporal extends Component {
       direction = 1;
       store.setCharacterDirection(direction);
       this.move(this.body, 3);
-    }
-
-    if (keys.isDown(keys.D_KEY)) {
-      return this.grenadeLaunch();
     }
 
     if (keys.isDown(keys.S_KEY) || this.props.mobileControlsShoot) {
@@ -366,7 +356,7 @@ export default class Corporal extends Component {
     const shouldMoveStageRight = store.characterPosition.x > midPoint && store.stageX > -2048;
 
 
-    if (!this.isJumping && !this.isPunching && !this.isLeaving && !this.isHit) {
+    if (!this.isJumping && !this.isPunching && !this.isLeaving && !this.isHit && !this.isGrenadeLaunching && !this.isGrenadeReloading) {
       this.checkKeys(shouldMoveStageLeft, shouldMoveStageRight);
       store.setCharacterPosition(store.characterPosition);
     } else {
@@ -378,13 +368,18 @@ export default class Corporal extends Component {
         this.isShooting = false;
       }
 
+      if (this.isHit && this.state.spritePlaying === false) {
+        this.isHit = false;
+      }
+
       if (this.isGrenadeLaunching && this.state.spritePlaying === false) {
         this.isGrenadeLaunching = false;
       }
 
-      if (this.isHit && this.state.spritePlaying === false) {
-        this.isHit = false;
+      if (this.isGrenadeReloading && this.state.spritePlaying === false) {
+        this.isGrenadeReloading = false;
       }
+
       const targetX = store.stageX + (this.lastX - store.characterPosition.x);
       if (shouldMoveStageLeft || shouldMoveStageRight) {
         store.setStageX(targetX);
@@ -395,13 +390,13 @@ export default class Corporal extends Component {
 
   constructor(props) {
     super(props);
-
     this.loopID = null;
     this.isJumping = false;
     this.isCrouch = false;
     this.isPunching = false;
     this.isShooting = false;
     this.isGrenadeLaunching = false;
+    this.isGrenadeReloading = false;
     this.isHit = false;
     this.isLeaving = false;
     this.lastX = 0;
@@ -414,16 +409,25 @@ export default class Corporal extends Component {
       ticksPerFrame: 5,
       contextLoop: null
     };
+    const model = this;
+    window.addEventListener('keyup', (event) => {
+      model.press(event)
+    });
   }
 
   componentDidMount() {
     this.pulseRifleSound = new AudioPlayer('assets/se/m41.wav');
     this.pulseRifleReloadSound = new AudioPlayer('assets/se/mgbolt.ogg');
+    this.pulseRifleGrenadeSound = new AudioPlayer('assets/se/grenade.ogg');
+
     this.loopID = this.context.loop.subscribe(this.loop);
+
   }
 
   componentWillUnmount() {
     this.context.loop.unsubscribe(this.loopID);
+    const model = this;
+    window.removeEventListener('keypress', model.press);
   }
 
   getWrapperStyles() {
@@ -466,7 +470,8 @@ export default class Corporal extends Component {
             1, // 8 crouch shoot
             0, // 9 crouch
             7, // 10 latch
-            2  // 11 grenade launch
+            2, // 11 grenade launch
+            2  // 12 grenade reload
             ]}
           offset={[0,0]}
           tileWidth={160}
