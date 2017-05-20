@@ -33,7 +33,7 @@ export default class Intro extends Component {
       resources: [
         'assets/bg_music/Rescue.mp3',
         'assets/se/motion_tracker.wav',
-        'assets/se/grenade.mp3',
+        'assets/se/grenade.ogg',
         'assets/se/bite2.wav',
         'assets/se/mg-1.wav',
         'assets/se/m41.wav',
