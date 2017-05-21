@@ -92,7 +92,7 @@ export default class Alien extends Npc {
 
   componentWillUnmount() {
     this.context.loop.unsubscribe(this.loopID);
-    if( this.motionTrackerSound) {
+    if( this.stopMotionTrackerSound) {
       this.stopMotionTrackerSound();
     }
     this.respawn();
@@ -335,7 +335,9 @@ export default class Alien extends Npc {
       ticksPerFrame: 10
     }));
 
-    this.stopMotionTrackerSound();
+    if( this.stopMotionTrackerSound) {
+      this.stopMotionTrackerSound();
+    }
   };
 
   respawn = () => {
@@ -403,7 +405,9 @@ export default class Alien extends Npc {
       repeat: false,
       ticksPerFrame: 6 // respawn time
     }));
-    this.stopMotionTrackerSound();
+    if(this.stopMotionTrackerSound) {
+      this.stopMotionTrackerSound();
+    }
   };
 
   land = () => {
