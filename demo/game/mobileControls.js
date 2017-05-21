@@ -112,7 +112,25 @@ export default class mobileControls extends Component {
             transformOrigin="center top"
             tileWidth={150}
             tileHeight={144}
-            left={750 * this.context.scale}
+            left={600 * this.context.scale}
+            top={400 * this.context.scale}
+            repeat={false}
+            src="assets/pad_btn.png"
+            scale={this.context.scale * 1}
+            state={0}
+            steps={[0]}
+            ticksPerFrame={0}
+          />
+        </div>
+
+        <div
+          onClick={this.props.onGrenadePressEnd}>
+          <Sprite
+            style={{overflow: 'hidden',position: 'absolute', opacity:.4}}
+            transformOrigin="center top"
+            tileWidth={150}
+            tileHeight={144}
+            left={780 * this.context.scale}
             top={400 * this.context.scale}
             repeat={false}
             src="assets/pad_btn.png"
@@ -132,6 +150,7 @@ export default class mobileControls extends Component {
 mobileControls.propTypes = {
   onShootPressStart:PropTypes.func,
   onShootPressEnd:PropTypes.func,
+  onGrenadePressEnd:PropTypes.func,
   onDirectionPadLeftPressStart:PropTypes.func,
   onDirectionPadLeftPressEnd:PropTypes.func,
   onDirectionPadRightPressStart:PropTypes.func,

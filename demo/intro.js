@@ -11,9 +11,17 @@ export default class Intro extends Component {
     this.animationFrame = requestAnimationFrame(this.startUpdate);
   };
 
+  onStart = () => {
+    if(this.state.loaded) {
+      this.props.onStart();
+    }
+  };
+
   handleKeyPress = (e) => {
     if (e.keyCode === 13) {
-      this.props.onStart();
+      if(this.state.loaded) {
+        this.props.onStart();
+      }
     }
   };
 
@@ -33,6 +41,10 @@ export default class Intro extends Component {
       resources: [
         'assets/bg_music/Rescue.mp3',
         'assets/se/motion_tracker.wav',
+        'assets/se/reload_grenade.ogg',
+        'assets/se/explode_0.ogg',
+        'assets/se/explode_1.ogg',
+        'assets/se/explode_2.ogg',
         'assets/se/grenade.ogg',
         'assets/se/bite2.wav',
         'assets/se/mg-1.wav',
@@ -62,7 +74,17 @@ export default class Intro extends Component {
         'assets/bathroom_0.png',
         'assets/hangar_0.png',
         'assets/hospital_0.png',
-        'assets/alien_0.png'],
+        'assets/alien_0.png',
+        'assets/grenade_explode_0.png',
+        'assets/grenade_explode_1.png',
+        'assets/grenade_explode_2.png',
+        'assets/grenade_explode_3.png',
+        'assets/grenade_explode_4.png',
+        'assets/grenade_explode_5.png',
+        'assets/grenade_explode_6.png',
+        'assets/grenade_explode_7.png',
+        'assets/grenade_explode_8.png',
+      ],
       concurrency: 4
     });
 
@@ -90,9 +112,10 @@ export default class Intro extends Component {
 
   render() {
     return (
-      <div onClick={this.props.onStart}>
+      <div onClick={this.onStart}>
         <img className="intro" src="assets/intro.png"/>
-        {!IS_MOBILE && <p className="instructions">S Key to shoot</p>}
+        {!IS_MOBILE && <p className="instructions">S Key to shoot</p> }
+        {!IS_MOBILE && <p className="instructions">D Key for grenade</p> }
         {this.state.loaded && <p className="start" style={{ display: 'block'}}>Press Start</p>}
         {!this.state.loaded && <p className="start" style={{ display: 'block'}}>Loading</p>}
       </div>

@@ -20,6 +20,7 @@ export default class Corporal extends Component {
     store: PropTypes.object,
     hitCount: PropTypes.number,
     mobileControlsShoot: PropTypes.bool,
+    mobileControlsGrenade: PropTypes.bool,
     mobileControlsDirection: PropTypes.array
   };
 
@@ -96,7 +97,11 @@ export default class Corporal extends Component {
   };
 
   press = (event) => {
-    const {keys} = this.props;
+    const {keys,mobileControlsGrenade} = this.props;
+    if(mobileControlsGrenade) {
+      return this.grenadeLaunch();
+    }
+
     if (event.keyCode === keys.D_KEY) {
       event.preventDefault();
       return this.grenadeLaunch();
@@ -117,7 +122,7 @@ export default class Corporal extends Component {
         ticksPerFrame: 12,
         repeat: false
       });
-      this.props.store.setCharacterIsAttacking(true);
+      this.props.store.setCharacterIsAttackingGrenade(true);
     }
     else {
       this.reloadGrenade();
@@ -152,7 +157,7 @@ export default class Corporal extends Component {
   };
 
   reloadGrenade = () => {
-    this.pulseRifleReloadSound.play();
+    this.pulseRifleGrenadeReloadSound.play();
     this.isGrenadeReloading = true;
     let direction = this.lastDirection > 0 ? -1 : 1;
     this.setState({
@@ -161,7 +166,7 @@ export default class Corporal extends Component {
       ticksPerFrame: 5,
       repeat: false
     });
-    this.props.store.setCharacterIsAttacking(false);
+    this.props.store.setCharacterIsAttackingGrenade(false);
     return this.props.onReloadGrenade();
   };
 
@@ -178,6 +183,7 @@ export default class Corporal extends Component {
       repeat: true
     });
     this.props.store.setCharacterIsAttacking(false);
+    this.props.store.setCharacterIsAttackingGrenade(false);
     if (this.state.latchTimeStamp) {
       if (this.state.contextLoop > this.state.latchTimeStamp + 100) {
         this.props.store.setCharacterLatched(false);
@@ -304,6 +310,10 @@ export default class Corporal extends Component {
       this.move(this.body, 3);
     }
 
+    if(this.props.mobileControlsGrenade) {
+      return this.press()
+    }
+
     if (keys.isDown(keys.S_KEY) || this.props.mobileControlsShoot) {
       if (keys.isUp(keys.DOWN)) {
         this.isCrouching = false;
@@ -318,6 +328,7 @@ export default class Corporal extends Component {
     else {
       const {store} = this.props;
       store.setCharacterIsAttacking(false);
+      store.setCharacterIsAttackingGrenade(false);
       if(store.killCount >= KILL_THRESHOLD) {
         return this.roundClear();
       }
@@ -419,6 +430,7 @@ export default class Corporal extends Component {
     this.pulseRifleSound = new AudioPlayer('assets/se/m41.wav');
     this.pulseRifleReloadSound = new AudioPlayer('assets/se/mgbolt.ogg');
     this.pulseRifleGrenadeSound = new AudioPlayer('assets/se/grenade.ogg');
+    this.pulseRifleGrenadeReloadSound = new AudioPlayer('assets/se/reload_grenade.ogg');
 
     this.loopID = this.context.loop.subscribe(this.loop);
 

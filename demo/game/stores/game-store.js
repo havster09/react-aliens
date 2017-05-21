@@ -6,16 +6,21 @@ class GameStore {
   @observable characterPosition = {x: 300, y: FLOOR};
   @observable characterDirection = 1;
   @observable characterIsAttacking = false;
+  @observable characterIsAttackingGrenade = false;
   @observable characterIsCrouching = false;
   @observable characterIsLatched = false;
   @observable stageX = 0;
   @observable heroLoopCount = 0;
 
-  @observable levelCount = 0;
+  @observable levelCount = 1;
   @observable killCount = 0;
 
+  @observable explosionPositions = [];
+
+
   @observable npcPositions = [
-    // {x: 900, y: ALIEN_FLOOR}
+     {x: 900, y: ALIEN_FLOOR},
+     {x: 900, y: ALIEN_FLOOR}
   ];
 
 
@@ -23,23 +28,20 @@ class GameStore {
   @observable faceHuggerPositions = [];
 
   @observable eggPositions = [
-    {x: 2800, y: EGG_FLOOR, hatched:false}
+    {x: 2800, y: EGG_FLOOR, hatched:false},
+    {x: 800, y: EGG_FLOOR, hatched:false},
   ];
 
   constructor() {
     mobx.autorun(()=> this.reactToCrouch);
 
-    /*if(!IS_MOBILE) {
+    if(!IS_MOBILE) {
       this.npcPositions = [
         ...this.npcPositions,
         {x: 1000, y: ALIEN_FLOOR},
-        {x: 1200, y: ALIEN_FLOOR},
-        {x: 1300, y: ALIEN_FLOOR},
-        {x: 1400, y: ALIEN_FLOOR},
-        {x: 1500, y: ALIEN_FLOOR},
-        {x: 1600, y: ALIEN_FLOOR}
+        {x: 1200, y: ALIEN_FLOOR}
       ];
-    }*/
+    }
   }
 
   @computed get characterCrouch() {
@@ -62,6 +64,10 @@ class GameStore {
     this.characterIsAttacking = isAttacking;
   }
 
+  setCharacterIsAttackingGrenade(isAttacking) {
+    this.characterIsAttackingGrenade = isAttacking;
+  }
+
   setCharacterIsCrouching(isCrouching) {
     this.characterIsCrouching = isCrouching;
   }
@@ -79,14 +85,27 @@ class GameStore {
   setEggPosition(position, index) {
     this.eggPositions[index] = position;
   }
+
   addFaceHugger(position) {
     this.faceHuggerPositions = [...this.faceHuggerPositions,position];
   }
+
   removeFaceHugger(npcIndex) {
     const removedFaceHugger = this.faceHuggerPositions.filter((faceHugger,i)=>{
       return i !== npcIndex;
     });
     this.faceHuggerPositions = removedFaceHugger;
+  }
+
+  addExplosion(position) {
+    this.explosionPositions = [...this.explosionPositions,position];
+  }
+
+  removeExplosion(explosionIndex) {
+    const removedExplosions = this.explosionPositions.filter((explosion)=>{
+      return explosion.npcIndex !== explosionIndex;
+    });
+    this.explosionPositions = removedExplosions;
   }
 
   setLevelCount(levelCount) {

@@ -51,7 +51,8 @@ export default class Game extends Component {
 
   handleGrenadeLaunch = () => {
     this.setState({
-      grenadeAmmo: this.state.grenadeAmmo - 1
+      grenadeAmmo: this.state.grenadeAmmo - 1,
+      mobileControlsGrenade:false
     });
   };
 
@@ -94,6 +95,7 @@ export default class Game extends Component {
       levelUpdate: false,
       isHit: false,
       mobileControlsShoot: false,
+      mobileControlsGrenade: false,
       hitCount: 0,
       ammo: 990,
       grenadeAmmo: 1,
@@ -144,6 +146,12 @@ export default class Game extends Component {
   handleShootPressEnd(...args) {
     this.setState(Object.assign({}, ...this.state, {
       mobileControlsShoot: false
+    }));
+  }
+
+  handleGrenadePressEnd(...args) {
+    this.setState(Object.assign({}, ...this.state, {
+      mobileControlsGrenade: true
     }));
   }
 
@@ -221,6 +229,7 @@ export default class Game extends Component {
             ammo={this.state.ammo}
             grenadeAmmo={this.state.grenadeAmmo}
             mobileControlsShoot={this.state.mobileControlsShoot}
+            mobileControlsGrenade={this.state.mobileControlsGrenade}
             mobileControlsDirection={this.state.mobileControlsDirection}
             keys={this.keyListener}/>}
           {!this.state.fade && aliens}
@@ -230,6 +239,7 @@ export default class Game extends Component {
           {IS_MOBILE && <MobileControls
             onShootPressStart={this.handleShootPressStart.bind(this)}
             onShootPressEnd={this.handleShootPressEnd.bind(this)}
+            onGrenadePressEnd={this.handleGrenadePressEnd.bind(this)}
             onDirectionPadLeftPressStart={this.handleDirectionLeftPadPressStart.bind(this)}
             onDirectionPadRightPressStart={this.handleDirectionRightPadPressStart.bind(this)}
             onDirectionPadDownPressStart={this.handleDirectionDownPadPressStart.bind(this)}
