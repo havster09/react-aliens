@@ -54,6 +54,8 @@ export default class Game extends Component {
       grenadeAmmo: this.state.grenadeAmmo - 1,
       mobileControlsGrenade:false
     });
+    GameStore.setCharacterIsAttackingGrenade(false);
+
   };
 
   handleCharacterHit = () => {

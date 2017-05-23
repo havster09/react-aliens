@@ -85,7 +85,6 @@ export default class FaceHugger extends Npc {
       store.removeFaceHugger(npcIndex);
     }
     else {
-      this.stopMotionTrackerSound();
       this.respawn();
     }
   }
@@ -331,7 +330,9 @@ export default class FaceHugger extends Npc {
       repeat: false,
       ticksPerFrame: 100
     }));
-    this.stopMotionTrackerSound();
+    if(this.stopMotionTrackerSound && this.context.loop.loopID > 1000) {
+      this.stopMotionTrackerSound();
+    }
   };
 
   respawn = () => {

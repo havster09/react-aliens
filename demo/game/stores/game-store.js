@@ -19,7 +19,6 @@ class GameStore {
 
 
   @observable npcPositions = [
-     {x: 900, y: ALIEN_FLOOR},
      {x: 900, y: ALIEN_FLOOR}
   ];
 
@@ -38,8 +37,7 @@ class GameStore {
     if(!IS_MOBILE) {
       this.npcPositions = [
         ...this.npcPositions,
-        {x: 1000, y: ALIEN_FLOOR},
-        {x: 1200, y: ALIEN_FLOOR}
+        {x: 1000, y: ALIEN_FLOOR}
       ];
     }
   }
