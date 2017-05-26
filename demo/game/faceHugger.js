@@ -124,7 +124,9 @@ export default class FaceHugger extends Npc {
         this.isAttacking = false;
         this.props.onCharacterHitDone();
         if (!store.characterIsLatched && !this.hasLatched) {
-          this.stopMotionTrackerSound();
+          if(this.stopMotionTrackerSound && this.context.loop.loopID > 1000) {
+            this.stopMotionTrackerSound();
+          }
           return this.latch();
         }
       }
@@ -162,7 +164,9 @@ export default class FaceHugger extends Npc {
       if (this.isDown && this.state.spritePlaying === false) {
         this.isDown = false;
         if(store.killCount < KILL_THRESHOLD) {
-          this.stopMotionTrackerSound = this.motionTrackerSound.play({loop:true});
+          if(this.stopMotionTrackerSound && this.context.loop.loopID > 1000) {
+            this.stopMotionTrackerSound();
+          }
           return this.respawn();
         }
         else {

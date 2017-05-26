@@ -55,7 +55,6 @@ export default class Game extends Component {
       mobileControlsGrenade:false
     });
     GameStore.setCharacterIsAttackingGrenade(false);
-
   };
 
   handleCharacterHit = () => {
@@ -100,7 +99,7 @@ export default class Game extends Component {
       mobileControlsGrenade: false,
       hitCount: 0,
       ammo: 990,
-      grenadeAmmo: 1,
+      grenadeAmmo: 0,
       mobileControlsDirection: ['neutral','neutral']
     };
     this.keyListener = new KeyListener();
