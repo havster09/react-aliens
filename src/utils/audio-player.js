@@ -13,6 +13,9 @@ export default class AudioPlayer {
   }
 
   play = (options) => {
+    if(!this.buffer) {
+      return;
+    }
     const volume = options && options.volume;
     const offset = options && options.offset;
     const loop = options && options.loop;

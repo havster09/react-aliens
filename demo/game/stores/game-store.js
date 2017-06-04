@@ -19,7 +19,9 @@ class GameStore {
 
 
   @observable npcPositions = [
-     {x: 900, y: ALIEN_FLOOR}
+     {x: 1300, y: ALIEN_FLOOR},
+     {x: 3300, y: ALIEN_FLOOR},
+     {x: 2300, y: ALIEN_FLOOR}
   ];
 
 
@@ -75,8 +77,9 @@ class GameStore {
   }
 
   setNpcPosition(position, index) {
-    this.npcPositions[index] = position;
-  }
+  this.npcPositions[index] = position;
+}
+
   setFaceHuggerPosition(position, index) {
     this.faceHuggerPositions[index] = position;
   }

@@ -59,6 +59,7 @@ export default class Alien extends Npc {
     this.lastX = 0;
     this.lastDirection = -1;
     this.contextLoop = null;
+    this.npcPosition = this.props.store.npcPositions[this.props.npcIndex];
 
 
     this.state = {
@@ -98,7 +99,8 @@ export default class Alien extends Npc {
 
   getWrapperStyles() {
     const {store, npcIndex} = this.props;
-    const npcPosition = store.npcPositions[npcIndex];
+    // const npcPosition = this.npcPosition;
+    const npcPosition = this.npcPosition;
     const {stageX} = store;
     const {scale} = this.context;
     const {x, y} = npcPosition;
@@ -178,47 +180,47 @@ export default class Alien extends Npc {
         }
       }
     }
-    this.lastX = store.npcPositions[npcIndex].x;
+    this.lastX = this.npcPosition.x;
   };
 
   npcAction = (body) => {
     const {store, npcIndex} = this.props;
     let npcState = this.state.npcState;
-    if (store.characterIsAttacking && store.npcPositions[npcIndex].y === ALIEN_FLOOR) {
-      if (Math.abs(store.npcPositions[npcIndex].x - store.characterPosition.x) < Math.random() * 100 + 400) {
-        if (store.npcPositions[npcIndex].x < store.characterPosition.x && store.characterDirection === -1) {
+    if (store.characterIsAttacking && this.npcPosition.y === ALIEN_FLOOR) {
+      if (Math.abs(this.npcPosition.x - store.characterPosition.x) < Math.random() * 100 + 400) {
+        if (this.npcPosition.x < store.characterPosition.x && store.characterDirection === -1) {
           return this.hit();
         }
-        else if (store.npcPositions[npcIndex].x > store.characterPosition.x && store.characterDirection === 1) {
+        else if (this.npcPosition.x > store.characterPosition.x && store.characterDirection === 1) {
           return this.hit();
         }
       }
     }
 
-    if (store.characterIsAttackingGrenade && store.npcPositions[npcIndex].y === ALIEN_FLOOR) {
-      if (Math.abs(store.npcPositions[npcIndex].x - store.characterPosition.x) < Math.random() * 100 + 400) {
+    if (store.characterIsAttackingGrenade && this.npcPosition.y === ALIEN_FLOOR) {
+      if (Math.abs(this.npcPosition.x - store.characterPosition.x) < Math.random() * 100 + 400) {
         if(store.explosionPositions.length < 1) {
-          if (store.npcPositions[npcIndex].x < store.characterPosition.x && store.characterDirection === -1) {
+          if (this.npcPosition.x < store.characterPosition.x && store.characterDirection === -1) {
             return this.downGrenade();
           }
-          else if (store.npcPositions[npcIndex].x > store.characterPosition.x && store.characterDirection === 1) {
+          else if (this.npcPosition.x > store.characterPosition.x && store.characterDirection === 1) {
             return this.downGrenade();
           }
         }
       }
     }
 
-    if(this.isCloseGrenade() && store.npcPositions[npcIndex].y === ALIEN_FLOOR) {
+    if(this.isCloseGrenade() && this.npcPosition.y === ALIEN_FLOOR) {
       return this.hit();
     }
 
-    if (store.npcPositions[npcIndex].y  < ALIEN_FLOOR  && npcState !== 16 && npcState !== 14) {
+    if (this.npcPosition.y  < ALIEN_FLOOR  && npcState !== 16 && npcState !== 14) {
       return this.crouchIdle();
     }
-    else if(store.npcPositions[npcIndex].y  < ALIEN_FLOOR && npcState === 14) {
-      return store.setNpcPosition({x: store.npcPositions[npcIndex].x, y: store.npcPositions[npcIndex].y+10}, npcIndex);
+    else if(this.npcPosition.y  < ALIEN_FLOOR && npcState === 14) {
+      return this.ambush();
     }
-    else if(store.npcPositions[npcIndex].y  === ALIEN_FLOOR && npcState === 14 && npcState !== 15) {
+    else if(this.npcPosition.y  === ALIEN_FLOOR && npcState === 14 && npcState !== 15) {
       return this.land();
     }
 
@@ -239,12 +241,12 @@ export default class Alien extends Npc {
         }
       }
       if (this.state.hasStopped % 2 > 0) {
-        npcState = store.npcPositions[npcIndex].x < store.characterPosition.x ? 0 : 1;
+        npcState = this.npcPosition.x < store.characterPosition.x ? 0 : 1;
       }
       else {
-        npcState = store.npcPositions[npcIndex].x < store.characterPosition.x ? 2 : 3;
+        npcState = this.npcPosition.x < store.characterPosition.x ? 2 : 3;
       }
-      const distance = store.npcPositions[npcIndex].x < store.characterPosition.x ? 3 : -3;
+      const distance = this.npcPosition.x < store.characterPosition.x ? 3 : -3;
       this.move(body, distance, npcState);
     }
     else if (this.state.npcState !== 4) {
@@ -267,11 +269,11 @@ export default class Alien extends Npc {
 
   hit = () => {
     const {store, npcIndex} = this.props;
-    const direction = store.npcPositions[npcIndex].x < store.characterPosition.x ? 1 : -1;
+    const direction = this.npcPosition.x < store.characterPosition.x ? 1 : -1;
     if (this.state.hasHit < 3) {
       this.isHit = true;
       const distance = direction < 0 ? Math.ceil(Math.random() * 10) : 0 - Math.ceil(Math.random() * 10);
-      store.setNpcPosition({x: store.npcPositions[npcIndex].x + distance, y: store.npcPositions[npcIndex].y}, npcIndex);
+      this.setNpcPosition({x: this.npcPosition.x + distance, y: this.npcPosition.y});
       this.setState(Object.assign({}, this.state, {
         npcState: this.state.hasHit % 2 > 0 ? 8 : 9,
         hasHit: this.state.hasHit + 1,
@@ -295,10 +297,10 @@ export default class Alien extends Npc {
 
   decapitated = () => {
     const {store, npcIndex} = this.props;
-    const direction = store.npcPositions[npcIndex].x < store.characterPosition.x ? 1 : -1;
+    const direction = this.npcPosition.x < store.characterPosition.x ? 1 : -1;
     this.isDecapitated = true;
     const distance = direction < 0 ? Math.ceil(Math.random() * 30) : 0 - Math.ceil(Math.random() * 30);
-    store.setNpcPosition({x: store.npcPositions[npcIndex].x + distance, y: store.npcPositions[npcIndex].y}, npcIndex);
+    this.setNpcPosition({x: this.npcPosition.x + distance, y: this.npcPosition.y});
     this.setState(Object.assign({}, this.state, {
       npcState: this.state.hasHit % 2 > 0 ? 19 : 20,
       hasHit: this.state.hasHit + 1,
@@ -312,12 +314,12 @@ export default class Alien extends Npc {
   drop = () => {
     this.isDrop = true;
     const {store, npcIndex} = this.props;
-    const direction = store.npcPositions[npcIndex].x < store.characterPosition.x ? 1 : -1;
+    const direction = this.npcPosition.x < store.characterPosition.x ? 1 : -1;
     const distance = direction < 0 ? Math.ceil(Math.random() * 28) : 0 - Math.ceil(Math.random() * 28);
-    store.setNpcPosition({
-      x: store.npcPositions[npcIndex].x + distance * 5,
-      y: store.npcPositions[npcIndex].y
-    }, npcIndex);
+    this.setNpcPosition({
+      x: this.npcPosition.x + distance * 5,
+      y: this.npcPosition.y
+    });
     let npcState = Math.random() < .5 ? 10 : 11;
     if(this.state.decapitated) {
       npcState = 21;
@@ -347,12 +349,12 @@ export default class Alien extends Npc {
       store.removeExplosion(npcIndex);
     }
 
-    const direction = store.npcPositions[npcIndex].x < store.characterPosition.x ? 1 : -1;
+    const direction = this.npcPosition.x < store.characterPosition.x ? 1 : -1;
     let distance = 0;
     let npcState = 4;
     if(Math.random()<.5 || store.levelCount < 1) {
       distance = direction < 0 ? RESPAWN_DISTANCE: -RESPAWN_DISTANCE;
-      store.setNpcPosition({x: store.characterPosition.x + distance, y: store.npcPositions[npcIndex].y}, npcIndex);
+      this.setNpcPosition({x: store.characterPosition.x + distance, y: this.npcPosition.y});
     }
     else {
       let npcState = 14;
@@ -362,7 +364,7 @@ export default class Alien extends Npc {
       else {
         distance = 0-Math.ceil(Math.random() * 200+100);
       }
-      store.setNpcPosition({x: store.characterPosition.x + distance, y: store.npcPositions[npcIndex].y-getAmbushHeight(store.levelCount)}, npcIndex);
+      this.setNpcPosition({x: store.characterPosition.x + distance, y: this.npcPosition.y-getAmbushHeight(store.levelCount)});
     }
     this.setState(Object.assign({}, this.state, {
       npcState,
@@ -395,8 +397,8 @@ export default class Alien extends Npc {
     }
     store.addExplosion({
       npcIndex,
-      x:store.npcPositions[npcIndex].x,
-      y:store.npcPositions[npcIndex].y
+      x:this.npcPosition.x,
+      y:this.npcPosition.y
     });
     let npcState = 23;
     this.setState(Object.assign({}, this.state, {
@@ -420,13 +422,13 @@ export default class Alien extends Npc {
 
   isBehind() {
     const {store, npcIndex} = this.props;
-    const turnOffset = store.npcPositions[npcIndex].x < store.characterPosition.x ? -1000 : 1000;
-    return store.npcPositions[npcIndex].x < store.characterPosition.x - turnOffset;
+    const turnOffset = this.npcPosition.x < store.characterPosition.x ? -1000 : 1000;
+    return this.npcPosition.x < store.characterPosition.x - turnOffset;
   }
 
   isClose = () => {
     const {store, npcIndex} = this.props;
-    const distance = store.npcPositions[npcIndex].x - store.characterPosition.x;
+    const distance = this.npcPosition.x - store.characterPosition.x;
     return distance < 100;
   };
 
@@ -435,7 +437,7 @@ export default class Alien extends Npc {
     if(store.explosionPositions.length < 1) {
       return false;
     }
-    const distance = store.npcPositions[npcIndex].x - store.explosionPositions[0].x;
+    const distance = this.npcPosition.x - store.explosionPositions[0].x;
     return distance < 100;
 
   };
@@ -451,20 +453,24 @@ export default class Alien extends Npc {
   isFar = () => {
     const {store, npcIndex} = this.props;
     const directionOffset = this.state.direction < 0 ? -40 : 0;
-    const distance = Math.abs(store.npcPositions[npcIndex].x - store.characterPosition.x);
+    const distance = Math.abs(this.npcPosition.x - store.characterPosition.x);
     return distance > 110 + directionOffset;
   };
 
   move = (body, distance, npcState) => {
     const {store, npcIndex} = this.props;
-    store.setNpcPosition({x: store.npcPositions[npcIndex].x + distance, y: store.npcPositions[npcIndex].y}, npcIndex);
+    this.setNpcPosition({x: this.npcPosition.x + distance, y: this.npcPosition.y});
     this.setState(Object.assign({}, this.state, {
       npcState,
-      direction: store.npcPositions[npcIndex].x < store.characterPosition.x ? 1 : -1,
+      direction: this.npcPosition.x < store.characterPosition.x ? 1 : -1,
       repeat: true,
       loop: true,
       ticksPerFrame: 5
     }));
+  };
+
+  setNpcPosition = (position) => {
+    this.npcPosition = position;
   };
 
   jump = (body) => {
@@ -484,6 +490,7 @@ export default class Alien extends Npc {
 
   ambush = () => {
     this.isAmbush = true;
+    this.setNpcPosition({x: this.npcPosition.x, y: this.npcPosition.y+10});
     this.setState(Object.assign({}, this.state, {
       npcState: 14,
       ticksPerFrame: 5,
@@ -526,7 +533,7 @@ export default class Alien extends Npc {
     this.isCrouchIdle = true;
     this.setState(Object.assign({}, this.state, {
       npcState: 16,
-      direction: store.npcPositions[npcIndex].x < store.characterPosition.x ? 1 : -1,
+      direction: this.npcPosition.x < store.characterPosition.x ? 1 : -1,
       ticksPerFrame: 10,
       repeat: false
     }));

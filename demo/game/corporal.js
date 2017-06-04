@@ -77,7 +77,7 @@ export default class Corporal extends Component {
     let direction = store.characterDirection;
     let characterState = this.isCrouching?8:3;
     if (this.props.ammo > 0) {
-      if(this.contextLoop%4===2 && this.contextLoop > 100) {
+      if(this.contextLoop%4===2) {
         this.pulseRifleSound.play({loop: false, offset: 0, volume: 0.35});
       }
       this.props.onShoot();
@@ -382,6 +382,7 @@ export default class Corporal extends Component {
 
       if (this.isGrenadeLaunching && this.state.spritePlaying === false) {
         this.isGrenadeLaunching = false;
+        this.props.store.setCharacterIsAttackingGrenade(false);
       }
 
       if (this.isGrenadeReloading && this.state.spritePlaying === false) {
