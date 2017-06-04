@@ -33,9 +33,7 @@ export default class FaceHugger extends Npc {
   };
 
   getContextLoop = (contextLoop) => {
-    this.setState({
-      contextLoop: contextLoop
-    });
+    this.contextLoop = contextLoop;
   };
 
   constructor(props) {
@@ -54,6 +52,7 @@ export default class FaceHugger extends Npc {
     this.isInEgg = false;
     this.lastX = 0;
     this.lastDirection = -1;
+    this.contextLoop = null;
 
 
     this.state = {

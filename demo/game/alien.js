@@ -10,7 +10,6 @@ import {
   Body,
   Sprite,
 } from '../../src';
-;
 
 
 @observer
@@ -36,9 +35,7 @@ export default class Alien extends Npc {
   };
 
   getContextLoop = (contextLoop) => {
-    this.setState({
-      contextLoop: contextLoop
-    });
+    this.contextLoop = contextLoop;
   };
 
   constructor(props) {
@@ -61,6 +58,7 @@ export default class Alien extends Npc {
     this.isLeaving = false;
     this.lastX = 0;
     this.lastDirection = -1;
+    this.contextLoop = null;
 
 
     this.state = {

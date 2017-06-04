@@ -33,9 +33,7 @@ export default class Egg extends Component {
 
   getContextLoop = (contextLoop) => {
     const {store} = this.props;
-    this.setState({
-      contextLoop: contextLoop
-    });
+    this.contextLoop = contextLoop
   };
 
   constructor(props) {
@@ -48,6 +46,7 @@ export default class Egg extends Component {
     this.hasLatched = false;
     this.lastX = 0;
     this.lastDirection = -1;
+    this.contextLoop = null;
 
 
     this.state = {

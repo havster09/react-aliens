@@ -39,9 +39,7 @@ export default class Corporal extends Component {
   getContextLoop = (contextLoop) => {
     const {store} = this.props;
     store.setHeroLoopCount(contextLoop);
-    this.setState({
-      contextLoop: contextLoop
-    });
+    this.contextLoop = contextLoop;
   };
 
   move = (body, x) => {
@@ -79,7 +77,7 @@ export default class Corporal extends Component {
     let direction = store.characterDirection;
     let characterState = this.isCrouching?8:3;
     if (this.props.ammo > 0) {
-      if(this.state.contextLoop%4===2) {
+      if(this.contextLoop%4===2 && this.contextLoop > 100) {
         this.pulseRifleSound.play({loop: false, offset: 0, volume: 0.35});
       }
       this.props.onShoot();
@@ -134,7 +132,7 @@ export default class Corporal extends Component {
       this.pulseRifleReloadSound.play();
       this.setState({
         ngcState: 4,
-        reloadTimeStamp: this.state.contextLoop,
+        reloadTimeStamp: this.contextLoop,
         ticksPerFrame: 10
       });
     }
@@ -147,7 +145,7 @@ export default class Corporal extends Component {
     });
     this.props.store.setCharacterIsAttacking(false);
     if (this.state.reloadTimeStamp) {
-      if (this.state.contextLoop > this.state.reloadTimeStamp + 50) {
+      if (this.contextLoop > this.state.reloadTimeStamp + 50) {
         this.props.onReload();
         this.setState({
           reloadTimeStamp: null
@@ -173,7 +171,7 @@ export default class Corporal extends Component {
   latch = () => {
     if (!this.state.latchTimeStamp) {
       this.setState({
-        latchTimeStamp: this.state.contextLoop,
+        latchTimeStamp: this.contextLoop,
         ticksPerFrame: 10
       });
     }
@@ -185,7 +183,7 @@ export default class Corporal extends Component {
     this.props.store.setCharacterIsAttacking(false);
     this.props.store.setCharacterIsAttackingGrenade(false);
     if (this.state.latchTimeStamp) {
-      if (this.state.contextLoop > this.state.latchTimeStamp + 100) {
+      if (this.contextLoop > this.state.latchTimeStamp + 100) {
         this.props.store.setCharacterLatched(false);
         // kill faceHugger
         this.setState({
@@ -410,14 +408,14 @@ export default class Corporal extends Component {
     this.isHit = false;
     this.isLeaving = false;
     this.lastX = 0;
+    this.contextLoop = null;
 
     this.state = {
       characterState: 2,
       hitCount: 0,
       loop: false,
       spritePlaying: true,
-      ticksPerFrame: 5,
-      contextLoop: null
+      ticksPerFrame: 5
     };
     const model = this;
     window.addEventListener('keyup', (event) => {
