@@ -20,17 +20,24 @@ class GameStore {
 
   @observable npcPositions = [
      {x: 1300, y: ALIEN_FLOOR},
-     {x: 3300, y: ALIEN_FLOOR},
      {x: 2300, y: ALIEN_FLOOR}
   ];
 
 
 
-  @observable faceHuggerPositions = [];
+  @observable faceHuggerPositions = [
+    {x: 1300, y: FACEHUGGER_FLOOR}
+  ];
 
   @observable eggPositions = [
-    {x: 2800, y: EGG_FLOOR, hatched:false},
-    {x: 800, y: EGG_FLOOR, hatched:false},
+    {x: 1550, y: EGG_FLOOR, hatched:false},
+    {x: 1600, y: EGG_FLOOR, hatched:false},
+    {x: 1650, y: EGG_FLOOR, hatched:false},
+    {x: 1800, y: EGG_FLOOR, hatched:false}
+  ];
+
+  @observable queenPositions = [
+    {x: 2850, y: 0}
   ];
 
   constructor() {

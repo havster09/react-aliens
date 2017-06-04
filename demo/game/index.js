@@ -22,6 +22,7 @@ import UserInterface from './userInterface';
 import MobileControls from './mobileControls';
 
 import GameStore from './stores/game-store';
+import Queen from "./queen";
 
 @observer
 export default class Game extends Component {
@@ -193,6 +194,13 @@ export default class Game extends Component {
 
 
   render() {
+    const queens = GameStore.queenPositions.map((queen, i) => {
+      return (
+        <Queen key={i} store={GameStore} npcIndex={parseInt(i)} onCharacterHit={this.handleCharacterHit}
+               onCharacterHitDone={this.handleCharacterHitDone}/>
+      )
+    });
+
     const aliens = GameStore.npcPositions.map((alien, i) => {
       return (
         <Alien key={i} store={GameStore} npcIndex={parseInt(i)} onCharacterHit={this.handleCharacterHit}
@@ -233,9 +241,12 @@ export default class Game extends Component {
             mobileControlsGrenade={this.state.mobileControlsGrenade}
             mobileControlsDirection={this.state.mobileControlsDirection}
             keys={this.keyListener}/>}
+
+          {!this.state.fade && queens}
           {!this.state.fade && aliens}
           {!this.state.fade && faceHuggers}
           {!this.state.fade && eggs}
+
           <Fade visible={this.state.fade}/>
           {IS_MOBILE && <MobileControls
             onShootPressStart={this.handleShootPressStart.bind(this)}

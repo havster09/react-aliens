@@ -98,8 +98,7 @@ export default class Alien extends Npc {
   }
 
   getWrapperStyles() {
-    const {store, npcIndex} = this.props;
-    // const npcPosition = this.npcPosition;
+    const {store} = this.props;
     const npcPosition = this.npcPosition;
     const {stageX} = store;
     const {scale} = this.context;
@@ -458,7 +457,7 @@ export default class Alien extends Npc {
   };
 
   move = (body, distance, npcState) => {
-    const {store, npcIndex} = this.props;
+    const {store} = this.props;
     this.setNpcPosition({x: this.npcPosition.x + distance, y: this.npcPosition.y});
     this.setState(Object.assign({}, this.state, {
       npcState,
