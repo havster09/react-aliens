@@ -19,7 +19,7 @@ module.exports = {
       },
     }),
   ],
-  devtool:'source-map',
+  devtool:'eval-source-map',
   module: {
     loaders: [{
       test: /\.js$/,

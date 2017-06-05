@@ -251,7 +251,7 @@ export default class Alien extends Npc {
     else if (this.state.npcState !== 4) {
       this.stop();
     }
-    else if (this.state.npcState === 4 && this.contextLoop % 50 === 1) {
+    else if (this.state.npcState === 4 && this.contextLoop % Math.floor(Math.random()*100) === 1) {
       this.props.onCharacterHit();
       const attackRandom = Math.random();
       if (attackRandom > .6 && this.state.direction === 1) {

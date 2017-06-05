@@ -1,7 +1,7 @@
 import React, {Component, PropTypes} from 'react';
 import {observer} from 'mobx-react';
 
-import {FACEHUGGER_FLOOR, IS_MOBILE, RESPAWN_DISTANCE} from './constants';
+import {FACEHUGGER_FLOOR, FLOOR, IS_MOBILE, RESPAWN_DISTANCE} from './constants';
 
 import {
   AudioPlayer,
@@ -86,6 +86,8 @@ export default class Game extends Component {
   };
 
   resetLevel() {
+    GameStore.setStageX(0);
+    GameStore.setCharacterPosition({x:300,y:FLOOR});
     GameStore.faceHuggerPositions.forEach((faceHugger) => {
         faceHugger.y = FACEHUGGER_FLOOR;
         faceHugger.x = faceHugger.x + RESPAWN_DISTANCE;
