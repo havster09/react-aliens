@@ -37,7 +37,7 @@ class GameStore {
   ];
 
   @observable queenPositions = [
-    {x: 2850, y: 0}
+    {x: IS_MOBILE?2730:2850, y: 0}
   ];
 
   constructor() {

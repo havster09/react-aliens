@@ -55,7 +55,6 @@ export default class FaceHugger extends Npc {
     this.contextLoop = null;
     this.npcPosition = this.props.store.faceHuggerPositions[this.props.npcIndex];
 
-
     this.state = {
       npcState: 2,
       loop: false,
@@ -85,7 +84,7 @@ export default class FaceHugger extends Npc {
       store.removeFaceHugger(npcIndex);
     }
     else {
-      this.respawn();
+      return this.respawn();
     }
   }
 
@@ -234,21 +233,6 @@ export default class FaceHugger extends Npc {
     }
   };
 
-  hatch = () => {
-    const {store, npcIndex} = this.props;
-    const direction = this.npcPosition.x < store.characterPosition.x ? 1 : -1;
-    const distance = direction < 0 ? -90 : -10;
-    this.setState(Object.assign({}, this.state, {
-      direction,
-      hatched: true
-    }));
-    this.setNpcPosition(Object.assign({},{
-      x: this.npcPosition.x + distance,
-      y: this.npcPosition.y + -10
-    }));
-    return this.ambush();
-  };
-
   hit = () => {
     const {store, npcIndex} = this.props;
     const direction = this.npcPosition.x < store.characterPosition.x ? 1 : -1;
@@ -337,17 +321,15 @@ export default class FaceHugger extends Npc {
   };
 
   respawn = () => {
-    const {store, npcIndex} = this.props;
+    const {store} = this.props;
     if(this.npcPosition){
       const direction = this.npcPosition.x < store.characterPosition.x ? 1 : -1;
       let distance = 0;
-      let npcState = 2;
+      let npcState = 10;
       if (Math.random() < .5 || store.levelCount < 1) {
         distance = direction < 0 ? RESPAWN_DISTANCE : -RESPAWN_DISTANCE;
         this.setNpcPosition(Object.assign({},{
-          x: store.characterPosition.x + distance,
-          y: this.npcPosition.y
-        }));
+          x: this.npcPosition.x+distance, y: FACEHUGGER_FLOOR}));
       }
       else {
         npcState = 14;

@@ -45,7 +45,7 @@ export default class Corporal extends Component {
   move = (body, x) => {
     const {store} = this.props;
     this.lastDirection = (x < 0 && Math.abs(x) > 2) ? 1 : 0;
-    if(!store.characterIsAttacking && this.state.characterState!==4 && this.state.characterState!==9) {
+    if (!store.characterIsAttacking && this.state.characterState !== 4 && this.state.characterState !== 9) {
       store.setCharacterPosition({x: store.characterPosition.x + x, y: store.characterPosition.y});
     }
     this.setState({
@@ -75,9 +75,9 @@ export default class Corporal extends Component {
     const {store} = this.props;
     this.isShooting = true;
     let direction = store.characterDirection;
-    let characterState = this.isCrouching?8:3;
+    let characterState = this.isCrouching ? 8 : 3;
     if (this.props.ammo > 0) {
-      if(this.contextLoop%4===2) {
+      if (this.contextLoop % 4 === 2) {
         this.pulseRifleSound.play({loop: false, offset: 0, volume: 0.35});
       }
       this.props.onShoot();
@@ -95,37 +95,55 @@ export default class Corporal extends Component {
   };
 
   press = (event) => {
-    const {keys,mobileControlsGrenade} = this.props;
-    if(mobileControlsGrenade) {
-      return this.grenadeLaunch();
-    }
+    const {keys, mobileControlsGrenade} = this.props;
+    if (this.props.grenadeAmmo > 0 && this.grenadeToggle) {
+      if (mobileControlsGrenade) {
+        return this.grenadeLaunch();
+      }
 
-    if (event.keyCode === keys.D_KEY) {
-      event.preventDefault();
-      return this.grenadeLaunch();
+      if (event.keyCode === keys.D_KEY) {
+        event.preventDefault();
+        return this.grenadeLaunch();
+      }
+    }
+    else {
+      return this.reloadGrenade();
     }
   };
+
 
   grenadeLaunch = () => {
     const {store} = this.props;
     let direction = store.characterDirection;
     let characterState = 11;
-    if (this.props.grenadeAmmo > 0) {
-      this.isGrenadeLaunching = true;
-      this.pulseRifleGrenadeSound.play();
-      this.props.onGrenadeLaunch();
-      this.setState({
-        characterState,
-        direction,
-        ticksPerFrame: 12,
-        repeat: false
-      });
-      this.props.store.setCharacterIsAttackingGrenade(true);
-    }
-    else {
-      this.reloadGrenade();
-    }
+
+    this.isGrenadeLaunching = true;
+    this.props.onGrenadeLaunch();
+    this.setState({
+      characterState,
+      direction,
+      ticksPerFrame: 6,
+      repeat: false
+    });
+    this.grenadeToggle = false;
+
+    return this.props.store.setCharacterIsAttackingGrenade(true);
   };
+
+  reloadGrenade = () => {
+    this.grenadeToggle = true;
+    this.isGrenadeReloading = true;
+    let direction = this.lastDirection > 0 ? -1 : 1;
+    this.setState({
+      characterState: 12,
+      direction,
+      ticksPerFrame: 5,
+      repeat: false
+    });
+    this.props.store.setCharacterIsAttackingGrenade(false);
+    return this.props.onReloadGrenade();
+  };
+
 
   reload = () => {
     if (!this.state.reloadTimeStamp) {
@@ -152,20 +170,6 @@ export default class Corporal extends Component {
         });
       }
     }
-  };
-
-  reloadGrenade = () => {
-    this.pulseRifleGrenadeReloadSound.play();
-    this.isGrenadeReloading = true;
-    let direction = this.lastDirection > 0 ? -1 : 1;
-    this.setState({
-      characterState: 12,
-      direction,
-      ticksPerFrame: 5,
-      repeat: false
-    });
-    this.props.store.setCharacterIsAttackingGrenade(false);
-    return this.props.onReloadGrenade();
   };
 
   latch = () => {
@@ -210,8 +214,8 @@ export default class Corporal extends Component {
     let characterState = this.props.hitCount % 2 > 0 ? 5 : 6;
     let direction = this.lastDirection > 0 ? -1 : 1;
 
-    store.npcPositions.forEach((alien)=> {
-      if(store.characterPosition.x < alien.x && direction < 0 || store.characterPosition.x > alien.x && direction > 0) {
+    store.npcPositions.forEach((alien) => {
+      if (store.characterPosition.x < alien.x && direction < 0 || store.characterPosition.x > alien.x && direction > 0) {
         characterState = 7;
       }
     });
@@ -244,22 +248,22 @@ export default class Corporal extends Component {
   enterBuilding = (body) => {
     const {store} = this.props;
     this.setState({
-      direction:store.characterDirection,
+      direction: store.characterDirection,
       characterState: 2,
     });
     this.isLeaving = true;
-   /*
-    const doorIndex = this.getDoorIndex(0);
-   if (doorIndex !== null) {
-      this.props.onEnterBuilding(doorIndex);
-    }*/
+    /*
+     const doorIndex = this.getDoorIndex(0);
+     if (doorIndex !== null) {
+     this.props.onEnterBuilding(doorIndex);
+     }*/
   };
 
   roundClear = () => {
     // todo add check for all aliens to be npcState dead
     const {store} = this.props;
     console.log(store.characterPosition.x);
-    if(store.levelCount === 4) {
+    if (store.levelCount === 4) {
       store.setLevelCount(0);
     }
     else {
@@ -289,7 +293,7 @@ export default class Corporal extends Component {
       // return this.enterBuilding(this.body);
     }
 
-    if ((keys.isDown(keys.LEFT) || this.props.mobileControlsDirection[0]==='left')&& store.characterPosition.x > -39) {
+    if ((keys.isDown(keys.LEFT) || this.props.mobileControlsDirection[0] === 'left') && store.characterPosition.x > -39) {
       if (shouldMoveStageLeft) {
         store.setStageX(store.stageX + 3);
       }
@@ -297,7 +301,7 @@ export default class Corporal extends Component {
       store.setCharacterDirection(direction);
       this.move(this.body, -3);
       characterState = 1;
-    } else if ((keys.isDown(keys.RIGHT)  || this.props.mobileControlsDirection[0]==='right') && store.characterPosition.x < 2952) {
+    } else if ((keys.isDown(keys.RIGHT) || this.props.mobileControlsDirection[0] === 'right') && store.characterPosition.x < 2952) {
       if (shouldMoveStageRight) {
         store.setStageX(store.stageX - 3);
       }
@@ -307,7 +311,7 @@ export default class Corporal extends Component {
       this.move(this.body, 3);
     }
 
-    if(this.props.mobileControlsGrenade) {
+    if (this.props.mobileControlsGrenade) {
       return this.press()
     }
 
@@ -316,7 +320,7 @@ export default class Corporal extends Component {
         this.isCrouching = false;
         store.setCharacterIsCrouching(false);
       }
-      if (keys.isDown(keys.DOWN) || this.props.mobileControlsDirection[1]==='down') {
+      if (keys.isDown(keys.DOWN) || this.props.mobileControlsDirection[1] === 'down') {
         this.isCrouching = true;
         store.setCharacterIsCrouching(true);
       }
@@ -326,16 +330,16 @@ export default class Corporal extends Component {
       const {store} = this.props;
       store.setCharacterIsAttacking(false);
       store.setCharacterIsAttackingGrenade(false);
-      if(store.killCount >= KILL_THRESHOLD) {
+      if (store.killCount >= KILL_THRESHOLD) {
         return this.roundClear();
       }
     }
 
-    if (keys.isDown(keys.DOWN) || this.props.mobileControlsDirection[1]==='down' ) {
+    if (keys.isDown(keys.DOWN) || this.props.mobileControlsDirection[1] === 'down') {
       return this.crouch(this.body);
     }
     else {
-      if(store.characterIsCrouching) {
+      if (store.characterIsCrouching) {
         this.isCrouching = false;
         store.setCharacterIsCrouching(false);
       }
@@ -343,7 +347,7 @@ export default class Corporal extends Component {
 
     this.setState({
       characterState,
-      direction:characterState!==4?direction:this.lastDirection,
+      direction: characterState !== 4 ? direction : this.lastDirection,
       repeat: characterState < 2,
     });
   };
@@ -382,10 +386,12 @@ export default class Corporal extends Component {
 
       if (this.isGrenadeLaunching && this.state.spritePlaying === false) {
         this.isGrenadeLaunching = false;
+        this.pulseRifleGrenadeSound.play();
         this.props.store.setCharacterIsAttackingGrenade(false);
       }
 
       if (this.isGrenadeReloading && this.state.spritePlaying === false) {
+        this.pulseRifleGrenadeReloadSound.play();
         this.isGrenadeReloading = false;
       }
 
@@ -410,6 +416,7 @@ export default class Corporal extends Component {
     this.isLeaving = false;
     this.lastX = 0;
     this.contextLoop = null;
+    this.grenadeToggle = false;
 
     this.state = {
       characterState: 2,
@@ -420,7 +427,9 @@ export default class Corporal extends Component {
     };
     const model = this;
     window.addEventListener('keyup', (event) => {
-      model.press(event)
+      if (event.keyCode === 68) {
+        return model.press(event)
+      }
     });
   }
 
@@ -457,9 +466,9 @@ export default class Corporal extends Component {
     return (
       <div style={this.getWrapperStyles()}>
         <Sprite
-          ref={(sprite)=>{
-              this.body=sprite
-            }
+          ref={(sprite) => {
+            this.body = sprite
+          }
           }
           repeat={this.state.repeat}
           onPlayStateChanged={this.handlePlayStateChanged}
@@ -482,28 +491,28 @@ export default class Corporal extends Component {
             7, // 10 latch
             2, // 11 grenade launch
             2  // 12 grenade reload
-            ]}
-          offset={[0,0]}
+          ]}
+          offset={[0, 0]}
           tileWidth={160}
           tileHeight={120}
           ticksPerFrame={this.state.ticksPerFrame}
           transformOrigin="left top"
         />
         {this.props.store.characterIsAttacking &&
-          <Sprite
-            repeat={this.state.repeat}
-            src={this.state.characterState === 8 ? "assets/pulse_rifle_crouch_shoot.png" : "assets/pulse_rifle_shoot.png"}
-            scale={this.context.scale * 1}
-            direction={this.state.direction}
-            steps={[3]}
-            offset={[0, 0]}
-            tileWidth={160}
-            tileHeight={120}
-            ticksPerFrame={3}
-            top={-120}
-            left={0}
-            display={this.state.characterState !== 3 && this.state.characterState !== 8 ? "none" : "block"}
-          />
+        <Sprite
+          repeat={this.state.repeat}
+          src={this.state.characterState === 8 ? "assets/pulse_rifle_crouch_shoot.png" : "assets/pulse_rifle_shoot.png"}
+          scale={this.context.scale * 1}
+          direction={this.state.direction}
+          steps={[3]}
+          offset={[0, 0]}
+          tileWidth={160}
+          tileHeight={120}
+          ticksPerFrame={3}
+          top={-120}
+          left={0}
+          display={this.state.characterState !== 3 && this.state.characterState !== 8 ? "none" : "block"}
+        />
         }
       </div>
     );

@@ -1,7 +1,7 @@
 import React, {Component, PropTypes} from 'react';
 import {observer} from 'mobx-react';
 
-import {IS_MOBILE} from './constants';
+import {FACEHUGGER_FLOOR, IS_MOBILE, RESPAWN_DISTANCE} from './constants';
 
 import {
   AudioPlayer,
@@ -53,7 +53,7 @@ export default class Game extends Component {
   handleGrenadeLaunch = () => {
     this.setState({
       grenadeAmmo: this.state.grenadeAmmo - 1,
-      mobileControlsGrenade:false
+      mobileControlsGrenade: false
     });
     GameStore.setCharacterIsAttackingGrenade(false);
   };
@@ -81,12 +81,21 @@ export default class Game extends Component {
 
   handleReloadGrenade = () => {
     this.setState({
-      grenadeAmmo: 1
+      grenadeAmmo: this.state.grenadeAmmo + 1
     });
   };
 
   resetLevel() {
+    GameStore.faceHuggerPositions.forEach((faceHugger) => {
+        faceHugger.y = FACEHUGGER_FLOOR;
+        faceHugger.x = faceHugger.x + RESPAWN_DISTANCE;
+      }
+    );
 
+    GameStore.npcPositions.forEach((alien) => {
+        alien.x = alien.x + RESPAWN_DISTANCE;
+      }
+    );
   }
 
   constructor(props) {
@@ -101,7 +110,7 @@ export default class Game extends Component {
       hitCount: 0,
       ammo: 990,
       grenadeAmmo: 0,
-      mobileControlsDirection: ['neutral','neutral']
+      mobileControlsDirection: ['neutral', 'neutral']
     };
     this.keyListener = new KeyListener();
     window.AudioContext = window.AudioContext || window.webkitAudioContext;
@@ -159,7 +168,7 @@ export default class Game extends Component {
 
   handleDirectionLeftPadPressStart(event) {
     let direction = [...this.state.mobileControlsDirection];
-    direction[0]='left';
+    direction[0] = 'left';
     this.setState(Object.assign({}, ...this.state, {
       mobileControlsDirection: direction
     }));
@@ -167,7 +176,7 @@ export default class Game extends Component {
 
   handleDirectionRightPadPressStart(event) {
     let direction = [...this.state.mobileControlsDirection];
-    direction[0]='right';
+    direction[0] = 'right';
     this.setState(Object.assign({}, ...this.state, {
       mobileControlsDirection: direction
     }));
@@ -175,7 +184,7 @@ export default class Game extends Component {
 
   handleDirectionDownPadPressStart(event) {
     let direction = [...this.state.mobileControlsDirection];
-    direction[1]='down';
+    direction[1] = 'down';
     this.setState(Object.assign({}, ...this.state, {
       mobileControlsDirection: direction
     }));
@@ -183,14 +192,12 @@ export default class Game extends Component {
 
   handleDirectionPadPressEnd(event) {
     let direction = [];
-    direction[0]='neutral';
-    direction[1]='neutral';
+    direction[0] = 'neutral';
+    direction[1] = 'neutral';
     this.setState(Object.assign({}, ...this.state, {
       mobileControlsDirection: direction
     }));
   }
-
-
 
 
   render() {
