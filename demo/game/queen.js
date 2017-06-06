@@ -40,12 +40,15 @@ export default class Queen extends Component {
     this.loopID = null;
     this.contextLoop = null;
 
+    this.isHit = false;
+    this.isSnarl = false;
+    this.isIdle = false;
 
     this.state = {
       npcState: 0,
       loop: false,
       spritePlaying: true,
-      ticksPerFrame: 5,
+      ticksPerFrame: 10,
       dead: false,
       direction: 1,
       hasStopped: 0,
@@ -56,6 +59,7 @@ export default class Queen extends Component {
 
   componentDidMount() {
     this.loopID = this.context.loop.subscribe(this.loop);
+    this.queenScream = new AudioPlayer('assets/se/primalscreaming.wav');
   }
 
   componentWillUnmount() {
@@ -80,12 +84,19 @@ export default class Queen extends Component {
   loop = () => {
     const {store, npcIndex} = this.props;
 
-    if (!this.isJumping && !this.isHatching) {
+    if (!this.isJumping && !this.isHit && !this.isSnarl && !this.isIdle) {
       this.queenAction(this.body);
     } else {
-
       if (this.isHit && this.state.spritePlaying === false) {
         this.isHit = false;
+      }
+
+      if (this.isSnarl && this.state.spritePlaying === false) {
+        this.isSnarl = false;
+      }
+
+      if (this.isIdle && this.state.spritePlaying === false) {
+        this.isIdle = false;
       }
 
       if (this.isDown && this.state.spritePlaying === false) {
@@ -107,7 +118,6 @@ export default class Queen extends Component {
           return this.hit();
         }
       }
-
     }
 
     if (!this.isFar(300) && !this.state.dead) {
@@ -116,6 +126,11 @@ export default class Queen extends Component {
     if (this.isOver() && !this.state.dead) {
 
     }
+
+    if(!this.isFar(500) && Math.random() < .01 && this.state.spritePlaying === false) {
+      return this.snarl();
+    }
+    return this.idle();
   };
 
   hit = () => {
@@ -182,11 +197,21 @@ export default class Queen extends Component {
   };
 
   idle = () => {
+    this.isIdle = true;
     this.setState(Object.assign({}, this.state, {
       npcState: 1,
-      ticksPerFrame: 30,
-      repeat: false,
-      hasStopped: this.state.hasStopped + 1
+      ticksPerFrame: 10,
+      repeat: false
+    }));
+  };
+
+  snarl = () => {
+    this.isSnarl = true;
+    this.queenScream.play();
+    this.setState(Object.assign({}, this.state, {
+      npcState: 2,
+      ticksPerFrame: 15,
+      repeat: false
     }));
   };
 
@@ -211,6 +236,7 @@ export default class Queen extends Component {
                 ticksPerFrame={this.state.ticksPerFrame}
                 transformOrigin="center top"
         />
+
         <Sprite ref={(sprite) => {this.body = sprite}}
                 repeat={this.state.repeat}
                 onPlayStateChanged={this.handlePlayStateChanged}
@@ -220,7 +246,9 @@ export default class Queen extends Component {
                 direction={this.state.direction}
                 state={this.state.npcState}
                 steps={[
-                  4, //0 idle
+                  0,
+                  4, //1 idle
+                  2, //2 snarl
                 ]}
                 offset={[0, 0]}
                 tileWidth={204}

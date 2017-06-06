@@ -177,8 +177,8 @@ export default class Egg extends Component {
     const {store, npcIndex} = this.props;
     const direction = store.eggPositions[npcIndex].x < store.characterPosition.x ? 1 : -1;
     let npcState = 2;
-    let distance = direction < 0 ? Math.ceil(Math.random() * RESPAWN_DISTANCE) + RESPAWN_DISTANCE : 0 - Math.ceil(Math.random() * RESPAWN_DISTANCE) - RESPAWN_DISTANCE;
-    store.setEggPosition({x: store.characterPosition.x + distance, y: store.eggPositions[npcIndex].y, hatched:false}, npcIndex);
+    let distance = direction < 0 ? Math.ceil(Math.random() * 100) : 0 - Math.ceil(Math.random() * 100);
+    store.setEggPosition({x: store.eggPositions[npcIndex].x + distance, y: store.eggPositions[npcIndex].y, hatched:false}, npcIndex);
     this.setState(Object.assign({}, this.state, {
       npcState,
       hasHit: 0,
