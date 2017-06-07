@@ -132,9 +132,14 @@ export default class Egg extends Component {
       }
     }
 
+    if(this.isCloseGrenade() && !this.state.dead && store.eggPositions[npcIndex].y === EGG_FLOOR) {
+      return this.hit();
+    }
+
     if (!this.isFar(300) && !this.state.dead && !store.eggPositions[npcIndex].hatched) {
       this.hatch();
     }
+
     if (this.isOver() && !this.state.dead && !this.hasLatched && this.state.hatched) {
       // this.latch();
     }
@@ -144,6 +149,15 @@ export default class Egg extends Component {
     const {store} = this.props;
     this.hasLatched = true;
     store.setCharacterLatched(true);
+  };
+
+  isCloseGrenade = () => {
+    const {store, npcIndex} = this.props;
+    if(store.explosionPositions.length < 1) {
+      return false;
+    }
+    const distance = Math.abs(store.eggPositions[npcIndex].x - store.explosionPositions[0].x);
+    return distance < 100 && distance !==0;
   };
 
   hit = () => {

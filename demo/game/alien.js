@@ -19,7 +19,7 @@ export default class Alien extends Npc {
     keys: PropTypes.object,
     onCharacterHit: PropTypes.func,
     onCharacterHitDone: PropTypes.func,
-    store: PropTypes.object,
+    store: PropTypes.object
   };
 
   static contextTypes = {
@@ -168,8 +168,17 @@ export default class Alien extends Npc {
         return this.down();
       }
 
-      if ((this.isDown||this.isDownGrenade) && this.state.spritePlaying === false) {
+      if (this.isDown && this.state.spritePlaying === false) {
         this.isDown = false;
+        if(store.killCount < KILL_THRESHOLD) {
+          return this.respawn();
+        }
+        else {
+          return this.down();
+        }
+      }
+
+      if (this.isDownGrenade && this.state.spritePlaying === false) {
         this.isDownGrenade = false;
         if(store.killCount < KILL_THRESHOLD) {
           return this.respawn();
@@ -197,14 +206,17 @@ export default class Alien extends Npc {
     }
 
     if (store.characterIsAttackingGrenade && this.npcPosition.y === ALIEN_FLOOR) {
-      if (Math.abs(this.npcPosition.x - store.characterPosition.x) < Math.random() * 100 + 400) {
-        if(store.explosionPositions.length < 1) {
-          if (this.npcPosition.x < store.characterPosition.x && store.characterDirection === -1) {
-            return this.downGrenade();
-          }
-          else if (this.npcPosition.x > store.characterPosition.x && store.characterDirection === 1) {
-            return this.downGrenade();
-          }
+      if ((this.npcPosition.x < store.characterPosition.x && store.characterDirection === -1) || (this.npcPosition.x > store.characterPosition.x && store.characterDirection === 1)) {
+        if(store.explosionPositions.length > 0) {
+          return this.hit();
+        }
+        else {
+          store.addExplosion({
+            npcIndex,
+            x:this.npcPosition.x,
+            y:this.npcPosition.y
+          });
+          return this.downGrenade();
         }
       }
     }
@@ -231,7 +243,7 @@ export default class Alien extends Npc {
     }
 
     if (this.isFar()) {
-      if(Math.random()<.5 && this.state.hasStopped % 2 === 0 && npcState < 3) {
+      if(Math.random()<.8 && this.state.hasStopped % 2 === 0 && npcState < 3) {
         if(Math.random()<.2) {
           return this.lookBack();
         }
@@ -280,9 +292,6 @@ export default class Alien extends Npc {
         repeat: false,
         ticksPerFrame: 10
       }));
-    }
-    else if(store.characterIsAttackingGrenade && this.state.hasHit){
-      return this.downGrenade();
     }
     else {
       if(Math.random() < .5) {
@@ -371,7 +380,8 @@ export default class Alien extends Npc {
       direction,
       repeat: false,
       decapitated: false,
-      ticksPerFrame: 500
+      ticksPerFrame: 500,
+      grenadeImage: Math.floor(Math.random()*9)
     }));
 
   };
@@ -394,11 +404,6 @@ export default class Alien extends Npc {
     if(!this.isDown) {
       this.isDownGrenade = true;
     }
-    store.addExplosion({
-      npcIndex,
-      x:this.npcPosition.x,
-      y:this.npcPosition.y
-    });
     let npcState = 23;
     this.setState(Object.assign({}, this.state, {
       npcState,
@@ -419,36 +424,6 @@ export default class Alien extends Npc {
     }));
   };
 
-  isBehind() {
-    const {store, npcIndex} = this.props;
-    const turnOffset = this.npcPosition.x < store.characterPosition.x ? -1000 : 1000;
-    return this.npcPosition.x < store.characterPosition.x - turnOffset;
-  }
-
-  isClose = () => {
-    const {store, npcIndex} = this.props;
-    const distance = this.npcPosition.x - store.characterPosition.x;
-    return distance < 100;
-  };
-
-  isCloseGrenade = () => {
-    const {store, npcIndex} = this.props;
-    if(store.explosionPositions.length < 1) {
-      return false;
-    }
-    const distance = this.npcPosition.x - store.explosionPositions[0].x;
-    return distance < 100;
-
-  };
-
-  turn(direction) {
-    const {store, npcIndex} = this.props;
-    this.lastDirection = direction;
-    this.setState(Object.assign({}, this.state, {
-      direction: direction
-    }));
-  }
-
   isFar = () => {
     const {store, npcIndex} = this.props;
     const directionOffset = this.state.direction < 0 ? -40 : 0;
@@ -466,10 +441,6 @@ export default class Alien extends Npc {
       loop: true,
       ticksPerFrame: 5
     }));
-  };
-
-  setNpcPosition = (position) => {
-    this.npcPosition = position;
   };
 
   jump = (body) => {
@@ -647,8 +618,8 @@ export default class Alien extends Npc {
         />
         }
 
-        {this.state.npcState === 23 && store.characterIsAttackingGrenade && !store.characterIsAttacking &&
-          <Explosion grenadeImage={this.state.grenadeImage} direction={this.state.direction}/>}
+        {this.state.npcState === 23 &&
+          <Explosion grenadeImage={this.state.grenadeImage} direction={this.state.direction} store={store}/>}
       </div>
     );
   }

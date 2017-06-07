@@ -7,13 +7,14 @@ import React, {Component, PropTypes} from 'react';
 
 export default class Explosion extends Component {
   componentDidMount() {
-    const explodeImg = Math.floor(Math.random() * 3);
-    this.explosionSound = new AudioPlayer(`assets/se/explode_${explodeImg}.ogg`, () => {
+    const explodeSound = Math.floor(Math.random() * 3);
+    this.explosionSound = new AudioPlayer(`assets/se/explode_${explodeSound}.ogg`, () => {
       this.explosionSound.play();
     });
   }
 
   componentWillUnmount() {
+
   }
 
   render() {
@@ -38,7 +39,7 @@ export default class Explosion extends Component {
 
 Explosion.propTypes = {
   grenadeImage:PropTypes.number,
-  direction:PropTypes.number,
+  direction:PropTypes.number
 };
 
 Explosion.contextTypes = {

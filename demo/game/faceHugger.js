@@ -196,6 +196,10 @@ export default class FaceHugger extends Npc {
       }
     }
 
+    if(this.isCloseGrenade() && this.npcPosition.y === FACEHUGGER_FLOOR) {
+      return this.hit();
+    }
+
     if (this.npcPosition.y < FACEHUGGER_FLOOR && npcState !== 11 && npcState !== 9) {
       return this.crouchIdle();
     }
@@ -356,6 +360,13 @@ export default class FaceHugger extends Npc {
     }
   };
 
+  isFar = () => {
+    const {store, npcIndex} = this.props;
+    const directionOffset = this.state.direction < 0 ? 0 : -20;
+    const distance = Math.abs(this.npcPosition.x - store.characterPosition.x);
+    return distance > 40 + directionOffset;
+  };
+
 
   land = () => {
     this.isLanding = true;
@@ -364,27 +375,6 @@ export default class FaceHugger extends Npc {
       repeat: false,
       ticksPerFrame: 10
     }));
-  };
-
-  isBehind() {
-    const {store, npcIndex} = this.props;
-    const turnOffset = this.npcPosition.x < store.characterPosition.x ? -1000 : 1000;
-    return this.npcPosition.x < store.characterPosition.x - turnOffset;
-  }
-
-  turn(direction) {
-    const {store, npcIndex} = this.props;
-    this.lastDirection = direction;
-    this.setState(Object.assign({}, this.state, {
-      direction: direction
-    }));
-  }
-
-  isFar = () => {
-    const {store, npcIndex} = this.props;
-    const directionOffset = this.state.direction < 0 ? 0 : -20;
-    const distance = Math.abs(this.npcPosition.x - store.characterPosition.x);
-    return distance > 40 + directionOffset;
   };
 
   move = (body, distance, npcState) => {
@@ -400,10 +390,6 @@ export default class FaceHugger extends Npc {
       loop: true,
       ticksPerFrame: 2
     }));
-  };
-
-  setNpcPosition = (position) => {
-    this.npcPosition = position;
   };
 
   attack = () => {
