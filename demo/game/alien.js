@@ -619,7 +619,12 @@ export default class Alien extends Npc {
         }
 
         {this.state.npcState === 23 &&
-          <Explosion grenadeImage={this.state.grenadeImage} direction={this.state.direction} store={store}/>}
+          <Explosion
+           grenadeImage={this.state.grenadeImage}
+           direction={this.state.direction}
+           store={store}
+           top={Math.ceil(-100-Math.ceil(Math.random()*10))}
+           left={0}/>}
       </div>
     );
   }

@@ -30,7 +30,9 @@ export default class Explosion extends Component {
           tileWidth={64}
           tileHeight={64}
           ticksPerFrame={1}
-          top={Math.ceil(-100-Math.ceil(Math.random()*10))}
+          top={this.props.top}
+          left={this.props.left}
+          transformOrigin={'center center'}
         />
       </div>
     );
@@ -39,7 +41,9 @@ export default class Explosion extends Component {
 
 Explosion.propTypes = {
   grenadeImage:PropTypes.number,
-  direction:PropTypes.number
+  direction:PropTypes.number,
+  left:PropTypes.number,
+  top:PropTypes.number
 };
 
 Explosion.contextTypes = {

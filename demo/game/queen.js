@@ -1,11 +1,12 @@
 import React, {Component, PropTypes} from 'react';
-import {FACEHUGGER_FLOOR, EGG_FLOOR, RESPAWN_DISTANCE} from './constants';
+import {FACEHUGGER_FLOOR, EGG_FLOOR, RESPAWN_DISTANCE, FLOOR} from './constants';
 import {observer} from 'mobx-react';
 
 import {
   AudioPlayer,
   Sprite,
 } from '../../src';
+import Explosion from './explosion';
 
 
 @observer
@@ -41,6 +42,7 @@ export default class Queen extends Component {
     this.contextLoop = null;
 
     this.isHit = false;
+    this.isHitGrenade = false;
     this.isSnarl = false;
     this.isIdle = false;
 
@@ -53,6 +55,8 @@ export default class Queen extends Component {
       direction: 1,
       hasStopped: 0,
       hasHit: 0,
+      grenadeImage: Math.floor(Math.random()*9),
+      explosionOffset:{y:Math.ceil(Math.random()*-50)-200,x:Math.ceil(Math.random()*50)+50}
     };
   }
 
@@ -84,11 +88,19 @@ export default class Queen extends Component {
   loop = () => {
     const {store, npcIndex} = this.props;
 
-    if (!this.isJumping && !this.isHit && !this.isSnarl && !this.isIdle) {
+    if (!this.isJumping && !this.isHit && !this.isSnarl && !this.isIdle && !this.isHitGrenade) {
       this.queenAction(this.body);
     } else {
       if (this.isHit && this.state.spritePlaying === false) {
         this.isHit = false;
+      }
+
+      if (this.isHitGrenade && this.state.spritePlaying === false) {
+        this.isHitGrenade = false;
+        const explosion = store.explosionPositions.find((explosion) => explosion.npcIndex === 9999);
+        if(explosion) {
+          store.removeExplosion(9999);
+        }
       }
 
       if (this.isSnarl && this.state.spritePlaying === false) {
@@ -120,6 +132,20 @@ export default class Queen extends Component {
       }
     }
 
+    if (store.characterIsAttackingGrenade && !this.state.dead) {
+      if(Math.abs(store.queenPositions[npcIndex].x - store.characterPosition.x) < Math.random() * 100 + 400) {
+        if ((store.queenPositions[npcIndex].x < store.characterPosition.x && store.characterDirection === -1)
+         || (store.queenPositions[npcIndex].x > store.characterPosition.x && store.characterDirection === 1)) {
+          store.addExplosion({
+            npcIndex: 9999,
+            x:store.queenPositions[npcIndex].x,
+            y:store.characterPosition.y
+          });
+          return this.hitGrenade();
+        }
+      }
+    }
+
     if (!this.isFar(300) && !this.state.dead) {
 
     }
@@ -134,11 +160,26 @@ export default class Queen extends Component {
   };
 
   hit = () => {
-    const {store, npcIndex} = this.props;
     if (this.state.hasHit < 10000) {
       this.isHit = true;
       this.setState(Object.assign({}, this.state, {
+        npcState:2,
         hasHit: this.state.hasHit + 1,
+        repeat: false,
+        ticksPerFrame: 10
+      }));
+    }
+    else {
+      return this.dead();
+    }
+  };
+
+  hitGrenade = () => {
+    if (this.state.hasHit < 10000) {
+      this.isHitGrenade = true;
+      this.setState(Object.assign({}, this.state, {
+        npcState:2,
+        hasHit: this.state.hasHit + 10,
         repeat: false,
         ticksPerFrame: 10
       }));
@@ -170,7 +211,8 @@ export default class Queen extends Component {
       direction,
       repeat: false,
       decapitated: false,
-      ticksPerFrame: 500
+      ticksPerFrame: 500,
+      grenadeImage: Math.floor(Math.random()*9)
     }));
   };
 
@@ -217,6 +259,7 @@ export default class Queen extends Component {
 
   render() {
     const {store} = this.props;
+    // todo rescale queen sprites
     return (
       <div style={this.getWrapperStyles()} className={'npc'} id={`npc_${this.props.npcIndex}`}>
         <Sprite ref={(sprite) => {this.body = sprite}}
@@ -224,7 +267,7 @@ export default class Queen extends Component {
                 onPlayStateChanged={this.handlePlayStateChanged}
                 onGetContextLoop={this.getContextLoop}
                 src="assets/queen_sack.png"
-                scale={this.context.scale * 1.9}
+                scale={this.context.scale * 1}
                 direction={this.state.direction}
                 state={0}
                 steps={[
@@ -234,7 +277,6 @@ export default class Queen extends Component {
                 tileWidth={204}
                 tileHeight={188}
                 ticksPerFrame={this.state.ticksPerFrame}
-                transformOrigin="center top"
         />
 
         <Sprite ref={(sprite) => {this.body = sprite}}
@@ -242,7 +284,7 @@ export default class Queen extends Component {
                 onPlayStateChanged={this.handlePlayStateChanged}
                 onGetContextLoop={this.getContextLoop}
                 src="assets/queen.png"
-                scale={this.context.scale * 1.9}
+                scale={this.context.scale * 1}
                 direction={this.state.direction}
                 state={this.state.npcState}
                 steps={[
@@ -254,7 +296,6 @@ export default class Queen extends Component {
                 tileWidth={204}
                 tileHeight={188}
                 ticksPerFrame={this.state.ticksPerFrame}
-                transformOrigin="center top"
                 top={-190}
         />
         {this.isHit &&
@@ -267,10 +308,15 @@ export default class Queen extends Component {
           offset={[0, 0]}
           tileWidth={56}
           tileHeight={56}
-          ticksPerFrame={3}
-          top={-40}
-          transformOrigin="center top"
+          ticksPerFrame={6}
         />}
+
+        {this.isHitGrenade &&
+        <Explosion
+         grenadeImage={this.state.grenadeImage}
+         direction={this.state.direction}
+         store={store}
+         />}
       </div>
     );
   }
