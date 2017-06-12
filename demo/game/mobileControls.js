@@ -124,7 +124,7 @@ export default class mobileControls extends Component {
         </div>
 
         <div
-          onClick={this.props.onGrenadePressEnd}>
+          onTouchStart={this.props.onGrenadePressEnd}>
           <Sprite
             style={{overflow: 'hidden',position: 'absolute', opacity:.4}}
             transformOrigin="center top"

@@ -78,6 +78,7 @@ export default class Intro extends Component {
         'assets/hospital_0.png',
         'assets/alien_0.png',
         'assets/queen_sack.png',
+        'assets/queen_sack_dead.png',
         'assets/queen.png',
         'assets/grenade_explode_0.png',
         'assets/grenade_explode_1.png',

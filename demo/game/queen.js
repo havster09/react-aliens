@@ -97,10 +97,7 @@ export default class Queen extends Component {
 
       if (this.isHitGrenade && this.state.spritePlaying === false) {
         this.isHitGrenade = false;
-        const explosion = store.explosionPositions.find((explosion) => explosion.npcIndex === 9999);
-        if(explosion) {
-          store.removeExplosion(9999);
-        }
+        this.removeExplosion();
       }
 
       if (this.isSnarl && this.state.spritePlaying === false) {
@@ -138,7 +135,7 @@ export default class Queen extends Component {
          || (store.queenPositions[npcIndex].x > store.characterPosition.x && store.characterDirection === 1)) {
           store.addExplosion({
             npcIndex: 9999,
-            x:store.queenPositions[npcIndex].x,
+            x:store.queenPositions[npcIndex].x+Math.ceil(Math.random()*200)*this.context.scale,
             y:store.characterPosition.y
           });
           return this.hitGrenade();
@@ -160,7 +157,7 @@ export default class Queen extends Component {
   };
 
   hit = () => {
-    if (this.state.hasHit < 10000) {
+    if (this.state.hasHit < 1000) {
       this.isHit = true;
       this.setState(Object.assign({}, this.state, {
         npcState:2,
@@ -175,7 +172,7 @@ export default class Queen extends Component {
   };
 
   hitGrenade = () => {
-    if (this.state.hasHit < 10000) {
+    if (this.state.hasHit < 1000) {
       this.isHitGrenade = true;
       this.setState(Object.assign({}, this.state, {
         npcState:2,
@@ -192,6 +189,7 @@ export default class Queen extends Component {
   dead = () => {
     this.isDrop = true;
     let npcState = 1;
+    this.removeExplosion();
     this.setState(Object.assign({}, this.state, {
       npcState,
       dead: true,
@@ -247,6 +245,14 @@ export default class Queen extends Component {
     }));
   };
 
+  removeExplosion = () => {
+    const {store} = this.props;
+    const explosion = store.explosionPositions.find((explosion) => explosion.npcIndex === 9999);
+    if(explosion) {
+      store.removeExplosion(9999);
+    }
+  };
+
   snarl = () => {
     this.isSnarl = true;
     this.queenScream.play();
@@ -266,7 +272,7 @@ export default class Queen extends Component {
                   repeat={this.state.repeat}
                   onPlayStateChanged={this.handlePlayStateChanged}
                   onGetContextLoop={this.getContextLoop}
-                  src="assets/queen_sack.png"
+                  src={this.state.dead?"assets/queen_sack_dead.png":"assets/queen_sack.png"}
                   scale={this.context.scale * 1}
                   direction={this.state.direction}
                   state={0}
@@ -309,7 +315,8 @@ export default class Queen extends Component {
           left={Math.ceil(Math.random()*300)*this.context.scale}
         />}
 
-        {this.isHitGrenade &&
+        {(this.isHitGrenade||this.state.dead) &&
+        <div style={{position:'absolute'}}>
         <Sprite
           repeat={true}
           src={"assets/egg_burst.png"}
@@ -319,10 +326,43 @@ export default class Queen extends Component {
           offset={[0, 0]}
           tileWidth={56}
           tileHeight={56}
-          ticksPerFrame={10}
+          ticksPerFrame={6}
           top={IS_MOBILE?280*this.context.scale:270*this.context.scale}
-          left={Math.ceil(Math.random()*300)*this.context.scale}
-        />}
+        />
+        </div>
+          }
+
+        {(this.isHitGrenade||this.state.dead) &&
+        <div style={{position:'absolute'}}>
+        <Sprite
+          repeat={true}
+          src={"assets/egg_burst.png"}
+          scale={this.context.scale * 1}
+          direction={-1}
+          steps={[6]}
+          offset={[0, 0]}
+          tileWidth={56}
+          tileHeight={56}
+          ticksPerFrame={6}
+          left={100}
+          top={IS_MOBILE?280*this.context.scale:270*this.context.scale}
+        /></div>}
+
+        {(this.isHitGrenade||this.state.dead) &&
+        <div style={{position:'absolute'}}>
+        <Sprite
+          repeat={true}
+          src={"assets/egg_burst.png"}
+          scale={this.context.scale * 1}
+          direction={-1}
+          steps={[6]}
+          offset={[0, 0]}
+          tileWidth={56}
+          tileHeight={56}
+          ticksPerFrame={6}
+          left={200}
+          top={IS_MOBILE?280*this.context.scale:270*this.context.scale}
+        /></div>}
 
       </div>
     );

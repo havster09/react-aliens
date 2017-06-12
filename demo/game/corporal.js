@@ -122,7 +122,7 @@ export default class Corporal extends Component {
     this.setState({
       characterState,
       direction,
-      ticksPerFrame: 6,
+      ticksPerFrame: 12,
       repeat: false
     });
     this.grenadeToggle = false;

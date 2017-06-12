@@ -33,12 +33,14 @@ class GameStore {
     {x: 2550, y: EGG_FLOOR, hatched:false},
     {x: 2600, y: EGG_FLOOR, hatched:false},
     {x: 2650, y: EGG_FLOOR, hatched:false},
-    {x: 2500, y: EGG_FLOOR, hatched:false}
+    {x: 2500, y: EGG_FLOOR, hatched:false},
+    {x: 2400, y: EGG_FLOOR, hatched:false},
+    {x: 2300, y: EGG_FLOOR, hatched:false}
   ];
 
   @observable queenPositions = [
     {x: 2700, y: 0},
-    //{x: 800, y: 0},
+    // {x: 800, y: 0},
   ];
 
   constructor() {
