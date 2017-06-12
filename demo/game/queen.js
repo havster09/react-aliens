@@ -1,5 +1,5 @@
 import React, {Component, PropTypes} from 'react';
-import {FACEHUGGER_FLOOR, EGG_FLOOR, RESPAWN_DISTANCE, FLOOR} from './constants';
+import {IS_MOBILE} from './constants';
 import {observer} from 'mobx-react';
 
 import {
@@ -305,7 +305,7 @@ export default class Queen extends Component {
           grenadeImage={this.state.grenadeImage}
           direction={this.state.direction}
           store={store}
-          top={280*this.context.scale}
+          top={IS_MOBILE?280*this.context.scale:270*this.context.scale}
           left={Math.ceil(Math.random()*300)*this.context.scale}
         />}
 
@@ -320,7 +320,7 @@ export default class Queen extends Component {
           tileWidth={56}
           tileHeight={56}
           ticksPerFrame={10}
-          top={280*this.context.scale}
+          top={IS_MOBILE?280*this.context.scale:270*this.context.scale}
           left={Math.ceil(Math.random()*300)*this.context.scale}
         />}
 
