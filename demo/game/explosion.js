@@ -17,9 +17,16 @@ export default class Explosion extends Component {
 
   }
 
+  getWrapperStyles() {
+    return {
+      position: 'absolute',
+      transformOrigin: 'center center',
+    };
+  }
+
   render() {
     return (
-      <div>
+      <div  style={this.getWrapperStyles()} className={'explosion'} id={`explosion_${this.props.npcIndex}`}>
         <Sprite
           repeat={false}
           src={`assets/grenade_explode_${this.props.grenadeImage}.png`}

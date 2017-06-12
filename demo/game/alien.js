@@ -214,7 +214,7 @@ export default class Alien extends Npc {
           store.addExplosion({
             npcIndex,
             x:this.npcPosition.x,
-            y:this.npcPosition.y
+            y:store.characterPosition.y
           });
           return this.downGrenade();
         }
@@ -623,8 +623,8 @@ export default class Alien extends Npc {
            grenadeImage={this.state.grenadeImage}
            direction={this.state.direction}
            store={store}
-           top={Math.ceil(-100-Math.ceil(Math.random()*10))}
-           left={0}/>}
+           top={Math.ceil(-90-Math.ceil(Math.random()*10))}
+          />}
       </div>
     );
   }

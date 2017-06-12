@@ -81,7 +81,7 @@ export default class Queen extends Component {
     return {
       position: 'absolute',
       transform: `translate(${targetX * scale}px, ${y * scale}px)`,
-      transformOrigin: 'left top',
+      transformOrigin: 'left bottom',
     };
   }
 
@@ -259,64 +259,71 @@ export default class Queen extends Component {
 
   render() {
     const {store} = this.props;
-    // todo rescale queen sprites
     return (
       <div style={this.getWrapperStyles()} className={'npc'} id={`npc_${this.props.npcIndex}`}>
-        <Sprite ref={(sprite) => {this.body = sprite}}
-                repeat={this.state.repeat}
-                onPlayStateChanged={this.handlePlayStateChanged}
-                onGetContextLoop={this.getContextLoop}
-                src="assets/queen_sack.png"
-                scale={this.context.scale * 1}
-                direction={this.state.direction}
-                state={0}
-                steps={[
-                  0, //0 idle
-                ]}
-                offset={[0, 0]}
-                tileWidth={204}
-                tileHeight={188}
-                ticksPerFrame={this.state.ticksPerFrame}
-        />
+        <div style={{position:'absolute'}}>
+          <Sprite ref={(sprite) => {this.body = sprite}}
+                  repeat={this.state.repeat}
+                  onPlayStateChanged={this.handlePlayStateChanged}
+                  onGetContextLoop={this.getContextLoop}
+                  src="assets/queen_sack.png"
+                  scale={this.context.scale * 1}
+                  direction={this.state.direction}
+                  state={0}
+                  steps={[
+                    0, //0 idle
+                  ]}
+                  offset={[0, 0]}
+                  tileWidth={396}
+                  tileHeight={370}
+          />
+        </div>
 
-        <Sprite ref={(sprite) => {this.body = sprite}}
-                repeat={this.state.repeat}
-                onPlayStateChanged={this.handlePlayStateChanged}
-                onGetContextLoop={this.getContextLoop}
-                src="assets/queen.png"
-                scale={this.context.scale * 1}
-                direction={this.state.direction}
-                state={this.state.npcState}
-                steps={[
-                  0,
-                  4, //1 idle
-                  2, //2 snarl
-                ]}
-                offset={[0, 0]}
-                tileWidth={204}
-                tileHeight={188}
-                ticksPerFrame={this.state.ticksPerFrame}
-                top={-190}
-        />
-        {this.isHit &&
+        <div style={{position:'absolute'}}>
+          <Sprite ref={(sprite) => {this.body = sprite}}
+                  repeat={this.state.repeat}
+                  onPlayStateChanged={this.handlePlayStateChanged}
+                  onGetContextLoop={this.getContextLoop}
+                  src="assets/queen.png"
+                  scale={this.context.scale * 1}
+                  direction={this.state.direction}
+                  state={this.state.npcState}
+                  steps={[
+                    0,
+                    4, //1 idle
+                    2, //2 snarl
+                  ]}
+                  offset={[0, 0]}
+                  tileWidth={408}
+                  tileHeight={376}
+                  ticksPerFrame={this.state.ticksPerFrame}
+          />
+        </div>
+
+        {this.isHitGrenade &&
+        <Explosion
+          grenadeImage={this.state.grenadeImage}
+          direction={this.state.direction}
+          store={store}
+          top={280*this.context.scale}
+          left={Math.ceil(Math.random()*300)*this.context.scale}
+        />}
+
+        {this.isHitGrenade &&
         <Sprite
           repeat={true}
-          src={store.characterDirection > 0 ? "assets/egg_burst.png" : "assets/egg_r_burst.png"}
+          src={"assets/egg_burst.png"}
           scale={this.context.scale * 1}
           direction={-1}
           steps={[6]}
           offset={[0, 0]}
           tileWidth={56}
           tileHeight={56}
-          ticksPerFrame={6}
+          ticksPerFrame={10}
+          top={280*this.context.scale}
+          left={Math.ceil(Math.random()*300)*this.context.scale}
         />}
 
-        {this.isHitGrenade &&
-        <Explosion
-         grenadeImage={this.state.grenadeImage}
-         direction={this.state.direction}
-         store={store}
-         />}
       </div>
     );
   }
