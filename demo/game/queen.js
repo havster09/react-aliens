@@ -158,7 +158,7 @@ export default class Queen extends Component {
   };
 
   hit = () => {
-    if (this.state.hasHit < 500) {
+    if (this.state.hasHit < 300) {
       this.isHit = true;
       this.setState(Object.assign({}, this.state, {
         npcState:2,
@@ -174,7 +174,7 @@ export default class Queen extends Component {
 
   hitGrenade = () => {
     this.isHitGrenade = true;
-    if (this.state.hasHit < 500) {
+    if (this.state.hasHit < 300) {
       this.setState(Object.assign({}, this.state, {
         npcState:2,
         hasHit: this.state.hasHit + 10,
