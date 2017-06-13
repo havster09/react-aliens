@@ -1,8 +1,0 @@
-let animationFrame;
-
-const loop = () => {
-  // Update logic
-  animationFrame = requestAnimationFrame(loop);
-}
-
-animationFrame = requestAnimationFrame(loop);

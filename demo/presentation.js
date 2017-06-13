@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 
 import Intro from './intro';
 import Game from './game';
-import Slides from './slides';
 
 export default class Presentation extends Component {
 
@@ -36,8 +35,7 @@ export default class Presentation extends Component {
   render() {
     this.gameStates = [
       <Intro onStart={this.handleStart} />,
-      <Game onLeave={this.handleLeave}/>,
-      <Slides onDone={this.handleDone} index={this.state.slideIndex} />,
+      <Game onLeave={this.handleLeave}/>
     ];
     return this.gameStates[this.state.gameState];
   }

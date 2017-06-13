@@ -68,7 +68,6 @@ export default class Queen extends Component {
 
   componentWillUnmount() {
     this.context.loop.unsubscribe(this.loopID);
-    this.removeExplosion();
     this.respawn();
   }
 
@@ -98,7 +97,6 @@ export default class Queen extends Component {
 
       if (this.isHitGrenade && this.state.spritePlaying === false) {
         this.isHitGrenade = false;
-        this.removeExplosion();
       }
 
       if (this.isSnarl && this.state.spritePlaying === false) {
@@ -134,11 +132,6 @@ export default class Queen extends Component {
       if(Math.abs(store.queenPositions[npcIndex].x - store.characterPosition.x) < Math.random() * 100 + 400) {
         if ((store.queenPositions[npcIndex].x < store.characterPosition.x && store.characterDirection === -1)
          || (store.queenPositions[npcIndex].x > store.characterPosition.x && store.characterDirection === 1)) {
-          store.addExplosion({
-            npcIndex: 9999,
-            x:store.queenPositions[npcIndex].x+this.state.explosionOffset,
-            y:store.characterPosition.y
-          });
           return this.hitGrenade();
         }
       }
@@ -179,8 +172,9 @@ export default class Queen extends Component {
         npcState:2,
         hasHit: this.state.hasHit + 10,
         repeat: false,
-        ticksPerFrame: 15,
-        grenadeImage: Math.floor(Math.random()*9)
+        ticksPerFrame: 12,
+        grenadeImage: Math.floor(Math.random()*9),
+        explosionOffset: Math.floor(Math.random()*300)
       }));
     }
     else {
@@ -191,7 +185,6 @@ export default class Queen extends Component {
   dead = () => {
     this.isDrop = true;
     let npcState = 1;
-    this.removeExplosion();
     this.setState(Object.assign({}, this.state, {
       npcState,
       dead: true,
@@ -244,17 +237,6 @@ export default class Queen extends Component {
       npcState: 1,
       ticksPerFrame: 10,
       repeat: false
-    }));
-  };
-
-  removeExplosion = () => {
-    const {store} = this.props;
-    const explosion = store.explosionPositions.find((explosion) => explosion.npcIndex === 9999);
-    if(explosion) {
-      store.removeExplosion(9999);
-    }
-    this.setState(Object.assign({}, this.state, {
-      explosionOffset:Math.ceil(Math.random()*200)*this.context.scale
     }));
   };
 

@@ -36,7 +36,7 @@ export default class Explosion extends Component {
           offset={[0, 0]}
           tileWidth={64}
           tileHeight={64}
-          ticksPerFrame={1}
+          ticksPerFrame={2}
           top={this.props.top}
           transformOrigin={'center center'}
         />
