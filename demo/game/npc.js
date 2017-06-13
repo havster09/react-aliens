@@ -298,7 +298,7 @@ export default class Npc extends Component {
       return false;
     }
     const distance = Math.abs(this.npcPosition.x - store.explosionPositions[0].x);
-    return distance < 300 && distance !==0;
+    return distance < 100 && distance !==0;
   };
 
   turn(direction) {

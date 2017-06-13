@@ -56,7 +56,7 @@ export default class Queen extends Component {
       hasStopped: 0,
       hasHit: 0,
       grenadeImage: Math.floor(Math.random()*9),
-      explosionOffset:{y:Math.ceil(Math.random()*-50)-200,x:Math.ceil(Math.random()*50)+50}
+      explosionOffset:0
     };
   }
 
@@ -68,6 +68,7 @@ export default class Queen extends Component {
 
   componentWillUnmount() {
     this.context.loop.unsubscribe(this.loopID);
+    this.removeExplosion();
     this.respawn();
   }
 
@@ -135,7 +136,7 @@ export default class Queen extends Component {
          || (store.queenPositions[npcIndex].x > store.characterPosition.x && store.characterDirection === 1)) {
           store.addExplosion({
             npcIndex: 9999,
-            x:store.queenPositions[npcIndex].x+Math.ceil(Math.random()*200)*this.context.scale,
+            x:store.queenPositions[npcIndex].x+this.state.explosionOffset,
             y:store.characterPosition.y
           });
           return this.hitGrenade();
@@ -163,7 +164,7 @@ export default class Queen extends Component {
         npcState:2,
         hasHit: this.state.hasHit + 1,
         repeat: false,
-        ticksPerFrame: 10
+        ticksPerFrame: 15
       }));
     }
     else {
@@ -172,13 +173,14 @@ export default class Queen extends Component {
   };
 
   hitGrenade = () => {
+    this.isHitGrenade = true;
     if (this.state.hasHit < 500) {
-      this.isHitGrenade = true;
       this.setState(Object.assign({}, this.state, {
         npcState:2,
         hasHit: this.state.hasHit + 10,
         repeat: false,
-        ticksPerFrame: 10
+        ticksPerFrame: 15,
+        grenadeImage: Math.floor(Math.random()*9)
       }));
     }
     else {
@@ -251,6 +253,9 @@ export default class Queen extends Component {
     if(explosion) {
       store.removeExplosion(9999);
     }
+    this.setState(Object.assign({}, this.state, {
+      explosionOffset:Math.ceil(Math.random()*200)*this.context.scale
+    }));
   };
 
   snarl = () => {
@@ -307,13 +312,13 @@ export default class Queen extends Component {
         </div>
 
         {this.isHitGrenade &&
+        <div style={{position:'absolute', left:this.state.explosionOffset}}>
         <Explosion
           grenadeImage={this.state.grenadeImage}
           direction={this.state.direction}
           store={store}
           top={IS_MOBILE?280*this.context.scale:270*this.context.scale}
-          left={Math.ceil(Math.random()*300)*this.context.scale}
-        />}
+        /></div>}
 
         {(this.isHitGrenade||this.state.dead) &&
         <div style={{position:'absolute'}}>
