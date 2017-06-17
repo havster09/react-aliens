@@ -31,12 +31,12 @@ export default class Explosion extends Component {
           repeat={false}
           src={`assets/grenade_explode_${this.props.grenadeImage}.png`}
           scale={this.context.scale * 2}
-          direction={this.props.direction}
+          direction={1}
           steps={[15]}
           offset={[0, 0]}
           tileWidth={64}
           tileHeight={64}
-          ticksPerFrame={2}
+          ticksPerFrame={1}
           top={this.props.top}
           transformOrigin={'center center'}
         />

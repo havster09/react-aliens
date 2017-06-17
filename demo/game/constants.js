@@ -5,6 +5,6 @@ export const FACEHUGGER_FLOOR = 290;
 export const EGG_FLOOR = 315;
 export const RESPAWN_DISTANCE = 800;
 
-export const KILL_THRESHOLD = IS_MOBILE?60:80;
+export const KILL_THRESHOLD = IS_MOBILE?40:40;
 
 

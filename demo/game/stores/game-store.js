@@ -12,7 +12,7 @@ class GameStore {
   @observable stageX = 0;
   @observable heroLoopCount = 0;
 
-  @observable levelCount = 1;
+  @observable levelCount = 4;
   @observable killCount = 0;
 
   @observable explosionPositions = [];
