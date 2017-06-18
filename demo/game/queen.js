@@ -105,7 +105,7 @@ export default class Queen extends Component {
 
       if (this.isIdle && this.state.spritePlaying === false) {
         this.isIdle = false;
-        this.explosionOffset =  Math.ceil(Math.random() * 300);
+        this.explosionOffset =  Math.ceil(Math.random() * (200 * this.context.scale));
         this.grenadeImage = Math.floor(Math.random()*9);
       }
 
