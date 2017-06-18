@@ -17,6 +17,9 @@ export default class Explosion extends Component {
 
   }
 
+  componentWillReceiveProps(nextProps) {
+  }
+
   getWrapperStyles() {
     return {
       position: 'absolute',

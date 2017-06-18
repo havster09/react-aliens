@@ -45,6 +45,8 @@ export default class Queen extends Component {
     this.isHitGrenade = false;
     this.isSnarl = false;
     this.isIdle = false;
+    this.explosionOffset = 0;
+    this.grenadeImage = Math.floor(Math.random()*9);
 
     this.state = {
       npcState: 0,
@@ -54,9 +56,7 @@ export default class Queen extends Component {
       dead: false,
       direction: 1,
       hasStopped: 0,
-      hasHit: 0,
-      grenadeImage: Math.floor(Math.random()*9),
-      explosionOffset:0
+      hasHit: 0
     };
   }
 
@@ -105,6 +105,8 @@ export default class Queen extends Component {
 
       if (this.isIdle && this.state.spritePlaying === false) {
         this.isIdle = false;
+        this.explosionOffset =  Math.ceil(Math.random() * 300);
+        this.grenadeImage = Math.floor(Math.random()*9);
       }
 
       if (this.isDown && this.state.spritePlaying === false) {
@@ -172,9 +174,7 @@ export default class Queen extends Component {
         npcState:2,
         hasHit: this.state.hasHit + 10,
         repeat: false,
-        ticksPerFrame: 12,
-        grenadeImage: Math.floor(Math.random()*9),
-        explosionOffset: Math.floor(Math.random()*300)
+        ticksPerFrame: 12
       }));
     }
     else {
@@ -204,8 +204,7 @@ export default class Queen extends Component {
       direction,
       repeat: false,
       decapitated: false,
-      ticksPerFrame: 500,
-      grenadeImage: Math.floor(Math.random()*9)
+      ticksPerFrame: 500
     }));
   };
 
@@ -294,11 +293,10 @@ export default class Queen extends Component {
         </div>
 
         {this.isHitGrenade &&
-        <div style={{position:'absolute', left:this.state.explosionOffset}}>
+        <div style={{position:'absolute', left:this.explosionOffset}}>
         <Explosion
-          grenadeImage={this.state.grenadeImage}
+          grenadeImage={this.grenadeImage}
           direction={this.state.direction}
-          store={store}
           top={IS_MOBILE?280*this.context.scale:270*this.context.scale}
         /></div>}
 

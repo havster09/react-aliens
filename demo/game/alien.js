@@ -626,7 +626,6 @@ export default class Alien extends Npc {
         <Explosion
           grenadeImage={this.state.grenadeImage}
           direction={this.state.direction}
-          store={store}
           top={Math.ceil(-90 - Math.ceil(Math.random() * 10))}
         />}
       </div>
